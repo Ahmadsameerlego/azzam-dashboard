@@ -56,7 +56,7 @@
 
                    <div class="d-flex">
                         <!-- edit  -->
-                        <router-link  to="/" class="show_more fw-6" @click="click(slotProps.data._id)">
+                        <router-link  to="/consult/1" class="show_more fw-6" @click="click(slotProps.data._id)">
                                 عرض التفاصيل
                         </router-link>
                    </div>

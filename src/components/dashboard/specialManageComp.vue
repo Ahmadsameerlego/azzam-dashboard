@@ -43,8 +43,30 @@
             <Column field="phone" header="رقم الجوال" sortable></Column>
             <Column field="email" header="البريد الالكتروني" sortable></Column>
             <Column field="sessionCount" header="عدد الجلسات التي قام بها" sortable class="sessions"></Column>
-            <Column field="averageRating" header="التقييم" sortable class="rate"></Column>
+            <Column field="averageRating" header="التقييم" sortable class="rate">
+                <template #body="slotProps">
 
+                    <div class="d-flex">
+                        <!-- edit  -->
+                        <router-link  to="/rates/1" class="" @click="click(slotProps.data._id)">
+                            عرض التقييم
+                        </router-link>
+                       
+                    </div>
+                </template>
+            </Column>
+
+            <Column  header="" >
+                <template #body="slotProps">
+
+                   <div class="">
+                        <button class="btn deactivate" @click="click(slotProps.data._id)"> الغاء تفعيل الحساب </button>
+                        <!-- <button class="btn activate" @click="click(slotProps.data._id)">  تفعيل الحساب </button> -->
+                   </div>
+                </template>
+            </Column>
+
+            
             <Column  header="" >
                 <template #body="slotProps">
 
@@ -175,7 +197,16 @@ export default {
             margin: 0 13px;
         }
     }  
-    
+    .deactivate{
+        background-color: #df342f !important;
+        color:#fff !important;
+        width:157px !important;
+        font-size:14px !important;
+    }
+    .activate{
+        background-color: #4aa236 !important;
+        color:#fff !important;
+    }
     .grayColor{
         color: #bbbbbb;
         font-size: 13px;

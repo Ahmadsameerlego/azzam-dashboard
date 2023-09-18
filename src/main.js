@@ -30,6 +30,7 @@ import Row from 'primevue/row';                   // optional
 // google map 
 import VueGoogleMaps from '@fawmi/vue-google-maps'
 
+import VOtpInput from "vue3-otp-input";
 
 
 // import fontawesome
@@ -51,6 +52,7 @@ createApp(App)
     .use(Column)
     .use(ColumnGroup)
     .use(Row)
+    .component('v-otp-input', VOtpInput)
     .use(VueGoogleMaps, {
         load: {
             key: 'AIzaSyB4d19CAL7u_hJ8k4P7EaQFcnner_Q9KEo',

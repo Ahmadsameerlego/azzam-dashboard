@@ -7,7 +7,10 @@ import treatManage from '@/views/treatManage.vue';
 import support from '@/views/supportGroup.vue';
 import financial from '@/views/financialAccount.vue';
 import login from '@/views/loginView.vue';
-import register from '@/views/registerView.vue'
+import register from '@/views/registerView.vue';
+import rates from '@/views/specialistRates.vue';
+import activeCode from '@/views/otpView.vue';
+import consult from '@/views/consultDetails.vue'
 const routes = [
   {
     path: '/',
@@ -53,6 +56,21 @@ const routes = [
     path : '/register',
     name : 'register',
     component : register
+  },
+  {
+    path : '/rates/:id',
+    name : 'rate',
+    component : rates
+  },
+  {
+    path : '/consult/:id',
+    name : 'consult',
+    component : consult
+  },
+  {
+    path : '/activeCode',
+    name : 'activeCode',
+    component : activeCode
   }
 ]
 
