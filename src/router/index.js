@@ -1,6 +1,13 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
-
+import HomeView from '../views/HomeView.vue';
+import specialistsManage from '@/views/specificationsManage.vue';
+import addSpecialist from '@/views/addSpecialist.vue';
+import directConsultaions from '@/views/directConsultaions.vue';
+import treatManage from '@/views/treatManage.vue';
+import support from '@/views/supportGroup.vue';
+import financial from '@/views/financialAccount.vue';
+import login from '@/views/loginView.vue';
+import register from '@/views/registerView.vue'
 const routes = [
   {
     path: '/',
@@ -8,12 +15,44 @@ const routes = [
     component: HomeView
   },
   {
-    path: '/about',
-    name: 'about',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
+    path : '/specialistsManage',
+    name :'specialistsManage',
+    component : specialistsManage
+  },
+  {
+    path : '/addSpecialist',
+    name : 'addSpecialist',
+    component : addSpecialist
+  },
+  {
+    path : '/directConsultaions',
+    name : 'directConsultaions',
+    component : directConsultaions
+  },
+  {
+    path : '/treatManage',
+    name : 'treatManage',
+    component : treatManage
+  },
+  {
+    path : '/support',
+    name : 'support',
+    component : support
+  },
+  {
+    path : '/financial',
+    name : 'financial',
+    component : financial
+  },
+  {
+    path : '/login',
+    name : 'login',
+    component : login
+  },
+  {
+    path : '/register',
+    name : 'register',
+    component : register
   }
 ]
 

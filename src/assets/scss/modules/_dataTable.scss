@@ -1,0 +1,49 @@
+.p-datatable .p-datatable-thead > tr > th{
+    background-color: #4aa236;
+    color: #fff;
+    font-weight: 600;
+    font-size: 13px;
+
+    &:hover{
+        background-color: #4aa236 !important;
+    }
+}
+
+.p-datatable .p-sortable-column .p-sortable-column-icon{
+    color:#fff;
+}
+.p-datatable .p-datatable-tbody > tr > td{
+    text-align: right;
+    font-weight: 600;
+    font-size: 13px;
+
+}
+.p-component{
+    font-family: "Cairo", sans-serif !important;
+}
+.p-datatable-thead{
+    border-bottom: 15px solid whitesmoke;
+}
+.p-paginator .p-paginator-first, .p-paginator .p-paginator-prev, .p-paginator .p-paginator-next, .p-paginator .p-paginator-last{
+    transform: rotate(180deg);
+    min-width: 35px;
+    height: 35px;
+}
+.p-paginator .p-paginator-pages .p-paginator-page{
+    min-width: 35px;
+    height: 35px;
+}
+.p-paginator{
+    justify-content: end !important;
+}
+.p-paginator .p-paginator-pages .p-paginator-page.p-highlight {
+    background: #40a8e0;
+    color: #fff;
+}
+.p-paginator .p-paginator-last , .p-paginator .p-paginator-first{
+    background: #f3f3f3;
+}
+.p-paginator .p-dropdown .p-dropdown-label {
+    padding-left: 0;
+    padding-right:12px ;
+}
