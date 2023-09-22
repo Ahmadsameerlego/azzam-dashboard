@@ -1,9 +1,9 @@
 <template>
     <section class="pt-3 pb-3 px-5 ">
         <div>
-            <h6 class="fw-bold blackColor"> ادارة الاستشارات المباشرة </h6>
+            <h6 class="fw-bold blackColor"> ادارة الخطط العلاجية </h6>
             <p class="grayColor"> 
-                متابعة الاستشارات المباشرة
+                متابعة الخطط العلاجية
             </p>
         </div>
     </section>
@@ -13,7 +13,7 @@
         <!-- single step  -->
         <div class="step d-flex align-items-center">
             <span class="step_number active"> 1 </span>
-            <span class="step-text grayColor mx-2 active"> تأكيد الموعد </span>
+            <span class="step-text grayColor mx-2 active"> جديد </span>
         </div>
         <span class="line active"></span>
          <!-- single step  -->
@@ -72,66 +72,88 @@
             <!-- single info -->
             <div class="gray-bg pt-2 pb-2 px-5">
                 <div class="single_info gray-bg flex_between">
-                    <span class="info_key"> التخصص المطلوب </span>
+                    <span class="info_key"> الاسم </span>
                     <span class="info_value"> ٢ يناير ٢٠٢١ </span>
                 </div>
             </div>
             <!-- single info -->
             <div class="white_bg pt-2 pb-2 px-5">
                 <div class="single_info flex_between">
-                    <span class="info_key"> طريقة الدفع </span>
+                    <span class="info_key"> نوع الادمان </span>
                     <span class="info_value"> #123 </span>
                 </div>
             </div>
             <!-- single info -->
             <div class="gray-bg pt-2 pb-2 px-5">
                 <div class="single_info gray-bg flex_between">
-                    <span class="info_key"> تاريخ الاستشارة </span>
+                    <span class="info_key"> الحالة الاجتماعية </span>
                     <span class="info_value"> ٢ يناير ٢٠٢١ </span>
                 </div>
             </div>
             <!-- single info -->
             <div class="white_bg pt-2 pb-2 px-5">
                 <div class="single_info flex_between">
-                    <span class="info_key"> موعد الاستشارة </span>
+                    <span class="info_key"> الوظيفة </span>
                     <span class="info_value"> #123 </span>
                 </div>
             </div>
             <!-- single info -->
             <div class="gray-bg pt-2 pb-2 px-5">
                 <div class="single_info gray-bg flex_between">
-                    <span class="info_key"> مدة الاستشارة </span>
+                    <span class="info_key"> نوع الوظيفة </span>
                     <span class="info_value"> ٢ يناير ٢٠٢١ </span>
                 </div>
             </div>
             <!-- single info -->
             <div class="white_bg pt-2 pb-2 px-5">
                 <div class="single_info flex_between">
-                    <span class="info_key"> قيمة الاستشارة </span>
-                    <span class="info_value"> #123 </span>
+                    <span class="info_key"> هل يوجد اعراض انسحاب ؟ </span>
+                    <span class="info_value"> نعم </span>
                 </div>
             </div>
             <!-- single info -->
             <div class="gray-bg pt-2 pb-2 px-5">
                 <div class="single_info gray-bg flex_between">
-                    <span class="info_key"> قيمة الضريبة </span>
-                    <span class="info_value"> ٢ يناير ٢٠٢١ </span>
+                    <span class="info_key"> هل شخصت بأمراض نفسية ؟ </span>
+                    <span class="info_value"> نعم </span>
                 </div>
             </div>
-            <!-- total info -->
-            <div class="white_bg pt-2 pb-2 px-5">
-                <div class="single_info flex_between">
-                    <span class="main-color"> المجموع الكلي </span>
-                    <span class="main-color fw-6"> 20000</span>
-                </div>
-            </div>
+            
         </section>
 
     </section>
 
     <!-- status  -->
     <section class="main-bg pt-3 pb-3 mx-5 mb-3">
-        <h6 class="main-color fs-17 fw-6 px-5 mb-3"> وصف الحالة </h6>
+        <h6 class="sec-color fs-17 fw-6 px-5 mb-3"> وصف الحالة </h6>
+
+        <p class="grayColor mx-5 fs-14">
+            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Distinctio aliquid, quos harum deserunt quam consequatur minima magnam recusandae iusto natus dicta ratione optio nam, accusamus labore neque? Sapiente, consequuntur deserunt.
+        </p>
+    </section>
+
+    <!-- status  -->
+    <section class="main-bg pt-3 pb-3 mx-5 mb-3">
+        <h6 class="sec-color fs-17 fw-6 px-5 mb-3"> كيف تقضي أوقات فراغك </h6>
+
+        <p class="grayColor mx-5 fs-14">
+            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Distinctio aliquid, quos harum deserunt quam consequatur minima magnam recusandae iusto natus dicta ratione optio nam, accusamus labore neque? Sapiente, consequuntur deserunt.
+        </p>
+    </section>
+
+
+    <!-- status  -->
+    <section class="main-bg pt-3 pb-3 mx-5 mb-3">
+        <h6 class="sec-color fs-17 fw-6 px-5 mb-3"> الاوقات المناسبة لتنظيم الجلسات </h6>
+
+        <p class="grayColor mx-5 fs-14">
+            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Distinctio aliquid, quos harum deserunt quam consequatur minima magnam recusandae iusto natus dicta ratione optio nam, accusamus labore neque? Sapiente, consequuntur deserunt.
+        </p>
+    </section>
+
+    <!-- status  -->
+    <section class="main-bg pt-3 pb-3 mx-5 mb-3">
+        <h6 class="sec-color fs-17 fw-6 px-5 mb-3"> الأمراض النفسية التي شخصت بها من قبل </h6>
 
         <p class="grayColor mx-5 fs-14">
             Lorem ipsum dolor sit amet consectetur, adipisicing elit. Distinctio aliquid, quos harum deserunt quam consequatur minima magnam recusandae iusto natus dicta ratione optio nam, accusamus labore neque? Sapiente, consequuntur deserunt.
@@ -152,11 +174,7 @@
 
                 <div class="d-flex mb-2">
                     <span class="fw-6 fs-14 blackColor"> Ahmed Samer </span>
-                    <!-- rate  -->
-                    <div class="rate d-flex mx-4 align-items-center">
-                        <i class="fa-solid fa-star"></i>
-                        <span class="mx-1">4.4</span>
-                    </div>
+                    
                 </div>
 
                 <!-- phone  -->
@@ -170,48 +188,13 @@
         </section>
     </section>
 
-    <!-- spcialist info  -->
-    <section class="main-bg pt-3 pb-3 mx-5 mb-3">
-        <h6 class="sec-color fs-17 fw-6 px-5 mb-2"> بيانات الاخصائي </h6>
-        <!-- main info  -->
-        <section class="client_info mx-5 d-flex mt-3">
-            <!-- client image  -->
-            <div class="client_image">
-                <img :src="require('@/assets/imgs/logo.png')" alt="client image">
-            </div>
-            <!-- client info  -->
-            <div class="client_details mx-3">
+    <!-- send offer  -->
+    <div class="send_offer mx-5 mb-4">
+        <router-link to="/priceOffer">
+            ارسال عرض السعر
+        </router-link>
+    </div>
 
-                <div class="d-flex mb-2">
-                    <span class="fw-6 fs-14 blackColor"> Ahmed Samer </span>
-                    <!-- rate  -->
-                    <div class="rate d-flex mx-4 align-items-center">
-                        <i class="fa-solid fa-star"></i>
-                        <span class="mx-1">4.4</span>
-                    </div>
-                </div>
-
-                <!-- title  -->
-                <div class="title whiteColor">
-                    اخصائي علاج الادمان
-                </div>
-
-                <!-- desc  -->
-                <p class="grayColor fs-14 mt-2">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Provident, necessitatibus? Odit temporibus voluptate nostrum sint dolorum praesentium ab, obcaecati officiis dicta esse itaque. Possimus recusandae reprehenderit tempora cumque eveniet expedita!
-                </p>
-            </div>
-        </section>
-    </section>
-
-    <!-- report  -->
-    <section class="main-bg pt-3 pb-3 mx-5 mb-3">
-        <h6 class="sec-color fs-17 fw-6 px-5 mb-3"> تقرير الاستشارة </h6>
-
-        <p class="grayColor mx-5 fs-14">
-            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Distinctio aliquid, quos harum deserunt quam consequatur minima magnam recusandae iusto natus dicta ratione optio nam, accusamus labore neque? Sapiente, consequuntur deserunt.
-        </p>
-    </section>
 </template>
 
 <script>
@@ -221,95 +204,13 @@ export default {
 </script>
 
 <style lang="scss">
-    .client_info{
-        .client_image{
-            width:70px;
-            height:70px;
-            border-radius: 50%;
-            img{
-                width:100%;
-                height:100%;
-                object-fit: contain;
-                border-radius: 50%;
-            }
-        }
-        .rate{
-            background-color: #fafafa;
-            border-radius: 4px;
-            font-size: 12px;
-            padding: 4px 10px;
-            svg{
-                color:#f6b343;
-            }
-        }
-        .phone_icon{
-            width:22px;
-            height: 22px;
-            border-radius: 50%;
-            background-color: #4aa23632;
-        }
-        .title{
-            background-color: #3290d8;
-            border-radius: 15px;
-            padding: 3px 10px;
-            font-size: 11px;
-            min-width: 120px;
-            max-width: fit-content;
-            text-align: center;
-        }
-    }
-    .main-bg{
-        background-color: #fff;
-        border-radius: 4px;
-    }
-    .steps{
-        
-        .step{
-            position: relative;
-            .step_number{
-                width:20px;
-                height: 20px;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                border-radius: 50%;
-                border: 1px solid #bbbbbb;
-                color: #bbbbbb ;
-                font-size: 12px;
-                &.active{
-                    color: #3290d8;
-                    border: 1px solid #3290d8;
-                    background-color: #3290d830;
-                }
-            }
-            .step-text{
-                &.active{
-                    color: #333 !important;
-                }
-            }
-        }
-        .line{
-            width:300px;
-            height: 2px;
-            background-color:#bbbbbb ;
-            &.active{
-                background-color: #3290d8;
-            }
-        }
-    }
-    .gray-bg{
-        background-color: #fafafa;
-    }
-    .single_info{
-        width:50%;
-        .info_key{
-            color:#a6a6a6 ;
-            font-size: 13px;
-        }
-        .info_value{
-            color:#3c3b3c ;
-            font-weight: 600;
-            font-size: 14px;
-        }
+    .send_offer{
+        background-color: #3290d8;
+        border-radius: 20px;
+        text-align: center;
+        padding: 10px 7px;
+        color:#fff;
+        width: 250px;
+
     }
 </style>

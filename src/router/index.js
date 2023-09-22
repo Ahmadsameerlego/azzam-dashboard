@@ -10,7 +10,9 @@ import login from '@/views/loginView.vue';
 import register from '@/views/registerView.vue';
 import rates from '@/views/specialistRates.vue';
 import activeCode from '@/views/otpView.vue';
-import consult from '@/views/consultDetails.vue'
+import consult from '@/views/consultDetails.vue';
+import treat from '@/views/treatView.vue';
+import priceOffer from '@/views/priceOffer.vue'
 const routes = [
   {
     path: '/',
@@ -71,6 +73,16 @@ const routes = [
     path : '/activeCode',
     name : 'activeCode',
     component : activeCode
+  },
+  {
+    path : '/treat/:id',
+    name : 'treat',
+    component : treat
+  },
+  {
+    path : '/priceOffer',
+    name : 'priceOffer',
+    component : priceOffer
   }
 ]
 

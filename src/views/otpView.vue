@@ -60,13 +60,13 @@
 </template>
 
 <script>
-import InputText from 'primevue/inputtext';
-import Dropdown from 'primevue/dropdown';
+// import InputText from 'primevue/inputtext';
+// import Dropdown from 'primevue/dropdown';
 
 export default {
     components:{
-        InputText,
-        Dropdown
+        // InputText,
+        // Dropdown
     }
 }
 </script>

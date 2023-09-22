@@ -52,13 +52,14 @@
             <Column field="name" header="اسم العميل" sortable></Column>
             <Column field="phone" header="رقم الجوال" sortable></Column>
             <Column field="email" header="نوع الادمان" sortable></Column>
+            <Column field="email" header="نوع الطلب" sortable></Column>
 
             <Column  header="" >
                 <template #body="slotProps">
 
                    <div class="d-flex">
                         <!-- edit  -->
-                        <router-link  to="/" class="show_more fw-6" @click="click(slotProps.data._id)">
+                        <router-link  to="/treat/1" class="show_more fw-6" @click="click(slotProps.data._id)">
                                 عرض التفاصيل
                         </router-link>
                    </div>
