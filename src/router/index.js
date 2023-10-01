@@ -12,7 +12,9 @@ import rates from '@/views/specialistRates.vue';
 import activeCode from '@/views/otpView.vue';
 import consult from '@/views/consultDetails.vue';
 import treat from '@/views/treatView.vue';
-import priceOffer from '@/views/priceOffer.vue'
+import priceOffer from '@/views/priceOffer.vue';
+import supportManage from '@/views/supportManage.vue';
+import contactMessages from '@/views/contactMessages.vue'
 const routes = [
   {
     path: '/',
@@ -83,6 +85,16 @@ const routes = [
     path : '/priceOffer',
     name : 'priceOffer',
     component : priceOffer
+  },
+  {
+    path : '/supportManage/:id',
+    name : 'supportManage',
+    component : supportManage
+  },
+  {
+    path : '/contactMessages',
+    name : 'contactMessages',
+    component : contactMessages
   }
 ]
 

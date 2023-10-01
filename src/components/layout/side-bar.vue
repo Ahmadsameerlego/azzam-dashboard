@@ -129,6 +129,27 @@
 
         </li>
 
+
+        <!-- single nav item  -->
+        <li class="nav_item">
+          <router-link to="/contactMessages" class="flex_between">
+            <div class="d-flex align-items-center">
+              <span class="icon">
+                <i class="fa-regular fa-comments"></i>
+              </span>
+
+              <span class="mx-2 nav_name">
+                رسائل التواصل
+              </span>
+            </div>
+
+            <span class="left">
+              <i class="fa-solid fa-chevron-left"></i>
+            </span>
+          </router-link>
+
+        </li>
+
         <!-- single nav item  -->
         <li class="nav_item">
           <router-link to="/" class="flex_between">
