@@ -3,6 +3,8 @@ import App from './App.vue'
 import './registerServiceWorker'
 import router from './router'
 import store from './store';
+import VueI18n from 'vue-i18n';
+import i18n from './i18n'
 
 
 
@@ -44,6 +46,8 @@ dom.watch();
 
 
 createApp(App)
+    .use(i18n)
+    .use(VueI18n)
     .use(FontAwesomeIcon)
     .use(store)
     .use(router)

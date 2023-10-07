@@ -1,13 +1,13 @@
 <template>
     <section class="pt-3 pb-3 px-5 flex_between">
         <div>
-            <h6 class="fw-bold blackColor"> اضافة اخصائي </h6>
-            <p class="grayColor"> يمكنك اضافة اخصائي جديد وامكانية تعديله او حذفه </p>
+            <h6 class="fw-bold blackColor"> {{ $t('common.addSpec') }} </h6>
+            <p class="grayColor"> {{  $t('common.specDesc')  }} </p>
         </div>
     </section>
 
     <section class="card mx-5 pt-2 pb-2 px-4 border-none">
-        <h6 class="sec-color fw-6"> بيانات الاخصائي </h6>
+        <h6 class="sec-color fw-6"> {{ $t('common.specInfo') }} </h6>
 
         <form class="add_spec_form">
             <!-- profile pic  -->
@@ -27,10 +27,10 @@
                 <div class="col-md-6 mb-3">
                     <div class="form-group">
                         <label for="" class="d-block fw-6 mb-2">
-                             اسم الاخصائي 
+                             {{ $t('common.specName') }} 
                              <i class="fa-solid fa-star-of-life text-danger fs-10"></i>
                         </label>
-                        <InputText type="text" v-model="name" class="default_input w-100" placeholder="الرجاء ادخال الاسم" />
+                        <InputText type="text" v-model="name" class="default_input w-100" :placeholder="$t('common.namePlace')" />
 
                     </div>
                 </div>
@@ -38,7 +38,7 @@
                 <div class="col-md-6 mb-3">
                     <div class="form-group">
                         <label for="" class="d-block fw-6 mb-2">
-                             التخصص 
+                             {{ $t('common.special')  }} 
                              <i class="fa-solid fa-star-of-life text-danger fs-10"></i>
                         </label>
 
@@ -50,11 +50,11 @@
                 <div class="col-md-6 mb-3">
                     <div class="form-group position-relative">
                         <label for="" class="d-block fw-6 mb-2">
-                             رقم الجوال 
+                             {{ $t('common.phone')  }} 
                              <i class="fa-solid fa-star-of-life text-danger fs-10"></i>
                         </label>
 
-                        <InputText type="text" v-model="phone" class="default_input w-100" placeholder="الرجاء ادخال رقم الجوال" />
+                        <InputText type="text" v-model="phone" class="default_input w-100" :placeholder="$t('common.phonePlace')" />
 
                         <!-- country code  -->
                         <Dropdown v-model="selectedCity" :options="cities" optionLabel="name" placeholder="Select a City" class="default_input country_code w-100 w-full md:w-14rem" />
@@ -65,10 +65,10 @@
                 <div class="col-md-6 mb-3">
                     <div class="form-group">
                         <label for="" class="d-block fw-6 mb-2">
-                             البريد الالكتروني 
+                             {{  $t('common.email')  }} 
                              <i class="fa-solid fa-star-of-life text-danger fs-10"></i>
                         </label>
-                        <InputText type="text" v-model="email" class="default_input w-100" placeholder="الرجاء ادخال البريد الالكتروني" />
+                        <InputText type="text" v-model="email" class="default_input w-100" :placeholder="$t('common.emailPlace')" />
 
                     </div>
                 </div>
@@ -76,10 +76,10 @@
                 <div class="col-md-6 mb-3">
                     <div class="form-group">
                         <label for="" class="d-block fw-6 mb-2">
-                             سعر الاستشارة 
+                             {{  $t('common.conPrice')  }} 
                              <i class="fa-solid fa-star-of-life text-danger fs-10"></i>
                         </label>
-                        <InputNumber v-model="price" inputId="integeronly" class="default_input w-100" placeholder="الرجاء ادخال سعر الاستشارة" />
+                        <InputNumber v-model="price" inputId="integeronly" class="default_input w-100" :placeholder="$t('common.pricePlace')" />
 
                     </div>
                 </div>
@@ -87,10 +87,10 @@
                 <div class="col-md-6 mb-3">
                     <div class="form-group">
                         <label for="" class="d-block fw-6 mb-2">
-                             مدة الاستشارة 
+                             {{  $t('common.conDuration')  }} 
                              <i class="fa-solid fa-star-of-life text-danger fs-10"></i>
                         </label>
-                        <InputNumber v-model="duration" inputId="integeronly" class="default_input w-100" placeholder="الرجاء ادخال مدة الاستشارة" />
+                        <InputNumber v-model="duration" inputId="integeronly" class="default_input w-100" :placeholder="$t('common.durationPlace')" />
 
                     </div>
                 </div>
@@ -98,20 +98,20 @@
                 <div class="col-md-12 mb-3">
                     <div class="form-group">
                         <label for="" class="d-block fw-6 mb-2">
-                             نبذه عن الاخصائي بالعربية 
+                             {{  $t('common.bio_ar') }} 
                              <i class="fa-solid fa-star-of-life text-danger fs-10"></i>
                         </label>
-                        <Textarea v-model="bio_ar" autoResize rows="5" class="default_input default_textarea w-100" cols="30" placeholder="نبذه عن الاخصائي بالعربية" />
+                        <Textarea v-model="bio_ar" autoResize rows="5" class="default_input default_textarea w-100" cols="30" :placeholder="$t('common.bio_ar')" />
                     </div>
                 </div>
 
                 <div class="col-md-12">
                     <div class="form-group">
                         <label for="" class="d-block fw-6 mb-2">
-                             نبذه عن الاخصائي بالانجليزية 
+                             {{ $t('common.bio_en')  }} 
                              <i class="fa-solid fa-star-of-life text-danger fs-10"></i>
                         </label>
-                        <Textarea v-model="bio_en" autoResize rows="5" class="default_input default_textarea w-100" cols="30" placeholder="نبذه عن الاخصائي بالانجليزية" />
+                        <Textarea v-model="bio_en" autoResize rows="5" class="default_input default_textarea w-100" cols="30" :placeholder="$t('common.bio_en')" />
                     </div>
                 </div>
 
@@ -121,7 +121,7 @@
     </section>
 
     <section class="card mt-3 mx-5 pt-2 pb-2 px-4 border-none">
-        <h6 class="sec-color fw-6"> بيانات الاخصائي </h6>
+        <h6 class="sec-color fw-6"> {{ $t('common.specInfo')  }} </h6>
 
         <form class="add_spec_form">
             
@@ -130,7 +130,7 @@
                 <div class="col-md-4 mb-3">
                     <div class="form-group">
                         <label for="" class="d-block fw-6 mb-2">
-                             اليوم 
+                             {{ $t('common.day') }} 
                         </label>
 
                         <Dropdown v-model="selectedCity" :options="cities" optionLabel="name" placeholder="Select a City" class="default_input w-100 w-full md:w-14rem" />
@@ -140,7 +140,7 @@
                 <div class="col-md-4 mb-3">
                     <div class="form-group">
                         <label for="" class="d-block fw-6 mb-2">
-                             من 
+                             {{ $t('common.from') }} 
                         </label>
 
                         <Dropdown v-model="selectedCity" :options="cities" optionLabel="name" placeholder="Select a City" class="default_input w-100 w-full md:w-14rem" />
@@ -150,7 +150,7 @@
                 <div class="col-md-4 mb-3">
                     <div class="form-group">
                         <label for="" class="d-block fw-6 mb-2">
-                             الى 
+                             {{ $t('common.to')  }} 
                         </label>
 
                         <Dropdown v-model="selectedCity" :options="cities" optionLabel="name" placeholder="Select a City" class="default_input w-100 w-full md:w-14rem" />
@@ -164,10 +164,10 @@
                 <span class="add_icon flex_center whiteColor">
                     <i class="fa-solid fa-plus"></i>
                 </span>
-                <span class="mx-2 fw-6">اضافة تاريخ اخر</span>
+                <span class="mx-2 fw-6"> {{ $t('common.addAnotherDate')  }} </span>
             </div>
             <div class="d-flex justify-content-center align-items-center mt-3">
-                <button class="btn main_btn w-50 mx-auo pt-2 pb-2"> اضافة </button>
+                <button class="btn main_btn w-50 mx-auo pt-2 pb-2"> {{ $t('common.add') }} </button>
             </div>
         </form>
         

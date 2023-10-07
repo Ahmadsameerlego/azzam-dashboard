@@ -9,9 +9,9 @@
             <!-- user interaction  -->
             <div class="d-flex align-items-baseline">
                 <!-- lang  -->
-                <button class="btn lang">
+                <!-- <button class="btn lang">
                     <i class="fa-solid fa-globe"></i>
-                </button>
+                </button> -->
 
                 <!-- notfications  -->
                 <router-link to="/" class="btn nots mx-3">
@@ -28,6 +28,24 @@
                         <span class="title fw-6"> المدير العام </span>
                     </div>
                 </div>
+
+                <div class="dropdown">
+                    <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                        عربي
+                        <img class="flag_img" :src="require('@/assets/imgs/sudia.png')" alt="">
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                        <li><a class="dropdown-item" href="#">
+                            عربي
+                            <img class="flag_img" :src="require('@/assets/imgs/sudia.png')" alt="">
+                        </a></li>
+                        <li><a class="dropdown-item" href="#">
+                            انجليزي
+                            <img class="flag_img" :src="require('@/assets/imgs/en.png')" alt="">
+                        </a></li>
+                    </ul>
+                </div>
+
             </div>
         </section>
     </header>
@@ -40,5 +58,7 @@ export default {
 </script>
 
 <style>
-
+    .flag_img{
+        width: 25px;
+    }
 </style>

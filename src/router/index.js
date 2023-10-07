@@ -14,7 +14,11 @@ import consult from '@/views/consultDetails.vue';
 import treat from '@/views/treatView.vue';
 import priceOffer from '@/views/priceOffer.vue';
 import supportManage from '@/views/supportManage.vue';
-import contactMessages from '@/views/contactMessages.vue'
+import wallet from '@/views/walletView.vue';
+import contactMessages from '@/views/contactMessages.vue';
+import profile from '@/views/profileView.vue';
+import changePhone from '@/views/changePhone.vue';
+import contact from '@/views/contactUs.vue'
 const routes = [
   {
     path: '/',
@@ -95,6 +99,26 @@ const routes = [
     path : '/contactMessages',
     name : 'contactMessages',
     component : contactMessages
+  },
+  {
+    path : '/wallet',
+    name : 'wallet',
+    component : wallet
+  },
+  {
+    path : '/profile',
+    name : 'profile',
+    component : profile 
+  },
+  {
+    path : '/changePhone',
+    component : changePhone,
+    name : 'changePhone'
+  },
+  {
+    path : '/contact',
+    name : 'contact',
+    component : contact
   }
 ]
 

@@ -54,6 +54,11 @@ export default {
 }
 </script>
 
+<style scoped>
+    #auth #login{
+        transform: translateY(50%);
+    }
+</style>
 <style lang="scss">
     #auth{
         position: relative;
@@ -64,7 +69,6 @@ export default {
             margin-left: auto;
             background-color: #fff;
             border-radius: 25px;
-            transform: translateY(50%);
             padding: 30px 70px;
             .logo{
                 width:140px;

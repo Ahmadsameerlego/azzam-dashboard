@@ -18,7 +18,7 @@
               </span>
 
               <span class="nav_name mx-2 nav_name">
-                الرئيسية
+                {{  $t('nav.main') }}
               </span>
             </div>
 
@@ -38,7 +38,7 @@
               </span>
 
               <span class="mx-2 nav_name">
-                إداة الاخصائيين
+                {{  $t('nav.spec')  }}
               </span>
             </div>
 
@@ -58,7 +58,7 @@
               </span>
 
               <span class="nav_name mx-2 nav_name">
-                ادارة الاستشارات المباشرة
+                {{ $t('nav.direct')  }}
               </span>
             </div>
 
@@ -78,7 +78,7 @@
               </span>
 
               <span class="mx-2 nav_name">
-                ادارة الخطط العلاجية
+                {{  $t('nav.treat')  }}
               </span>
             </div>
 
@@ -98,7 +98,7 @@
               </span>
 
               <span class="mx-2 nav_name">
-                ادارة مجموعة الدعم
+                {{  $t('nav.support')  }}
               </span>
             </div>
 
@@ -118,7 +118,7 @@
               </span>
 
               <span class="mx-2 nav_name">
-                الحسابات المالية والارباح
+                {{  $t('nav.earn')  }}
               </span>
             </div>
 
@@ -139,7 +139,7 @@
               </span>
 
               <span class="mx-2 nav_name">
-                رسائل التواصل
+                {{  $t('nav.messages')  }}
               </span>
             </div>
 
@@ -152,14 +152,14 @@
 
         <!-- single nav item  -->
         <li class="nav_item">
-          <router-link to="/" class="flex_between">
+          <router-link to="/wallet" class="flex_between">
             <div class="d-flex align-items-center">
               <span class="icon">
                 <i class="fa-solid fa-wallet"></i>
               </span>
 
               <span class="mx-2 nav_name">
-                المحفظة
+                {{  $t('nav.wallet')  }}
               </span>
             </div>
 
@@ -172,14 +172,34 @@
 
         <!-- single nav item  -->
         <li class="nav_item">
-          <router-link to="/" class="flex_between">
+          <router-link to="/profile" class="flex_between">
             <div class="d-flex align-items-center">
               <span class="icon">
                 <i class="fa-regular fa-user"></i>
               </span>
 
               <span class="mx-2 nav_name">
-                الملف الشخصي
+                {{  $t('nav.profile')  }}
+              </span>
+            </div>
+
+            <span class="left">
+              <i class="fa-solid fa-chevron-left"></i>
+            </span>
+          </router-link>
+
+        </li>
+
+        <!-- single nav item  -->
+        <li class="nav_item">
+          <router-link to="/contact" class="flex_between">
+            <div class="d-flex align-items-center">
+              <span class="icon">
+                <i class="fa-solid fa-phone-volume"></i>
+              </span>
+
+              <span class="mx-2 nav_name">
+                {{  $t('nav.contact')  }}
               </span>
             </div>
 
@@ -199,7 +219,7 @@
               </span>
 
               <span class="mx-2 nav_name">
-                تسجيل الخروج
+                {{  $t('nav.logout')  }}
               </span>
             </div>
 

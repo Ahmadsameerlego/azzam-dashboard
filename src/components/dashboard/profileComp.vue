@@ -1,16 +1,19 @@
 <template>
-    <section id="auth">
-        <section id="login">
-            <!-- logo  -->
-            <div class="logo mx-auto d-flex">
-                <img :src="require('@/assets/imgs/logo.png')" alt="Azzam Logo">
-            </div>
+    <section class="pt-3 pb-3 px-5 ">
+        <div>
+            <h6 class="fw-bold blackColor"> الملف الشخصي </h6>
+            <p class="grayColor"> 
+                ادارة الملف الشخصي
+            </p>
+        </div>
+    </section>
+
+    <section id="auth" class="mx-5 pt-3 pb-3 px-3 main-bg">
+        <section id="login" class="mx-0 px-0" style="width:40%">
+            
             <!-- title  -->
-            <div class="mt-3">
-                <h6 class="blackColor fw-bold"> تسجيل جديد </h6>
-                <p class="grayColor">
-                    برجاء ادخال بيانات حسابك حتى تتمكن من التسجيل
-                </p>
+            <div class="">
+                <h6 class="blackColor fw-bold"> بيانات الملف الشخصي </h6>
             </div>
             <!-- form  -->
             <form>
@@ -35,8 +38,9 @@
                 </div>
 
                 <div class="form-group mb-3 position-relative">
-                    <label for="" class="blackColor d-block fw-6 mb-2 fs-14">
-                            رقم الجوال 
+                    <label for="" class="blackColor d-block fw-6 mb-2 fs-14 d-flex justify-content-between">
+                            <span>رقم الجوال</span> 
+                            <span class="grayColor" style="cursor: pointer;" @click="changePhoneModal=true">تغيير رقم الجوال</span>
                     </label>
 
                     <InputText type="text" v-model="phone" class="default_input w-100" placeholder="الرجاء ادخال رقم الجوال" />
@@ -157,22 +161,16 @@
                 
 
                 <div class="d-flex justify-content-center align-items-center mt-3">
-                    <button class="btn main_btn w-100 pt-2 pb-2"> تسجيل  </button>
+                    <button class="btn main_btn w-100 pt-2 pb-2"> تعديل  </button>
                 </div>
             </form>
 
-            <!-- register  -->
-            <div class="flex_center mt-3">
-                <p class="grayColor">
-                    هل لديك حساب  ؟
-                    <router-link to="/login" class="third-color"> تسجيل الدخول </router-link>
-                </p>
-            </div>
+           
         </section>
     </section>
 
-    <!-- google map modal  -->      
-    <Dialog v-model:visible="googleMap" modal :style="{ width: '50vw' }">
+     <!-- google map modal  -->      
+     <Dialog v-model:visible="googleMap" modal :style="{ width: '50vw' }">
         <GMapMap
             :center="locations"
             :zoom="14"
@@ -192,6 +190,58 @@
             />
         </GMapMap>
     </Dialog>
+    
+    <!-- change phone otp  -->
+     <Dialog v-model:visible="changePhoneModal" modal :style="{ width: '50vw' }">
+        <div style="margin:0 135px">
+            <h6 class="fw-bold blackColor"> الملف الشخصي </h6>
+            <p class="grayColor"> 
+                ادارة الملف الشخصي
+            </p>
+        </div>
+
+        <form>
+            <div class="form-group position-relative">        
+                <!-- otp  -->
+                <div class="position-relative flex-auto">
+                    <div
+                        style="
+                        display: flex;
+                        flex-direction: row;
+                        justify-content: space-evenly;
+                        "
+                    >
+                        <v-otp-input
+                            ref="otpInput"
+                            v-model:value="code"
+                            name="code"
+                            input-classes="otp-input"
+                            separator=""
+                            :num-inputs="6"
+                            :should-auto-focus="true"
+                            autofocus
+                            input-type="letter-numeric"
+                            style="flex-direction: row-reverse;"
+                        />
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="d-flex justify-content-center align-items-center mt-3 w-75 mx-auto">
+                <button class="btn main_btn w-100 pt-2 pb-2"> تأكيد </button>
+            </div>
+
+            <div class="flex_center mt-3">
+                <p class="grayColor">
+                    لم يصلك الكود  ؟
+                    <span  class="third-color"> إعادة ارسال </span>
+                </p>
+            </div>
+        </form>
+    </Dialog>
+
+
 </template>
 
 <script>
@@ -214,7 +264,8 @@ export default {
             googleMap : false,
             images : [],
             imagesName : [],
-            singleImage :null
+            singleImage :null,
+            changePhoneModal : false
         }
     },
     components:{
@@ -304,65 +355,6 @@ export default {
 }
 </script>
 
+<style>
 
-<style scoped>
-    #auth #login{
-        transform: translateY(10%);
-    }
-</style>
-<style lang="scss">
-.vue-map{
-    width: 100% !important;
-    height: 72vh !important;
-    position: relative;
-    overflow: hidden;
-}
-.pac-container{
-    z-index: 9999 !important;
-}
-.vue-map-hidden{
-    position: absolute  !important;
-    top: 92px !important;
-    right: 50% !important;
-    transform: translate(50%, 50%) !important;
-}
-.upload_file_container{
-    border: 1px dashed #3290d8;
-    width: 90px;
-    height: 90px;
-    border-radius: 10px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    svg{
-        color:#333;
-    }
-    input.upload_file_input{
-        position: absolute;
-        widows: 100%;
-        height:100%;
-        top: 0;
-        right:0;
-        opacity: 0;
-    }
-}
-.preview{
-    width: 80px;
-    height: 80px !important;
-    border-radius: 5px;
-}
-.remove-img{
-    position: absolute;
-    top: -4px;
-    left:-4px;
-    background-color: red;
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items:center;
-    color:#fff;
-    width:25px;
-    height:25px;
-    border: none;
-}
 </style>
