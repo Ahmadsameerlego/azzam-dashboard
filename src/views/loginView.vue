@@ -13,21 +13,26 @@
                 </p>
             </div>
             <!-- form  -->
-            <form>
+            <form @submit.prevent="login">
                 <div class="form-group position-relative">
                     <label for="" class="blackColor d-block fw-6 mb-2 fs-14">
                             رقم الجوال 
                     </label>
 
-                    <InputText type="text" v-model="phone" class="default_input w-100" placeholder="الرجاء ادخال رقم الجوال" />
+                    <InputText type="text" v-model="loginKey" name="loginKey" class="default_input w-100" placeholder="الرجاء ادخال رقم الجوال" />
 
                     <!-- country code  -->
-                    <Dropdown v-model="selectedCity" :options="cities" optionLabel="name" placeholder="Select a City" class="default_input country_code  w-full md:w-14rem" />
+                    <Dropdown v-model="selectedCity" :options="countries" optionLabel="name"  class="default_input country_code  w-full md:w-14rem" />
 
                 </div>
 
                 <div class="d-flex justify-content-center align-items-center mt-3">
-                    <button class="btn main_btn w-100 pt-2 pb-2"> تسجيل الدخول </button>
+                    <button class="btn main_btn w-100 pt-2 pb-2" :disabled="disabled"> 
+                        <span v-if="!disabled">تسجيل الدخول</span> 
+                        <div class="spinner-border" role="status" v-if="disabled">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </button>
                 </div>
             </form>
 
@@ -40,16 +45,75 @@
             </div>
         </section>
     </section>
+    <Toast />
 </template>
 
 <script>
 import InputText from 'primevue/inputtext';
 import Dropdown from 'primevue/dropdown';
+import { mapActions, mapGetters } from 'vuex';
+import axios from 'axios';
+import Toast from 'primevue/toast';
 
 export default {
+    data(){
+        return{
+            loginKey : '',
+            selectedCity : {
+                "id": "64ae5989a2f2fd0c04737761",
+                "name": "السعودية",
+                "image": "https://azzam.4hoste.com/assets/uploads/country/image941689583177874.png",
+                "code": "+966",
+            },
+            disabled : false
+        }
+    },
+    computed:{
+        ...mapGetters('setting',['countries'])
+    },
+    methods:{
+        ...mapActions('setting',['getCountries']),
+
+        // login 
+        async login(){
+            this.disabled = true ;
+            const fd = new FormData() ;
+            fd.append('loginKey', this.loginKey);
+            fd.append('countryCode', this.selectedCity.code);
+            fd.append('deviceId', localStorage.getItem('device_id'));
+            fd.append('deviceType', 'web');
+
+            await axios.post('/signin-center', fd)
+            .then( (res)=>{
+                if(  res.data.key === 'needActive' ){
+                    this.$toast.add({ severity: 'success', summary: res.data.message, life: 3000 });
+                    this.disabled = false ;
+                    localStorage.setItem('loginKey', this.loginKey);
+                    localStorage.setItem('countryCode', this.selectedCity.code);
+                    setTimeout(() => {
+                        this.$router.push('/activeCode');
+                    }, 3000);
+                }else{
+                    this.$toast.add({ severity: 'error', summary: res.data.message, life: 3000 });
+                    this.disabled = false ;
+                }
+
+            } )
+        }
+
+    },
     components:{
         InputText,
-        Dropdown
+        Dropdown,
+        Toast
+    },
+    mounted(){
+        this.getCountries();
+        // get random device_id 
+        fetch('https://api.ipify.org?format=json')
+        .then(response => response.json())
+        .then(data => localStorage.setItem('device_id', data.ip))
+        .catch(error => console.error(error));
     }
 }
 </script>
@@ -88,7 +152,7 @@ export default {
         }
         .country_code{
             position: absolute !important;
-            width: 20% !important;
+            width: 27% !important;
             left: 0;
             top: 40%;        
         }

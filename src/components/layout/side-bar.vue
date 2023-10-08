@@ -212,7 +212,7 @@
 
         <!-- single nav item  -->
         <li class="nav_item">
-          <router-link to="/login" class="flex_between">
+          <button @click="signOut" class="btn flex_between">
             <div class="d-flex align-items-center">
               <span class="icon logout">
                 <i class="fa-solid fa-arrow-right-from-bracket"></i>
@@ -226,18 +226,48 @@
             <span class="left">
               <i class="fa-solid fa-chevron-left"></i>
             </span>
-          </router-link>
+          </button>
 
         </li>
         
       </ul>
     </nav>
   </section>
+  <Toast />
 </template>
 
 <script>
-export default {
+import axios from 'axios';
+import Toast from 'primevue/toast';
 
+export default {
+  components:{
+    Toast
+  },
+  methods:{
+    async signOut(){
+      const fd = new FormData;
+      fd.append('deviceId', localStorage.getItem('device_id'));
+      const token = localStorage.getItem('token');
+      const headers = {
+          Authorization: `Bearer ${token}`,
+      };
+
+      await axios.post('/sign-out-center', fd , {headers})
+      .then( (res)=>{
+        if( res.data.key === 'success' ){
+          localStorage.removeItem('token');
+          localStorage.removeItem('user');
+          this.$toast.add({ severity: 'success', summary: res.data.message, life: 3000 });
+          setTimeout(() => {
+            this.$router.push('/login')
+          }, 3000);
+        }else{
+          this.$toast.add({ severity: 'error', summary: res.data.message, life: 3000 });
+        }
+      } )
+    }
+  }
 }
 </script>
 

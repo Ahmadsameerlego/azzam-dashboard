@@ -5,86 +5,15 @@
         <section class="cards">
             <div class="row">
                 <!-- single card  -->
-                <div class="col-md-3 mb-3">
-                    <section class="single_card blue px-3 pt-4 pb-3 flex_between">
+                <div class="col-md-3 mb-3" v-for="sta in statistics" :key="sta.id">
+                    <section class="single_card  px-3 pt-4 pb-3 flex_between" 
+                    :class="{dark:sta.key=='عدد الاخصائيين'||sta.key=='عدد جلسات الدعم', green : sta.key=='عدد الحالات الكلي'||sta.key=='عدد الاستشارات الفورية'||sta.key=='عدد الحاضرين لجلسات الدعم', blue:sta.key=='عدد الخطط العلاجية'}">
                         <div>
-                            <h4 class="fw-bold whiteColor">500</h4>
-                            <p class="whiteColor"> عدد العملاء </p>
+                            <h4 class="fw-bold whiteColor"> {{ sta.count }} </h4>
+                            <p class="whiteColor"> {{ sta.key }} </p>
                         </div>
                         <div class="card_icon">
                             <img :src="require('@/assets/imgs/plus.png')" alt="">
-                        </div>
-                    </section>
-                </div>
-                <!-- single card  -->
-                <div class="col-md-3 mb-3">
-                    <section class="single_card dark px-3 pt-4 pb-3 flex_between">
-                        <div>
-                            <h4 class="fw-bold whiteColor">500</h4>
-                            <p class="whiteColor"> عدد الاخصائيين </p>
-                        </div>
-                        <div class="card_icon">
-                            <img :src="require('@/assets/imgs/rotate.png')" alt="">
-                        </div>
-                    </section>
-                </div>
-                <!-- single card  -->
-                <div class="col-md-3 mb-3">
-                    <section class="single_card green px-3 pt-4 pb-3 flex_between">
-                        <div>
-                            <h4 class="fw-bold whiteColor">500</h4>
-                            <p class="whiteColor"> عدد الحالات الكلي </p>
-                        </div>
-                        <div class="card_icon">
-                            <img :src="require('@/assets/imgs/check.png')" alt="">
-                        </div>
-                    </section>
-                </div>
-                <!-- single card  -->
-                <div class="col-md-3 mb-3">
-                    <section class="single_card green px-3 pt-4 pb-3 flex_between">
-                        <div>
-                            <h4 class="fw-bold whiteColor">500</h4>
-                            <p class="whiteColor"> عدد الاستشارات الفورية </p>
-                        </div>
-                        <div class="card_icon">
-                            <img :src="require('@/assets/imgs/circle.png')" alt="">
-                        </div>
-                    </section>
-                </div>
-                <!-- single card  -->
-                <div class="col-md-3 mb-3">
-                    <section class="single_card blue px-3 pt-4 pb-3 flex_between">
-                        <div>
-                            <h4 class="fw-bold whiteColor">500</h4>
-                            <p class="whiteColor"> عدد الخطط العلاجية </p>
-                        </div>
-                        <div class="card_icon">
-                            <img :src="require('@/assets/imgs/plus.png')" alt="">
-                        </div>
-                    </section>
-                </div>
-                <!-- single card  -->
-                <div class="col-md-3 mb-3">
-                    <section class="single_card dark px-3 pt-4 pb-3 flex_between">
-                        <div>
-                            <h4 class="fw-bold whiteColor">500</h4>
-                            <p class="whiteColor"> عدد جلسات الدعم </p>
-                        </div>
-                        <div class="card_icon">
-                            <img :src="require('@/assets/imgs/rotate.png')" alt="">
-                        </div>
-                    </section>
-                </div>
-                <!-- single card  -->
-                <div class="col-md-3 mb-3">
-                    <section class="single_card green px-3 pt-4 pb-3 flex_between">
-                        <div>
-                            <h4 class="fw-bold whiteColor">500</h4>
-                            <p class="whiteColor"> عدد الحاضريين لجلسات الدعم </p>
-                        </div>
-                        <div class="card_icon">
-                            <img :src="require('@/assets/imgs/check.png')" alt="">
                         </div>
                     </section>
                 </div>
@@ -100,14 +29,16 @@
                         <div class="chart_header borderBottom">
                             <p class="fw-6 blackColor"> احصائيات الارباح </p>
                         </div>
-                        <div class="">
+                        <div class="position-relative">
                                 <Chart type="line" :data="chartData" :options="chartOptions" class="h-30rem" />
+
+                                <h6 class="total sec-color"> {{ managementProfitStatistics.total }}  </h6>
                         </div>
                     </section>
                 </div>
 
                 <!-- client opinions  -->
-                <div class="col-md-6 mb-3">
+                <div class="col-md-6 mb-3" >
                     <section class="chart">
                         <div class="chart_header borderBottom">
                             <p class="fw-6 blackColor"> أراء العملاء </p>
@@ -116,29 +47,29 @@
                         <!-- all opinions  -->
                         <sections class="opinions">
                             <!-- single opinion  -->
-                            <div class="opinion d-flex borderBottom pt-2 pb-2">
+                            <div class="opinion d-flex borderBottom pt-2 pb-2" v-for="review in reviews" :key="review.id">
                                 <!-- client image  -->
                                 <div class="client_image">
-                                    <img :src="require('@/assets/imgs/logo.png')" alt="client image">
+                                    <img :src="review.image" alt="client image">
                                 </div>
                                 <!-- opinion details  -->
                                 <div class="opinion_details flex_column align-items-start mx-3">
 
-                                    <span class="fw-6 blackColor mb-2"> Ahmed samer </span>
+                                    <span class="fw-6 blackColor mb-2"> {{ review.name }} </span>
 
                                     <div class="d-flex timming mb-2">
                                         <div class="d-flex align-items-center">
                                             <i class="fa-regular fa-clock"></i>
-                                            <span class="mx-1"> منذ ساعة </span>
+                                            <span class="mx-1"> {{ review.timeAdd }} </span>
                                         </div>
 
                                         <!-- starts  -->
-                                        <Rating v-model="rate" readonly :cancel="false" class="mx-3" />
+                                        <Rating v-model="review.rate" readonly :cancel="false" class="mx-3" />
                                     </div>
 
                                     <!-- comment  -->
                                     <span class="comment">
-                                        Lorem ipsum dolor sit amet consectetur.
+                                        {{ review.comment }}
                                     </span>
                                 </div>
                             </div>
@@ -153,14 +84,18 @@
 <script>
 import Chart from 'primevue/chart';
 import Rating from 'primevue/rating';
+import axios from 'axios';
 
 export default {
     data(){
         return{
             chartData: null,
             chartOptions: null,
-            rate : 5
-
+            rate : 5,
+            statistics : [],
+            managementProfitStatistics : {},
+            reviews : [],
+            profits : []
         }
     },
     components:{
@@ -172,12 +107,12 @@ export default {
             // const documentStyle = getComputedStyle(document.documentElement);
 
             return {
-                labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+                labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'Aug', 'sep', 'oct', 'nov','dec'],
                 datasets: [
                     
                     {
-                        label: 'Third Dataset',
-                        data: [12, 51, 62, 33, 21, 62, 45],
+                        label: 'احصائيات الارباح',
+                        data: this.profits , 
                         fill: true,
                         borderColor: '#3290d8',
                         tension: 0.4,
@@ -221,17 +156,40 @@ export default {
                     }
                 }
             };
+        },
+        // get home 
+        async getHome(){
+            const token = localStorage.getItem('token');
+            const headers = {
+                Authorization: `Bearer ${token}`,
+            };
+
+            await axios.get('/home-center', {headers})
+            .then( (res)=>{
+                this.statistics = res.data.data.statistics ;
+                this.managementProfitStatistics = res.data.data.managementProfitStatistics ;
+                this.profits = res.data.data.managementProfitStatistics.profits ;
+                this.reviews = res.data.data.reviews.results ;
+                this.chartData = this.setChartData();
+                this.chartOptions = this.setChartOptions();
+            } )
         }
     },
     mounted() {
-        this.chartData = this.setChartData();
-        this.chartOptions = this.setChartOptions();
+        
+        
+        this.getHome();
     },
 
 }
 </script>
 
 <style lang="scss">
+    .total{
+        position: absolute;
+        top: 5px;
+        right: 22px;
+    }
     .opinions{
         max-height: 350px;
         overflow-y: auto;

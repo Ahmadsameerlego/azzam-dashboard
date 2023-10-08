@@ -13,12 +13,12 @@
                 </p>
             </div>
             <!-- form  -->
-            <form>
+            <form @submit.prevent="register" ref="register">
                 <!-- profile pic  -->
                 <section class="profile_pic mx-auto d-flex mt-4">
-                    <input type="file" name="" @change="uploadProfilePic" class="uploadInput">
+                    <input type="file" name="avatar" @change="uploadProfilePic" class="uploadInput">
                     <!-- default image  -->
-                    <img :src="require('@/assets/imgs/logo.png')" class="profile_image" alt="">
+                    <img :src="require('@/assets/imgs/logo.png')" ref="profile" class="profile_image" alt="">
                     <!-- edit  -->
                     <span class="edit">
                         <i class="fa-solid fa-pen-to-square"></i>
@@ -30,7 +30,7 @@
                     <label for="" class="blackColor d-block fw-6 mb-2 fs-14">
                             اسم المركز 
                     </label>
-                    <InputText type="text" v-model="name" class="default_input w-100" placeholder="الرجاء ادخال اسم المركز" />
+                    <InputText type="text" v-model="name" name="name" class="default_input w-100" placeholder="الرجاء ادخال اسم المركز" />
 
                 </div>
 
@@ -39,10 +39,10 @@
                             رقم الجوال 
                     </label>
 
-                    <InputText type="text" v-model="phone" class="default_input w-100" placeholder="الرجاء ادخال رقم الجوال" />
+                    <InputText type="text" v-model="phone" name="phone" class="default_input w-100" placeholder="الرجاء ادخال رقم الجوال" />
 
                     <!-- country code  -->
-                    <Dropdown v-model="selectedCity" :options="cities" optionLabel="name" placeholder="Select a City" class="default_input country_code  w-full md:w-14rem" />
+                    <Dropdown v-model="selectedCountry" :options="countries" optionLabel="name"  class="default_input country_code  w-full md:w-14rem" />
 
                 </div>
 
@@ -50,7 +50,7 @@
                     <label for="" class="blackColor d-block fw-6 mb-2 fs-14">
                             البريد الالكتروني 
                     </label>
-                    <InputText type="text" v-model="name" class="default_input w-100" placeholder="الرجاء ادخال البريد الالكتروني" />
+                    <InputText type="text" v-model="email" name="email" class="default_input w-100" placeholder="الرجاء ادخال البريد الالكتروني" />
                 </div>
 
                 <div class="form-group mb-3">
@@ -58,7 +58,7 @@
                             التخصص 
                     </label>
 
-                    <Dropdown v-model="selectedCity" :options="cities" optionLabel="name" placeholder="Select a City" class="default_input w-100 w-full md:w-14rem" />
+                    <MultiSelect v-model="selectedSpec" :options="specs"  :maxSelectedLabels="3" optionLabel="name" placeholder="الرجاء اختيار التخصص" class="default_input w-100 w-full md:w-14rem" />
 
                 </div>
 
@@ -67,7 +67,7 @@
                             المدينة 
                     </label>
 
-                    <Dropdown v-model="selectedCity" :options="cities" optionLabel="name" placeholder="Select a City" class="default_input w-100 w-full md:w-14rem" />
+                    <Dropdown v-model="selectedCity" :options="cities" optionLabel="name" placeholder="الرجاء اختيار مدينة" class="default_input w-100 w-full md:w-14rem" />
 
                 </div>
 
@@ -85,28 +85,28 @@
                     <label for="" class="blackColor d-block fw-6 mb-2 fs-14">
                         رقم الترخيص
                     </label>
-                    <InputNumber v-model="value1" inputId="integeronly" class="default_input w-100" placeholder="الرجاء ادخال رقم الترخيص"/>
+                    <InputNumber v-model="commercialNumber" inputId="integeronly" class="default_input w-100" placeholder="الرجاء ادخال رقم الترخيص"/>
                 </div>
 
                 <div class="form-group mb-3">
                     <label for="" class="blackColor d-block fw-6 mb-2 fs-14">
                             اسم المالك 
                     </label>
-                    <InputText type="text" v-model="name" class="default_input w-100" placeholder="الرجاء ادخال اسم المالك" />
+                    <InputText type="text" v-model="ownerName" name="ownerName" class="default_input w-100" placeholder="الرجاء ادخال اسم المالك" />
                 </div>
 
                 <div class="form-group mb-3">
                     <label for="" class="blackColor d-block fw-6 mb-2 fs-14">
                             اسم البنك 
                     </label>
-                    <InputText type="text" v-model="name" class="default_input w-100" placeholder="الرجاء ادخال اسم البنك" />
+                    <InputText type="text" v-model="bankName"  name="bankName" class="default_input w-100" placeholder="الرجاء ادخال اسم البنك" />
                 </div>
 
                 <div class="form-group mb-3">
                     <label for="" class="blackColor d-block fw-6 mb-2 fs-14">
                             رقم الايبان 
                     </label>
-                    <InputText type="text" v-model="name" class="default_input w-100" placeholder="الرجاء ادخال رقم الايبان" />
+                    <InputText type="text" v-model="iban" name="iban" class="default_input w-100" placeholder="الرجاء ادخال رقم الايبان" />
                 </div>
 
 
@@ -124,7 +124,7 @@
                                 class="upload_file_input"
                                 accept="image/*"
                                 multiple
-                                name="boatImages[]"
+                                name="images[]"
                                 @change="uploadAdImages($event.target)"
                              >
                             <span class="icon">
@@ -157,7 +157,12 @@
                 
 
                 <div class="d-flex justify-content-center align-items-center mt-3">
-                    <button class="btn main_btn w-100 pt-2 pb-2"> تسجيل  </button>
+                    <button class="btn main_btn w-100 pt-2 pb-2" :disabled="disabled"> 
+                        <span v-if="!disabled">تسجيل</span> 
+                        <div class="spinner-border" role="status" v-if="disabled">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </button>
                 </div>
             </form>
 
@@ -192,6 +197,8 @@
             />
         </GMapMap>
     </Dialog>
+
+    <Toast />
 </template>
 
 <script>
@@ -199,7 +206,12 @@ import InputText from 'primevue/inputtext';
 import Dropdown from 'primevue/dropdown';
 import Dialog from 'primevue/dialog';
 import InputNumber from 'primevue/inputnumber';
+import Toast from 'primevue/toast';
 
+import { mapActions, mapGetters } from 'vuex';
+import MultiSelect from 'primevue/multiselect';
+
+import axios from 'axios';
 export default {
     data(){
         return{
@@ -214,16 +226,52 @@ export default {
             googleMap : false,
             images : [],
             imagesName : [],
-            singleImage :null
+            singleImage :null,
+
+            selectedCountry : {
+                "id": "64ae5989a2f2fd0c04737761",
+                "name": "السعودية",
+                "image": "https://azzam.4hoste.com/assets/uploads/country/image941689583177874.png",
+                "code": "+966",
+            },
+            selectedSpec : [],
+            selectedCity : null , 
+            cities : [],
+            ownerName : '',
+            name : '',
+            phone : '',
+            commercialNumber : null,
+            email : '',
+            bankName : '',
+            iban : '',
+            disabled : false
         }
+    },
+    computed:{
+        ...mapGetters('setting',['countries', 'specs'])
     },
     components:{
         InputText,
         Dropdown,
         Dialog,
-        InputNumber
+        InputNumber,
+        Toast,
+        MultiSelect
     },
     methods:{
+        ...mapActions('setting',['getCountries']),
+        uploadProfilePic(e){
+            const file = e.target.files[0];
+            this.$refs.profile.src = URL.createObjectURL(file);
+
+        },
+        // get cities 
+        async getCities(){
+            await axios.get(`/cities?countryId=${this.selectedCountry.id}`)
+            .then( (res)=>{
+                this.cities = res.data.data ;
+            } )
+        },
         // get current location  
         geolocation() {
             navigator.geolocation.getCurrentPosition((position) => {
@@ -297,15 +345,50 @@ export default {
             reader.readAsDataURL(this.images[i]);
           }
         },
+
+        // register 
+        async register(){
+            const fd = new FormData( this.$refs.register );
+            fd.append( 'countryCode', this.selectedCountry.code )
+            fd.append( 'addressAr', this.address )
+            fd.append( 'addressEn', this.address )
+            fd.append( 'latitude', this.locations.lat );
+            fd.append( 'longitude', this.locations.lng );
+            fd.append( 'city', this.selectedCity.id );
+            fd.append( 'commercialNumber', this.commercialNumber );
+
+            for( let i = 0 ; i<this.selectedSpec.length ; i++ ){
+                fd.append( 'specialization', this.selectedSpec[i].id );
+            }
+
+
+            this.disabled=true ;
+            await axios.post('/signup-center', fd)
+            .then( (res)=>{
+                if( res.data.key === 'success' ){
+                    this.$toast.add({ severity: 'success', summary: res.message, life: 3000 });
+                    setTimeout(() => {
+                        this.$router.push('/login')
+                    }, 3000);
+                    this.disabled=false ;
+                }else{
+                    this.$toast.add({ severity: 'error', summary: res.message, life: 3000 });
+                    this.disabled=false ;
+                }
+            } )
+        }
     },
     mounted(){
         this.geolocation();
+        this.getCountries();
+        this.getCities();
     }
 }
 </script>
 
 
 <style scoped>
+    .main_btn:disabled{ opacity: .5; cursor: not-allowed; }
     #auth #login{
         transform: translateY(10%);
     }

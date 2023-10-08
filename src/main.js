@@ -17,6 +17,8 @@ import "primevue/resources/themes/lara-light-indigo/theme.css";
 import "primevue/resources/primevue.min.css";
 
 
+import ToastService from 'primevue/toastservice';
+
 // import style 
 import '@/assets/scss/style.scss';
 // import bootstrap
@@ -44,6 +46,13 @@ import { far } from "@fortawesome/free-regular-svg-icons";
 library.add(fas, far, fab);
 dom.watch();
 
+// import axios
+import axios from 'axios';
+axios.defaults.baseURL = 'https://azzam.4hoste.com/api';
+// axios.defaults.headers.common['Authorization'] = localStorage.getItem('token');   
+// axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
+axios.defaults.headers.lang = 'ar';
+
 
 createApp(App)
     .use(i18n)
@@ -53,6 +62,7 @@ createApp(App)
     .use(router)
     .use(PrimeVue)
     .use(DataTable)
+    .use(ToastService)
     .use(Column)
     .use(ColumnGroup)
     .use(Row)
