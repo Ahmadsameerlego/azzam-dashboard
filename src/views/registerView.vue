@@ -364,7 +364,8 @@ export default {
 
             this.disabled=true ;
             await axios.post('/signup-center', fd)
-            .then( (res)=>{
+            .then((res)=>{
+                console.log("res",res);
                 if( res.data.key === 'success' ){
                     this.$toast.add({ severity: 'success', summary: res.message, life: 3000 });
                     setTimeout(() => {
@@ -375,6 +376,8 @@ export default {
                     this.$toast.add({ severity: 'error', summary: res.message, life: 3000 });
                     this.disabled=false ;
                 }
+            } ).catch ((err)=> {
+                this.$toast.add({ severity: 'error', summary: err, life: 3000 });
             } )
         }
     },
