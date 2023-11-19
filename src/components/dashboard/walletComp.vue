@@ -1,9 +1,9 @@
 <template>
     <section class="pt-3 pb-3 px-5">
         <div>
-            <h6 class="fw-bold blackColor"> المحفظة </h6>
+            <h6 class="fw-bold blackColor"> {{ $t('wallet.wallet') }} </h6>
             <p class="grayColor"> 
-                متابعة المحفظة
+                {{ $t('wallet.keep') }}
             </p>
         </div>
 
@@ -16,7 +16,7 @@
                 1000 رس
             </h3>
             <div>
-                <button class="main_btn btn w-100 px-5"> سحب رصيد </button>
+                <button class="main_btn btn w-100 px-5"> {{ $t('wallet.withdraw') }} </button>
             </div>
         </div>
     </section>

@@ -26,19 +26,26 @@
 
     <!-- table  -->
     <div class=" ">
+
         <DataTable 
-            :value="products" 
+            :value="doctors" 
             tableStyle="min-width: 50rem" 
             paginator :rows="5"  
             :rowsPerPageOptions="[5, 10, 20, 50]" 
             sortMode="multiple"
             v-model:filters="filters"
             style="width:90%;margin:auto" 
+            v-if="isShown"
         >
              
             <template #empty> No customers found. </template>
 
-            <Column field="_id.$oid" header="رقم" ></Column>
+            <Column  header="رقم" >
+                <template #body="slotProps">
+                <!-- Add row numbers to your table -->
+                {{  slotProps.index + 1  }}
+                </template>
+            </Column>
             <Column field="name" header="اسم الاخصائي" sortable></Column>
             <Column field="phone" header="رقم الجوال" sortable></Column>
             <Column field="email" header="البريد الالكتروني" sortable></Column>
@@ -48,7 +55,7 @@
 
                     <div class="d-flex">
                         <!-- edit  -->
-                        <router-link  to="/rates/1" class="" @click="click(slotProps.data._id)">
+                        <router-link  :to="'/rates/'+slotProps.data.id" class="" @click="click(slotProps.data._id)">
                             عرض التقييم
                         </router-link>
                        
@@ -60,8 +67,13 @@
                 <template #body="slotProps">
 
                    <div class="">
-                        <button class="btn deactivate" @click="click(slotProps.data._id)"> الغاء تفعيل الحساب </button>
-                        <!-- <button class="btn activate" @click="click(slotProps.data._id)">  تفعيل الحساب </button> -->
+                        <button class="btn deactivate"  v-if="slotProps.data.isApproved== true" @click="deactive(slotProps.data.id)"> 
+                            الغاء تفعيل الحساب 
+
+                        </button>
+                        <button class="btn activate"  v-if="slotProps.data.isApproved== false" @click="deactive(slotProps.data.id)">  
+                            تفعيل الحساب 
+                        </button>
                    </div>
                 </template>
             </Column>
@@ -72,74 +84,107 @@
 
                    <div class="d-flex">
                         <!-- edit  -->
-                        <router-link  to="/" class="edit_doctor" @click="click(slotProps.data._id)">
+                        <router-link  :to="'/editDoctor/'+slotProps.data.id" class="edit_doctor">
                                 <i class="fa-solid fa-pen-to-square" ></i>
                         </router-link>
                         <!-- notify  -->
-                        <span class="notify mx-2" @click="openNotiftDialog(slotProps.data._id)">
+                        <span class="notify mx-2" @click="openNotiftDialog(slotProps.data.id)">
                             <i class="fa-regular fa-bell"></i>
                         </span>
                         <!-- delete  -->
-                        <span class="delete">
+                        <span class="delete" @click="deleteDoctor(slotProps.data.id)">
                             <i class="fa-regular fa-trash-can"></i>
                         </span>
                    </div>
                 </template>
             </Column>
         </DataTable>
+
+        <Skeleton v-else style="width:90%;margin:auto" height="10rem"></Skeleton>
     </div>
 
 
     <!-- send notification  -->
     <Dialog v-model:visible="visible" modal  :style="{ width: '50vw' }">
         <h4 class="text-center main-color fw-6"> ارسال اشعار </h4>
-        <form>
-                <div class="form-group">
+        <form @submit.prevent="sendNot()" ref="not_form">
+                <div class="form-group mb-2">
                     <label for="" class="d-block fw-6 mb-2">
-                            عنوان الاشعار 
+                            عنوان الاشعار بالعربية 
                     </label>
-                    <InputText type="text" v-model="name" class="default_input w-100" placeholder="الرجاء ادخال عنوان الاشعار" />
+                    <InputText type="text" v-model="titleAr" name="titleAr" class="default_input w-100" placeholder="الرجاء ادخال عنوان الاشعار بالعربية" />
+
+                </div>
+
+                <div class="form-group mb-2">
+                    <label for="" class="d-block fw-6 mb-2">
+                            عنوان الاشعار بالانجليزية 
+                    </label>
+                    <InputText type="text" v-model="titleEn" name="titleEn" class="default_input w-100" placeholder="الرجاء ادخال عنوان الاشعار بالانجليزية" />
 
                 </div>
 
 
-                <div class="form-group">
+                <div class="form-group mb-2">
                     <label for="" class="d-block fw-6 mb-2">
-                            محتوى الاشعار 
+                            محتوى الاشعار بالعربية 
                     </label>
-                    <Textarea v-model="bio_ar" autoResize rows="5" class="default_input default_textarea w-100" cols="30" placeholder="الرجاء ادخال محتوى الاشعار" />
+                    <Textarea v-model="messageAr" name="messageAr" autoResize rows="5" class="default_input default_textarea w-100" cols="30" placeholder="الرجاء ادخال محتوى الاشعار بالعربية" />
+                </div>
+
+                <div class="form-group mb-2">
+                    <label for="" class="d-block fw-6 mb-2">
+                            محتوى الاشعار بالانجليزية 
+                    </label>
+                    <Textarea v-model="messageEn" name="messageEn" autoResize rows="5" class="default_input default_textarea w-100" cols="30" placeholder="الرجاء ادخال محتوى الاشعار بالانجليزية" />
                 </div>
 
                 <div class="d-flex justify-content-center align-items-center mt-3">
-                    <button class="btn main_btn w-50 mx-auo pt-2 pb-2"> ارسال </button>
+                    <button class="btn main_btn w-50 mx-auo pt-2 pb-2" :disabled="disabled">
+                         <span v-if="!disabled">ارسال</span> 
+                         <div class="spinner-border" role="status" v-if="disabled">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </button>
                 </div>
 
         </form>
     </Dialog>
+    <Toast />
+
 
 </template>
 
 <script>
-import { ProductService } from '@/services/customerServices';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import { FilterMatchMode } from 'primevue/api';
 import Dialog from 'primevue/dialog';
 
-// import ColumnGroup from 'primevue/columngroup';   // optional
-// import Row from 'primevue/row';                   // optional
 import InputText from 'primevue/inputtext';
 import Textarea from 'primevue/textarea';
+import axios from 'axios';
+
+
+import Skeleton from 'primevue/skeleton';
+import Toast from 'primevue/toast';
 
 export default {
     data() {
         return {
-            products: null,
+            // products: null,
             visible : false,
             filters: {
                 global: { value: null, matchMode: FilterMatchMode.CONTAINS },
             },
-
+            doctors : [],
+            disabled : false ,
+            isShown : false,
+            not_id : null,
+            titleAr : '',
+            titleEn : '',
+            messageAr : '',
+            messageEn : '',
         };
     },
     components:{
@@ -147,21 +192,122 @@ export default {
         Column,
         InputText,
         Dialog,
-        Textarea
+        Textarea,
+        Skeleton,
+        Toast 
         // ColumnGroup,
         // Row
     },
     methods:{
-        click(a){
-            console.log(a)
+        // deactive 
+        async deactive(id){
+            const fd = new FormData();
+            await axios.put(`/show-hidden-doctor?id=${id}`, fd ,{
+                headers:{
+                    Authorization : `Bearer ${localStorage.getItem('token')}`
+                }
+            })
+            .then( (res)=>{
+                if( res.data.key == 'success' ){
+                    this.$toast.add({ severity: 'success', summary: res.data.message, life: 3000 });
+                    this.disabled = false ;
+                    // setTimeout(() => {
+                        this.getDoctors()
+                    // }, 1000);
+                }else{
+                    this.$toast.add({ severity: 'error', summary: res.data.message, life: 3000 });
+                    this.disabled = false ;
+                }
+            } )
+            .catch( (err)=>{
+                this.$toast.add({ severity: 'error', summary: err.response.data.message, life: 3000 });
+                this.disabled = false ;
+            } )
+        },
+        // delete doctors 
+        async deleteDoctor(id){
+            await axios.delete(`/delete-doctor?id=${id}`,{
+                headers:{
+                    Authorization : `Bearer ${localStorage.getItem('token')}`
+                }
+            })
+            .then( (res)=>{
+                if( res.data.key == 'success' ){
+                    this.$toast.add({ severity: 'success', summary: res.data.message, life: 3000 });
+                    this.disabled = false ;
+                    // setTimeout(() => {
+                        this.getDoctors()
+                    // }, 1000);
+                }else{
+                    this.$toast.add({ severity: 'error', summary: res.data.message, life: 3000 });
+                    this.disabled = false ;
+                }
+            } )
+            .catch( (err)=>{
+                this.$toast.add({ severity: 'error', summary: err.response.data.message, life: 3000 });
+                this.disabled = false ;
+            } )
         },
         openNotiftDialog(id){
             this.visible = true ;
-            console.log(id);
+            this.not_id = id ;
+        },
+        // send Notification 
+        async sendNot(){
+            this.disabled = true ;
+            const fd = new FormData(this.$refs.not_form);
+            fd.append('id', this.not_id);
+            await axios.post('/send-notify', fd , {
+                headers : {
+                    Authorization : `Bearer ${localStorage.getItem('token')}`
+                }
+            })
+            .then( (res)=>{
+                if( res.data.key == 'success' ){
+                    this.$toast.add({ severity: 'success', summary: res.data.message, life: 3000 });
+                    this.disabled = false ;
+
+                    this.titleAr  = '';
+                    this.titleEn  = '';
+                    this.messageAr  = '';
+                    this.messageEn  = '';
+
+                    setTimeout(() => {
+                        this.visible = false ;
+                    }, 2000);
+                }else{
+                    this.$toast.add({ severity: 'error', summary: res.data.message, life: 3000 });
+                    this.disabled = false ;
+                }
+            } )
+            .catch( (err)=>{
+                this.$toast.add({ severity: 'error', summary: err.response.data.message, life: 3000 });
+                this.disabled = false ;
+            } )
+        },
+        // get doctors 
+        async getDoctors(){
+            await axios.get('/doctors', {
+                headers : {
+                    Authorization : `Bearer ${localStorage.getItem('token')}`
+                }
+            })
+            .then( (res)=>{
+                if( res.data.key === 'success' ){
+                    this.doctors = res.data.data ;
+                    this.isShown = true ;
+                }
+            } )
+            .catch( (err)=>{
+                this.$toast.add({ severity: 'error', summary: err.response.data.message, life: 3000 });
+            } )
         }
     },
     mounted() {
-        ProductService.getProductsMini().then((data) => (this.products = data));
+        this.getDoctors();
+        setTimeout(() => {
+            console.log(document.querySelector('.p-icon p-sortable-column-icon'))
+        }, 1000);
     }
 }
 </script>
@@ -200,12 +346,14 @@ export default {
     .deactivate{
         background-color: #df342f !important;
         color:#fff !important;
-        width:157px !important;
-        font-size:14px !important;
+        width:117px !important;
+        font-size:10px !important;
     }
     .activate{
         background-color: #4aa236 !important;
         color:#fff !important;
+        font-size: 10px !important;
+        width:117px !important;
     }
     .grayColor{
         color: #bbbbbb;

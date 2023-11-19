@@ -1,33 +1,69 @@
 <template>
     <section id="statistics" class="pt-3 pb-3 px-5">
-        <h6 class="fw-bold blackColor"> لوحة التحكم </h6>
+        <h6 class="fw-bold blackColor"> {{ $t('home.dash') }} </h6>
         <!-- statistics cards  -->
         <section class="cards">
-            <div class="row">
+            <div class="row" v-if="isShow">
                 <!-- single card  -->
                 <div class="col-md-3 mb-3" v-for="sta in statistics" :key="sta.id">
                     <section class="single_card  px-3 pt-4 pb-3 flex_between" 
-                    :class="{dark:sta.key=='عدد الاخصائيين'||sta.key=='عدد جلسات الدعم', green : sta.key=='عدد الحالات الكلي'||sta.key=='عدد الاستشارات الفورية'||sta.key=='عدد الحاضرين لجلسات الدعم', blue:sta.key=='عدد الخطط العلاجية'}">
+                    :class="{
+                        dark:sta.key==$t('home.docNum')
+                        ||sta.key==$t('home.supportNum'), green : sta.key==$t('home.total')
+                        ||sta.key==$t('home.urgentNum')
+                        ||sta.key==$t('home.personsNum'), blue:sta.key==$t('home.treatNum')
+                    }">
                         <div>
                             <h4 class="fw-bold whiteColor"> {{ sta.count }} </h4>
                             <p class="whiteColor"> {{ sta.key }} </p>
                         </div>
-                        <div class="card_icon">
-                            <img :src="require('@/assets/imgs/plus.png')" alt="">
+                        <div class="card_icon" v-if="sta.key==$t('home.docNum')||sta.key==$t('home.supportNum')">
+                            <img :src="require('@/assets/imgs/rotate.png')" alt="">
+                        </div>
+                        <div class="card_icon" v-if="sta.key==$t('home.total')||sta.key==$t('home.personsNum')">
+                            <img :src="require('@/assets/imgs/check.png')" alt="">
+                        </div>
+                        <div class="card_icon" v-if="sta.key==$t('home.treatNum')">
+                            <img :src="require('@/assets/imgs/check.png')" alt="">
+                        </div>
+                        <div class="card_icon" v-if="sta.key==$t('home.urgentNum')">
+                            <img :src="require('@/assets/imgs/circle.png')" alt="">
                         </div>
                     </section>
+                </div>
+            </div>
+
+            <div class="row" v-else>
+                <div class="col-md-3 mb-3">
+                    <Skeleton  height="9rem"></Skeleton>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <Skeleton  height="9rem"></Skeleton>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <Skeleton  height="9rem"></Skeleton>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <Skeleton  height="9rem"></Skeleton>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <Skeleton  height="9rem"></Skeleton>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <Skeleton  height="9rem"></Skeleton>
                 </div>
             </div>
         </section>
 
         <!-- chart & client opinios  -->
         <section class="chart_opinions mt-3"> 
-            <div class="row">
+
+            <div class="row" v-if="isShow">
                 <!-- chart  -->
                 <div class="col-md-6 mb-3">
                     <section class="chart">
                         <div class="chart_header borderBottom">
-                            <p class="fw-6 blackColor"> احصائيات الارباح </p>
+                            <p class="fw-6 blackColor"> {{ $t('home.profits') }} </p>
                         </div>
                         <div class="position-relative">
                                 <Chart type="line" :data="chartData" :options="chartOptions" class="h-30rem" />
@@ -36,12 +72,12 @@
                         </div>
                     </section>
                 </div>
-
+                
                 <!-- client opinions  -->
                 <div class="col-md-6 mb-3" >
                     <section class="chart">
                         <div class="chart_header borderBottom">
-                            <p class="fw-6 blackColor"> أراء العملاء </p>
+                            <p class="fw-6 blackColor"> {{ $t('home.opinions') }} </p>
                         </div>
                         
                         <!-- all opinions  -->
@@ -77,6 +113,15 @@
                     </section>
                 </div>
             </div>
+
+            <div class="row" v-else>
+                <div class="col-md-6 mb-3">
+                    <Skeleton  height="23rem"></Skeleton>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <Skeleton  height="23rem"></Skeleton>
+                </div>
+            </div>
         </section>
     </section>
 </template>
@@ -85,6 +130,7 @@
 import Chart from 'primevue/chart';
 import Rating from 'primevue/rating';
 import axios from 'axios';
+import Skeleton from 'primevue/skeleton';
 
 export default {
     data(){
@@ -95,12 +141,14 @@ export default {
             statistics : [],
             managementProfitStatistics : {},
             reviews : [],
-            profits : []
+            profits : [],
+            isShow : false
         }
     },
     components:{
         Chart,
-        Rating
+        Rating,
+        Skeleton
     },
     methods:{
         setChartData() {
@@ -172,6 +220,7 @@ export default {
                 this.reviews = res.data.data.reviews.results ;
                 this.chartData = this.setChartData();
                 this.chartOptions = this.setChartOptions();
+                this.isShow = true ;
             } )
         }
     },
@@ -185,6 +234,7 @@ export default {
 </script>
 
 <style lang="scss">
+
     .total{
         position: absolute;
         top: 5px;
@@ -218,6 +268,7 @@ export default {
     }
     .cards{
         .single_card{
+            position: relative;
             min-height: 140px;
             border-radius: 4px;
             &.blue{
@@ -229,6 +280,27 @@ export default {
             &.green{
                 background-color: #4aa236;
             }
+
+            &::before{
+                content: "";
+                position: absolute;
+                width: 44px;
+                height: 40px;
+                left: 9px;
+                bottom: 57px;
+                z-index: 0;
+                transition: .3s all;
+                background: linear-gradient(90deg, rgb(255 255 255 / 1%) 0%, rgb(255 255 255 / 24%) 38%);
+                border-radius: 8px;
+            }
+            &:hover{
+                &::before{
+                    width: 100%;
+                    height: 100%;
+                    bottom:0;
+                    left:0;
+                }
+            }
         }
     }
     .chart{
@@ -236,7 +308,11 @@ export default {
         background-color: #fff;
         padding: 10px;
         border-radius: 3px;
-        box-shadow: 0px 0px 7px #25436f31;;
+        box-shadow: 0px 0px 7px #25436f31;
+        transition: .3s all;
+        &:hover{
+            box-shadow: 0px 0px 15px #25436f68;
+        }
     }
     .p-chart{
         height: 350px   ;

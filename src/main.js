@@ -51,7 +51,7 @@ import axios from 'axios';
 axios.defaults.baseURL = 'https://azzam.4hoste.com/api';
 // axios.defaults.headers.common['Authorization'] = localStorage.getItem('token');   
 // axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
-axios.defaults.headers.lang = 'ar';
+axios.defaults.headers.lang = localStorage.getItem('locale');
 
 
 createApp(App)

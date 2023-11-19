@@ -1,4 +1,4 @@
-import { createRouter, createWebHashHistory } from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue';
 import specialistsManage from '@/views/specificationsManage.vue';
 import addSpecialist from '@/views/addSpecialist.vue';
@@ -18,7 +18,9 @@ import wallet from '@/views/walletView.vue';
 import contactMessages from '@/views/contactMessages.vue';
 import profile from '@/views/profileView.vue';
 import changePhone from '@/views/changePhone.vue';
-import contact from '@/views/contactUs.vue'
+import contact from '@/views/contactUs.vue';
+import editDoctor from '@/views/editDoctor.vue';
+import addGroup from '@/views/addGroup.vue'
 const routes = [
   {
     path: '/',
@@ -86,7 +88,7 @@ const routes = [
     component : treat
   },
   {
-    path : '/priceOffer',
+    path : '/priceOffer/:id',
     name : 'priceOffer',
     component : priceOffer
   },
@@ -119,11 +121,21 @@ const routes = [
     path : '/contact',
     name : 'contact',
     component : contact
+  },
+  {
+    path : '/editDoctor/:id',
+    name : 'editDoctor',
+    component : editDoctor
+  },
+  {
+    path : '/addGroup',
+    name : 'addGroup',
+    component :addGroup 
   }
 ]
 
 const router = createRouter({
-  history: createWebHashHistory(),
+  history: createWebHistory(),
   routes
 })
 

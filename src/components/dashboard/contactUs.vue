@@ -16,7 +16,7 @@
                 <h6 class="blackColor fw-bold"> تواصل معنا </h6>
             </div>
 
-            <form class="mt-4 w-50">
+            <form class="mt-4 w-50" >
                 <div class="form-group mb-3">
                     <label for="" class="blackColor d-block fw-6 mb-2 fs-14">
                             اسم المركز 
@@ -32,7 +32,7 @@
                     <InputText type="text" v-model="phone" class="default_input w-100" placeholder="الرجاء ادخال رقم الجوال" />
 
                     <!-- country code  -->
-                    <Dropdown v-model="selectedCity" :options="cities" optionLabel="name" placeholder="Select a City" class="default_input country_code  w-full md:w-14rem" />
+                    <Dropdown v-model="selectedCity" :options="countries" @change="chooseCountry" optionLabel="name" placeholder="Select a City" class="default_input country_code  w-full md:w-14rem" />
 
                 </div>
 
@@ -40,14 +40,14 @@
                     <label for="" class="blackColor d-block fw-6 mb-2 fs-14">
                             البريد الالكتروني 
                     </label>
-                    <InputText type="text" v-model="name" class="default_input w-100" placeholder="الرجاء ادخال البريد الالكتروني" />
+                    <InputText type="email" v-model="email" class="default_input w-100" placeholder="الرجاء ادخال البريد الالكتروني" />
                 </div>
 
                 <div class="form-group">
                     <label for="" class="blackColor d-block fw-6 mb-2 fs-14">
                             الرسالة 
                     </label>
-                    <Textarea v-model="bio_en" autoResize rows="5" class="default_input default_textarea w-100" cols="30" placeholder="الرجاء ادخال رسالتك" />
+                    <Textarea v-model="message" autoResize rows="5" class="default_input default_textarea w-100" cols="30" placeholder="الرجاء ادخال رسالتك" />
                 </div>
 
             </form>
@@ -56,8 +56,15 @@
     </section>  
     
     <div class="d-flex mx-5  mt-3">
-        <button class="btn main_btn w-25  pt-2 pb-2"> ارسال </button>
+        <button class="btn main_btn w-25  pt-2 pb-2" :disabled="disabled" @click="sendMessage"> 
+            <span v-if="!loader">ارسال</span> 
+            <div class="spinner-border" role="status" v-if="loader">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </button>
     </div>
+
+    <Toast />
 </template>
 
 <script>
@@ -65,11 +72,97 @@ import InputText from 'primevue/inputtext';
 import Dropdown from 'primevue/dropdown';
 import Textarea from 'primevue/textarea';
 
+import { mapActions, mapGetters } from 'vuex';
+
+
+import axios from 'axios';
+// import Skeleton from 'primevue/skeleton';
+import Toast from 'primevue/toast';
+
 export default {
+    data(){
+        return{
+            name : '',
+            phone : '',
+            email : '',
+            // disabled : false ,
+            selectedCity:{
+                "id": "64ae5989a2f2fd0c04737761",
+                "name": "السعودية",
+                "image": "https://azzam.4hoste.com/assets/uploads/country/image941689583177874.png",
+                code: "+966",
+            },
+            loader : false ,
+            disabled : true,
+            message : ''
+        }
+    },
     components:{
         InputText,
         Dropdown,
-        Textarea
+        Textarea,
+        // Skeleton,
+        Toast
+    },
+    watch:{
+        message(){
+            if( this.message == '' ){
+                this.disabled = true ;
+            }else{
+                this.disabled = false ;
+            }
+        }
+    },
+    computed:{
+        ...mapGetters('setting',['countries'])
+    },
+    methods:{
+        ...mapActions('setting',['getCountries']),
+        chooseCountry(){
+            document.querySelector('.p-dropdown-label').innerHTML = this.selectedCity.code ;
+        },
+
+        // send message 
+        async sendMessage(){
+            this.loader = true ;
+            this.disabled = true ;
+            const fd = new FormData();
+            fd.append('message', this.message)
+            await axios.post('/contactus-center', fd ,{
+                headers : {
+                    Authorization : `Bearer ${localStorage.getItem('token')}`
+                }
+            })
+            .then( (res)=>{
+                if( res.data.key === 'success' ){
+                    this.$toast.add({ severity: 'success', summary: res.data.message, life: 3000 });
+                    this.loader = false ;
+                    this.disabled = false ;
+                    this.message = '';
+                }else{
+                    this.$toast.add({ severity: 'error', summary: res.data.message, life: 3000 });
+                    this.loader = false ;
+                    this.disabled = false ;
+                }
+            } )
+            .catch( (err)=>{
+                this.$toast.add({ severity: 'error', summary: err.response.data.message, life: 3000 });
+                this.loader = false ;
+                this.disabled = false ;
+            } )
+        }
+
+    },
+    mounted(){
+        this.getCountries();
+        // document.querySelector('.p-dropdown-label').innerHTML = this.selectedCity.code ;
+
+        let user = JSON.parse(localStorage.getItem('user'));
+        this.name = user.name ;
+        this.phone = user.phone ;
+        this.email = user.email ;
+        this.selectedCity.code = user.countryCode ;
+        document.querySelector('.p-dropdown-label').innerHTML = user.countryCode ;
     }
 }
 </script>

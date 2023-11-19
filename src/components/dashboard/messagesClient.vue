@@ -1,29 +1,29 @@
 <template>
     <!-- filter  -->
     <section class="table_filter" style="width:90%;margin-right:auto;margin-left:auto">
-        <button class="filter_item" :class="{'active' : activeFilter === 0 }" @click="setActiveFilter(0)">
+        <button class="filter_item" :class="{'active' : activeFilter === 0 }" @click="setActiveFilter(0, 'doctor', 'رسائل الاخصائيين')">
             رسائل الاخصائيين
         </button>
-        <button class="filter_item" :class="{'active' : activeFilter === 1 }" @click="setActiveFilter(1)">
+        <button class="filter_item" :class="{'active' : activeFilter === 1 }" @click="setActiveFilter(1, 'patient', 'رسائل العملاء')">
             رسائل العملاء
         </button>
     </section>
 
-    <section class="main-bg pt-3 pb-3 mb-3" style="width:90%;margin-right:auto;margin-left:auto">
-        <h6 class="fw-6 border-bottom blackColor px-4 pb-2"> رسائل الاخصائيين </h6>
+    <section class="main-bg pt-3 pb-3 mb-3" style="width:90%;margin-right:auto;margin-left:auto" v-if="isShown">
+        <h6 class="fw-6 border-bottom blackColor px-4 pb-2"> {{ title }} </h6>
 
         <!-- single message  -->
-        <section class="single_message position-relative px-4 mt-4 border-bottom">
+        <section class="single_message position-relative px-4 mt-4 border-bottom" v-for="message in messages" :key="message.id">
             <p class="blackColor fw-bold fs-13 mb-2">
-                ابو جود
+                {{ message.name }}
             </p>
 
             <p class="fs-13 fw-6 mb-2">
-                رقم الجوال  : ٠١٠١٣٧٤٦١١١
+                رقم الجوال  : {{ message.phone }}
             </p>
 
             <p class="fs-13 fw-6 mb-2">
-                موضوع الرسالة  : اريد طلب خاص
+                موضوع الرسالة  : {{ message.title }}
             </p>
 
             <p class="fs-13 fw-6 mb-1">
@@ -31,30 +31,70 @@
             </p>
 
             <p class="fs-12 fw-6 mb-2">
-                Lorem, ipsum dolor sit amet consectetur adipisicing elit. Veritatis, aperiam nemo! Ullam vero vel cupiditate alias sed commodi qui facilis tenetur! Rem libero optio, necessitatibus voluptate ab corrupti repudiandae voluptatibus!
+                {{ message.message }}
             </p>
 
             <div class="time_date position-absolute d-flex align-items-center fs-13">
                 <i class="fa-regular fa-clock"></i>
                 <span class="mx-1">
-                    منذ ساعة
+                    {{ message.time }}
                 </span>
             </div>
         </section>
     </section>
+    <Skeleton v-else style="width:90%;margin:auto" height="10rem"></Skeleton>
+    <Toast />
 </template>
 
 <script>
+import axios from 'axios';
+import Skeleton from 'primevue/skeleton';
+import Toast from 'primevue/toast';
+
+
 export default {
     data(){
         return{
-            activeFilter : 0
+            activeFilter : 0,
+            type : 'doctor',
+            isShown : false ,
+            title : 'رسائل الاخصائيين',
+            messages : []
         }
     },
+    components:{
+        Skeleton,
+        Toast
+    },
     methods:{
-        setActiveFilter(index) {
+        setActiveFilter(index, type, title) {
             this.activeFilter = index;
+            this.type = type ;
+            this.title = title ;
+            this.isShown = false ;
+            this.getMessages();
         },
+        // get messages 
+        async getMessages(){
+            await axios.get(`/messages?type=${this.type}&page=1&limit=10`, {
+                headers : {
+                    Authorization : `Bearer ${localStorage.getItem('token')}`
+                }
+            })
+            .then( (res)=>{
+                if( res.data.key == 'success' ){
+                    this.messages = res.data.data ;
+                    this.isShown  = true ;
+                }
+            } )
+            .catch( (err)=>{
+                this.$toast.add({ severity: 'error', summary: err.response.data.message, life: 3000 });
+            } )
+
+        }
+    },
+    mounted(){
+        this.getMessages();
     }
 }
 </script>
@@ -63,7 +103,7 @@ export default {
     .time_date{
         left:10px;
         top:10px;
-        color: #f5f5f5;
+        color: #9e9e9e9e;
     }
     .table_filter{
         background-color: #fff;

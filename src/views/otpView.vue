@@ -8,10 +8,10 @@
             <!-- title  -->
             <div class="mt-3">
                 <h6 class="blackColor fw-bold"> 
-                    كود التحقق
+                    {{ $t('auth.actCode') }}
                 </h6>
                 <p class="grayColor">
-                    برجاء ادخال كود التحقق المرسل الى رقم جوالك
+                    {{ $t('auth.codePlc') }}
                 </p>
             </div>
             <!-- form  -->
@@ -45,8 +45,8 @@
 
                 <div class="d-flex justify-content-center align-items-center mt-3">
                     <button class="btn main_btn w-100 pt-2 pb-2" :disabled="disabled">
-                         <span v-if="!disabled"> تأكيد </span> 
-                         <div class="spinner-border" role="status" v-if="disabled">
+                         <span v-if="!loader"> {{ $t('auth.confirm') }} </span> 
+                         <div class="spinner-border" role="status" v-if="loader">
                             <span class="visually-hidden">Loading...</span>
                         </div>
                     </button>
@@ -56,8 +56,8 @@
             <!-- register  -->
             <div class="flex_center mt-3">
                 <p class="grayColor">
-                    لم يصلك الكود  ؟
-                    <span  class="third-color" style="cursor:pointer" @click="resendCode"> إعادة ارسال </span>
+                    {{ $t('auth.getNoCode') }}  ؟
+                    <span  class="third-color" style="cursor:pointer" @click="resendCode"> {{ $t('auth.resend') }} </span>
                 </p>
             </div>
         </section>
@@ -75,7 +75,8 @@ export default {
     data(){
         return{
             code : '',
-            disabled : false
+            disabled : true,
+            loader : false
         }
     },
     components:{
@@ -87,6 +88,7 @@ export default {
         // send code 
         async sendCode(){
             this.disabled = true ;
+            this.loader = true ;
             const fd = new FormData();
             fd.append('loginKey', localStorage.getItem('loginKey'));
             fd.append('countryCode', localStorage.getItem('countryCode'));
@@ -99,6 +101,7 @@ export default {
                 if( res.data.key === 'success' ){
                     this.$toast.add({ severity: 'success', summary: res.data.message, life: 3000 });
                     this.disabled = false ;
+                    this.loader = false ;
                     setTimeout(() => {
                         this.$router.push('/')
                     }, 3000);
@@ -107,7 +110,13 @@ export default {
                 }else{
                     this.$toast.add({ severity: 'error', summary: res.data.message, life: 3000 });
                     this.disabled = false ;
+                    this.loader = false ;
                 }
+            } )
+            .catch( (err)=>{
+                this.$toast.add({ severity: 'error', summary: err.response.data.message, life: 3000 });
+                    this.disabled = false ;
+                    this.loader = false ;
             } )
         },
 
@@ -126,6 +135,16 @@ export default {
                     this.$toast.add({ severity: 'error', summary: res.data.message, life: 3000 });
                 }
             } )
+        }
+    },
+    watch:{
+        code(){
+            if( this.code.length < 6 ){
+                console.log(this.code.length)
+                this.disabled = true ;
+            }else{
+                this.disabled = false ;
+            }
         }
     }
 }

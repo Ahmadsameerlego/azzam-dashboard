@@ -29,13 +29,13 @@
                             مدة انتهاء الخطة (عدد الايام )
                             <i class="fa-solid fa-asterisk text-danger fs-10"></i>
                         </label>
-                        <InputNumber v-model="value1" inputId="integeronly" class="default_input w-100" placeholder="اكتب عدد الأيام المتوقعة"/>
+                        <InputNumber v-model="durationDays" inputId="integeronly" class="default_input w-100" placeholder="اكتب عدد الأيام المتوقعة"/>
                     </div>
                 </div>
             </div>
 
             <div>
-                <button class="main_btn btn w-25" > تأكيد </button>
+                <button class="main_btn btn w-25" :disabled="numDisabled"> تأكيد </button>
             </div>
         </form>
     </section>
@@ -45,7 +45,7 @@
     <section class="" v-if="showSessionsNum">
 
         <!-- single session  -->
-        <section class="main-bg pt-3 pb-3 mx-5 mb-3" v-for="session in selectedNum.name" :key="session">
+        <section class="main-bg pt-3 pb-3 mx-5 mb-3" v-for="(session, index) in selectedNum.name" :key="index">
             <h6 class="sec-color fs-17 fw-6 px-5 mb-2"> الجلسة رقم {{  session  }} </h6>
             <form class="mx-5 mt-3">
                 <div class="row">
@@ -57,7 +57,7 @@
                                 <i class="fa-solid fa-asterisk text-danger fs-10"></i>
                             </label>
 
-                            <Dropdown v-model="selectedNum" :options="sessions" optionLabel="name" placeholder="الرجاء تحديد نوع الجلسة" class="default_input w-100 w-full md:w-14rem" />
+                            <Dropdown v-model="selectedType[index]" :options="types" optionLabel="title" placeholder="الرجاء تحديد نوع الجلسة" class="default_input w-100 w-full md:w-14rem" />
                         </div>
                     </div>
 
@@ -68,7 +68,7 @@
                                 <i class="fa-solid fa-asterisk text-danger fs-10"></i>
                             </label>
 
-                            <Dropdown v-model="selectedNum" :options="sessions" optionLabel="name" placeholder="الرجاء تحديد التخصص" class="default_input w-100 w-full md:w-14rem" />
+                            <Dropdown v-model="selectedSpec[index]" :options="specs" optionLabel="name" placeholder="الرجاء تحديد التخصص" class="default_input w-100 w-full md:w-14rem" />
                         </div>
                     </div>
 
@@ -79,7 +79,7 @@
                                 اسم الجلسة
                                 <i class="fa-solid fa-asterisk text-danger fs-10"></i>
                             </label>
-                            <InputText type="text" v-model="name" class="default_input w-100" placeholder="الرجاء ادخال اسم الجلسة" />
+                            <InputText type="text" v-model="sessionName[index]" class="default_input w-100" placeholder="الرجاء ادخال اسم الجلسة" />
                         </div>
                     </div>
 
@@ -89,7 +89,7 @@
                                 المدة
                                 <i class="fa-solid fa-asterisk text-danger fs-10"></i>
                             </label>
-                            <InputNumber v-model="value1" inputId="integeronly" class="default_input w-100" placeholder="الرجاء ادخال المدة (بالدقائق)"/>
+                            <InputNumber v-model="sessionDuration[index]" inputId="integeronly" class="default_input w-100" placeholder="الرجاء ادخال المدة (بالدقائق)"/>
                         </div>
                     </div>
 
@@ -99,7 +99,7 @@
                                 ارشادات الجلسة
                                 <i class="fa-solid fa-asterisk text-danger fs-10"></i>
                             </label>
-                            <InputText type="text" v-model="name" class="default_input w-100" placeholder="الرجاء ادخال ارشادات الجلسة" />
+                            <InputText type="text" v-model="instructions[index]" class="default_input w-100" placeholder="الرجاء ادخال ارشادات الجلسة" />
                         </div>
                     </div>
                 </div>
@@ -119,7 +119,7 @@
                                     اسم الدوء بالعربي
                                     <i class="fa-solid fa-asterisk text-danger fs-10"></i>
                                 </label>
-                                <InputText type="text" v-model="name" class="default_input w-100" placeholder="الرجاء ادخال اسم الدوء بالعربي" />
+                                <InputText type="text" v-model="nameAr" class="default_input w-100" placeholder="الرجاء ادخال اسم الدوء بالعربي" />
                             </div>
                         </div>
 
@@ -129,7 +129,7 @@
                                     اسم الدواء بالانجليزية
                                     <i class="fa-solid fa-asterisk text-danger fs-10"></i>
                                 </label>
-                                <InputText type="text" v-model="name" class="default_input w-100" placeholder="الرجاء ادخال اسم الدواء بالانجليزية" />
+                                <InputText type="text" v-model="nameEn" class="default_input w-100" placeholder="الرجاء ادخال اسم الدواء بالانجليزية" />
                             </div>
                         </div>
                 
@@ -154,14 +154,14 @@
                     </section>
 
                     <!-- appended  -->
-                    <section class="row" v-for="item in items" :key="item">
+                    <section class="row" v-for="(item, index) in items" :key="index">
                         <div class="col-md-6 mb-2">
                             <div class="form-group ">
                                 <label for="" class="blackColor d-block fw-6 mb-2 fs-14">
                                     اسم الدوء بالعربي
                                     <i class="fa-solid fa-asterisk text-danger fs-10"></i>
                                 </label>
-                                <InputText type="text" v-model="name" class="default_input w-100" placeholder="الرجاء ادخال اسم الدوء بالعربي" />
+                                <InputText type="text" v-model="namesAr[index]" class="default_input w-100" placeholder="الرجاء ادخال اسم الدوء بالعربي" />
                             </div>
                         </div>
 
@@ -171,7 +171,7 @@
                                     اسم الدواء بالانجليزية
                                     <i class="fa-solid fa-asterisk text-danger fs-10"></i>
                                 </label>
-                                <InputText type="text" v-model="name" class="default_input w-100" placeholder="الرجاء ادخال اسم الدواء بالانجليزية" />
+                                <InputText type="text" v-model="namesEn[index]" class="default_input w-100" placeholder="الرجاء ادخال اسم الدواء بالانجليزية" />
                             </div>
                         </div>
                 
@@ -181,18 +181,19 @@
                                     صورة الدواء
                                     <i class="fa-solid fa-asterisk text-danger fs-10"></i>
                                 </label>
-                                <InputText type="text" v-model="fileName" ref="file_name" class="default_input w-100" placeholder="الرجاء ارفاق صورة الدواء" />
+                                <InputText type="text" v-model="filesName[index]" class="default_input w-100" placeholder="الرجاء ارفاق صورة الدواء" />
                                 <!-- icon  -->
                                 <span class="icon_upload">
                                     <i class="fa-solid fa-arrow-up-from-bracket"></i>
                                 </span>
 
                                 <!-- input file  -->
-                                <input type="file" name="" id="" class="input_file" @change="uploadTreatImage">
+                                <input type="file" name="" id="" ref="file_name" class="input_file" @change="uploadTreatImage1(index)">
 
                             </div>
                         </div>
                     </section>
+
                     <!-- add new treat  -->
                     <div class="add_treat">
                         <button class="btn d-flex align-items-center main-color" @click.prevent="addNewTreat">
@@ -270,19 +271,22 @@
         </section>
 
         <div class=" pt-3 pb-3 mx-5 mb-3">
-            <button class="btn w-25 main_btn "> تأكيد </button>
+            <button class="btn w-25 main_btn " :disabled="disabled"> تأكيد </button>
         </div>
 
         
     </section>
 
-
+    <Toast />
 </template>
 
 <script>
 import Dropdown from 'primevue/dropdown';
 import InputNumber from 'primevue/inputnumber';
 import InputText from 'primevue/inputtext';
+import { mapActions, mapGetters } from 'vuex';
+import axios from 'axios';
+import Toast from 'primevue/toast';
 
 export default {
     data(){
@@ -304,16 +308,111 @@ export default {
                     id:4,
                     name : 4
                 },
+                {
+                    id:5,
+                    name : 5
+                },
+                {
+                    id:5,
+                    name : 5
+                },
+                {
+                    id:6,
+                    name : 6
+                },
+                {
+                    id:7,
+                    name : 7
+                },
+                {
+                    id:8,
+                    name : 8
+                },
+                {
+                    id:9,
+                    name : 9
+                },
+                {
+                    id:10,
+                    name : 10
+                },
             ],
+            types : [
+                {
+                    id:1 ,
+                    name : 'individual',
+                    title : 'فردي'
+                },
+                {
+                    id:2 ,
+                    name : 'group',
+                    title : 'جماعي'
+                },
+            ],
+            selectedType : [],
             selectedNum : null,
+            selectedSpec : [],
+            sessionName : [],
+            sessionDuration : [],
+            instructions : [],
             name : '',
             value1 : null,
             showSessionsNum :false ,
             fileName : '',
-            items : []
+            filesName : [],
+            items : [],
+            durationDays : null ,
+
+            nameAr : null,
+            nameEn : null,
+
+            namesAr : [],
+            namesEn : [],
+            numDisabled : true,
+            disabled : false,
+
+            sessions_appended : []
         }
     },
+    computed:{
+        ...mapGetters('setting',['countries', 'specs']),
+    },
+    watch:{
+        selectedNum(){
+            if( this.selectedNum == null ){
+                this.numDisabled = true ;
+            }else{
+                this.numDisabled = false ;
+            }
+        },
+        // set selected type  
+        selectedType:{
+            handler(){
+                for( let i = 0 ; i < this.selectedType.length ; i++ ){
+                    this.sessions_appended.push({
+                        type : this.selectedType[i].name 
+                    })
+                    console.log(this.sessions_appended)
+                }
+            },
+            deep : true     
+        },
+        // set selected spcifications 
+        selectedSpec : {
+            handler(){
+                for( let i = 0 ; i < this.selectedSpec.length ; i++ ){
+                    this.sessions_appended.push({
+                        specialization : this.selectedSpec[i].id  
+                    })
+                    console.log(this.sessions_appended)
+                }
+            },
+            deep : true 
+        }
+    },
+   
     methods:{
+        ...mapActions('setting',['getCountries']),
         sendSessionsInfo(){
             console.log(this.selectedNum)
             this.showSessionsNum = true ;
@@ -324,6 +423,13 @@ export default {
             console.log(file);
             this.fileName = file.name ;
         },
+        uploadTreatImage1(index) {
+            let file = this.$refs.file_name[index].files[0];
+            console.log(file);
+            this.filesName[index] = file.name;
+            // You can handle the file upload logic here
+        },
+
         addNewTreat(){
             let appendedSection = this.$refs.treat_item ;
 
@@ -333,12 +439,47 @@ export default {
             // console.log(appendedSection)
             // appendedArea.html = appendedSection
             this.items.push(appendedSection)
+        },
+
+        appenedSessions(){
+            
+        },
+
+        // send offer main method 
+        async sendOffer(){
+            this.disabled = true ;
+            const fd = new FormData();
+            fd.append('id', this.$route.params.id);
+            fd.append('sessionsNumber', this.selectedNum.name);
+            fd.append('duration', this.durationDays);
+            await axios.put('/send-offer', fd , {
+                headers:{
+                    Authorization : `Bearer ${localStorage.getItem('token')}`
+                }
+            })
+            .then( (res)=>{
+                if( res.data.key === 'success' ){
+                    this.$toast.add({ severity: 'success', summary: res.data.message, life: 3000 });
+                    this.disabled = false ;
+                }else{
+                    this.$toast.add({ severity: 'error', summary: res.data.message, life: 3000 });
+                    this.disabled = false ;
+                }
+            } )
+            .catch( (err)=>{
+                this.$toast.add({ severity: 'error', summary: err.response.data.message, life: 3000 });
+                this.disabled = false ;
+            } )
         }
     },
     components:{
         Dropdown,
         InputNumber,
-        InputText
+        InputText,
+        Toast
+    },
+    mounted(){
+        this.getCountries();
     }
 }
 </script>

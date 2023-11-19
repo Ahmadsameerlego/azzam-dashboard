@@ -21,7 +21,7 @@ function loadLocaleMessages() {
 
 export default createI18n({
   legacy: false,
-  locale:  localStorage.getItem('locale') || 'en',
-  fallbackLocale: localStorage.getItem('locale') || 'en',
+  locale:  localStorage.getItem('locale') || 'ar',
+  fallbackLocale: localStorage.getItem('locale') || 'ar',
   messages: loadLocaleMessages()
 })

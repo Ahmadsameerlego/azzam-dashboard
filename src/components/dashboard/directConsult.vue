@@ -21,42 +21,52 @@
     </section>
     <!-- filter  -->
     <section class="table_filter" style="width:90%;margin-right:auto;margin-left:auto">
-        <button class="filter_item" :class="{'active' : activeFilter === 0 }" @click="setActiveFilter(0)">
+        <button class="filter_item" :class="{'active' : activeFilter === 0 }" @click="setActiveFilter(0, 'new')">
             جديدة
         </button>
-        <button class="filter_item" :class="{'active' : activeFilter === 1 }" @click="setActiveFilter(1)">
+        <button class="filter_item" :class="{'active' : activeFilter === 1 }" @click="setActiveFilter(1 , 'current')">
             حالية او قادمة
         </button>
-        <button class="filter_item" :class="{'active' : activeFilter === 2 }" @click="setActiveFilter(2)">
+        <button class="filter_item" :class="{'active' : activeFilter === 2 }" @click="setActiveFilter(2, 'finish')">
             منتهية
+        </button>
+        <button class="filter_item" :class="{'active' : activeFilter === 3 }" @click="setActiveFilter(3, 'cancelled')">
+            ملغية
         </button>
     </section>
     <!-- table  -->
     <div class="table">
+
         <DataTable 
-            :value="products" 
+            :value="consutlations" 
             tableStyle="min-width: 50rem" 
             paginator :rows="5"  
             :rowsPerPageOptions="[5, 10, 20, 50]" 
             sortMode="multiple"
             v-model:filters="filters"
             style="width:90%;margin:auto" 
+            v-if="isShown"
         >
              
-            <template #empty> No customers found. </template>
+            <template #empty> No consultations found. </template>
 
-            <Column field="_id.$oid" header="رقم" ></Column>
+            <Column  header="رقم" >
+                <template #body="slotProps">
+                <!-- Add row numbers to your table -->
+                {{  slotProps.index + 1  }}
+                </template>
+            </Column>
             <Column field="name" header="اسم العميل" sortable></Column>
             <Column field="phone" header="رقم الجوال" sortable></Column>
-            <Column field="email" header="اسم الاخصائي المطلوب" sortable></Column>
-            <Column field="sessionCount" header="الموعد" sortable ></Column>
+            <Column field="specialistName" header="اسم الاخصائي المطلوب" sortable></Column>
+            <Column field="date" header="الموعد" sortable ></Column>
 
             <Column  header="" >
                 <template #body="slotProps">
 
                    <div class="d-flex">
                         <!-- edit  -->
-                        <router-link  to="/consult/1" class="show_more fw-6" @click="click(slotProps.data._id)">
+                        <router-link  :to="'/consult/'+slotProps.data.id" class="show_more fw-6" @click="click(slotProps.data._id)">
                                 عرض التفاصيل
                         </router-link>
                    </div>
@@ -64,33 +74,41 @@
                 </template>
             </Column>
         </DataTable>
-    </div>
 
+
+        <Skeleton v-else style="width:90%;margin:auto" height="10rem"></Skeleton>
+    </div>
+    <Toast />
 </template>
 
 <script>
-import { ProductService } from '@/services/customerServices';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import { FilterMatchMode } from 'primevue/api';
 import InputText from 'primevue/inputtext';
+import axios from 'axios';
+import Toast from 'primevue/toast';
+import Skeleton from 'primevue/skeleton';
 
 export default {
     data() {
         return {
-            products: null,
+            consutlations: null,
             visible : false,
             filters: {
                 global: { value: null, matchMode: FilterMatchMode.CONTAINS },
             },
-            activeFilter : 0
-
-        };
+            activeFilter : 0,
+            isShown : false,
+            status : 'new'
+        }
     },
     components:{
         DataTable,
         Column,
-        InputText
+        InputText,
+        Toast,
+        Skeleton
     },
     methods:{
         click(a){
@@ -100,13 +118,37 @@ export default {
             this.visible = true ;
             console.log(id);
         },
-        setActiveFilter(index) {
+        setActiveFilter(index, status) {
             this.activeFilter = index;
+            this.status = status;
+            this.isShown = false ;
+            setTimeout(() => {
+                this.getDirectConsultations();
+            }, 300);
         },
+
+        // get direct consultant 
+        async getDirectConsultations(){
+            await axios.get(`/urgentConsultations?status=${this.status}`, {
+                headers:{
+                    Authorization : `Bearer ${localStorage.getItem('token')}`
+                }
+            })
+            .then( (res)=>{
+                if( res.data.key === 'success' ){
+                    this.consutlations = res.data.data ;
+                    this.isShown = true ;
+                }
+            } )
+            .catch( (err)=>{
+                this.$toast.add({ severity: 'error', summary: err.response.data.message, life: 3000 });
+            } )
+        }
 
     },
     mounted() {
-        ProductService.getProductsMini().then((data) => (this.products = data));
+        // get consultations 
+        this.getDirectConsultations();
     }
 }
 </script>
@@ -125,7 +167,7 @@ export default {
             border: none;
             background: transparent;
             color:#ababab;
-            margin: 0px 30px;
+            margin: 0px 30px !important;
             &.active{
                 color:#4aa236;
                 border-bottom: 2px solid #4aa236;

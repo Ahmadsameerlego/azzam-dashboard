@@ -8,7 +8,7 @@
         </div>
     </section>
 
-    <section id="auth" class="mx-5 pt-3 pb-3 px-3 main-bg">
+    <section id="profile" class="mx-5 pt-3 pb-3 px-3 main-bg">
         <section id="login" class="mx-0 px-0" style="width:40%">
             
             <!-- title  -->
@@ -54,7 +54,7 @@
                     <label for="" class="blackColor d-block fw-6 mb-2 fs-14">
                             البريد الالكتروني 
                     </label>
-                    <InputText type="text" v-model="name" class="default_input w-100" placeholder="الرجاء ادخال البريد الالكتروني" />
+                    <InputText type="email" v-model="email" class="default_input w-100" placeholder="الرجاء ادخال البريد الالكتروني" />
                 </div>
 
                 <div class="form-group mb-3">
@@ -85,32 +85,33 @@
                     
                 </div>
 
-                <div class="form-group mb-3">
+                <div class="form-group default_input mb-3">
                     <label for="" class="blackColor d-block fw-6 mb-2 fs-14">
                         رقم الترخيص
                     </label>
-                    <InputNumber v-model="value1" inputId="integeronly" class="default_input w-100" placeholder="الرجاء ادخال رقم الترخيص"/>
+                    <!-- <InputNumber v-model="commercialNumber" inputId="integeronly" class="default_input w-100" placeholder="الرجاء ادخال رقم الترخيص"/> -->
+                    <input type="number" v-model="commercialNumber" class="form-control  w-100" placeholder="الرجاء ادخال رقم الترخيص">
                 </div>
 
                 <div class="form-group mb-3">
                     <label for="" class="blackColor d-block fw-6 mb-2 fs-14">
                             اسم المالك 
                     </label>
-                    <InputText type="text" v-model="name" class="default_input w-100" placeholder="الرجاء ادخال اسم المالك" />
+                    <InputText type="text" v-model="ownerName" class="default_input w-100" placeholder="الرجاء ادخال اسم المالك" />
                 </div>
 
                 <div class="form-group mb-3">
                     <label for="" class="blackColor d-block fw-6 mb-2 fs-14">
                             اسم البنك 
                     </label>
-                    <InputText type="text" v-model="name" class="default_input w-100" placeholder="الرجاء ادخال اسم البنك" />
+                    <InputText type="text" v-model="bankName" class="default_input w-100" placeholder="الرجاء ادخال اسم البنك" />
                 </div>
 
                 <div class="form-group mb-3">
                     <label for="" class="blackColor d-block fw-6 mb-2 fs-14">
                             رقم الايبان 
                     </label>
-                    <InputText type="text" v-model="name" class="default_input w-100" placeholder="الرجاء ادخال رقم الايبان" />
+                    <InputText type="text" v-model="iban" class="default_input w-100" placeholder="الرجاء ادخال رقم الايبان" />
                 </div>
 
 
@@ -241,14 +242,17 @@
         </form>
     </Dialog>
 
-
+    <Toast />
 </template>
 
 <script>
 import InputText from 'primevue/inputtext';
 import Dropdown from 'primevue/dropdown';
 import Dialog from 'primevue/dialog';
-import InputNumber from 'primevue/inputnumber';
+// import InputNumber from 'primevue/inputnumber';
+
+import axios from 'axios';
+import Toast from 'primevue/toast';
 
 export default {
     data(){
@@ -260,21 +264,59 @@ export default {
             },
             currentLocation: {},
             map_desc: '',
-            address : '',
+           address : '',
             googleMap : false,
             images : [],
             imagesName : [],
             singleImage :null,
-            changePhoneModal : false
-        }
+            changePhoneModal : false,
+
+            profile : null,
+
+            name : '',
+            phone : '',
+            email : '',
+            commercialNumber : '',
+            bankName : '',
+            iban : '',
+            ownerName : ''
+         }
     },
     components:{
         InputText,
         Dropdown,
         Dialog,
-        InputNumber
+        // InputNumber,
+        Toast
     },
     methods:{
+
+        // get profile 
+        async handleProfile(){
+            const fd = new FormData();
+            await axios.put('/edit-center',fd , {
+                headers : {
+                    Authorization : `Bearer ${localStorage.getItem('token')}`
+                }
+            })
+            .then( (res)=>{
+                if( res.data.key === 'success' ){
+                    let user = res.data.data ;
+                    this.profile = user ;
+                    this.name = user.name ;
+                    this.email = user.email ;
+                    this.commercialNumber = user.commercialNumber ;
+                    this.iban = user.iban ;
+                    this.bankName = user.bankName ;
+                    this.ownerName = user.ownerName ;
+                    // this.name = user.name ;
+                }
+            } )
+            .catch( (err)=>{
+                this.$toast.add({ severity: 'error', summary: err.response.data.message, life: 3000 });
+            } )
+        },
+
         // get current location  
         geolocation() {
             navigator.geolocation.getCurrentPosition((position) => {
@@ -348,9 +390,14 @@ export default {
             reader.readAsDataURL(this.images[i]);
           }
         },
+
+
+        
     },
     mounted(){
         this.geolocation();
+
+        this.handleProfile();
     }
 }
 </script>

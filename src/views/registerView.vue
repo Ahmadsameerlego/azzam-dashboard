@@ -7,9 +7,9 @@
             </div>
             <!-- title  -->
             <div class="mt-3">
-                <h6 class="blackColor fw-bold"> تسجيل جديد </h6>
+                <h6 class="blackColor fw-bold"> {{ $t('auth.reg') }} </h6>
                 <p class="grayColor">
-                    برجاء ادخال بيانات حسابك حتى تتمكن من التسجيل
+                    {{ $t('auth.regDesc') }}
                 </p>
             </div>
             <!-- form  -->
@@ -25,49 +25,62 @@
                     </span>
                 </section>
 
-                
+                <!-- name   -->
+                <div class="form-group mb-3 ">
+                    <label for="" class="blackColor d-block fw-6 mb-2 fs-14">
+                            {{ $t('auth.centerName') }} 
+                    </label>
+                    <InputText type="text" v-model="name" name="name" class="default_input w-100" :placeholder="$t('auth.namePlc')" @blur="nameTouched=true" />
+
+                    <!-- validation message  -->
+                    <div class="error text-danger fs-14"  v-if="showName"> يرجى ملئ هذا الحقل  </div>
+                </div>
+
+                <!-- phone  -->
+                <div class="form-group mb-3 ">
+                    <div class="above_valid position-relative">
+                        <label for="" class="blackColor d-block fw-6 mb-2 fs-14">
+                            {{ $t('auth.phone') }} 
+                        </label>
+
+                        <input type="number"  v-model="phone" name="phone" class="default_input form-control w-100" :placeholder="$t('auth.phonePlc')" @blur="phoneTouched=true">
+
+                        <!-- country code  -->
+                        <Dropdown v-model="selectedCity" :options="countries" optionLabel="code"  @change="chooseCountry"  class="default_input country_code  w-full md:w-14rem" />
+
+                    </div>
+                    
+                    <div class="error text-danger fs-14"  v-if="showrError" > يجب أن يكون رقم الهاتف اكثر من ٩ أرقام </div>
+                </div>
+
+                <!-- email  -->
                 <div class="form-group mb-3">
                     <label for="" class="blackColor d-block fw-6 mb-2 fs-14">
-                            اسم المركز 
+                            {{ $t('auth.email') }} 
                     </label>
-                    <InputText type="text" v-model="name" name="name" class="default_input w-100" placeholder="الرجاء ادخال اسم المركز" />
+                    <InputText type="email" v-model="email" name="email" class="default_input w-100" :placeholder="$t('auth.emailPlc')" />
+
+
+                    <span class="error text-danger fs-14" v-if="showEmail">
+                        صيغة الأيميل غير صحيحة
+                    </span>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label for="" class="blackColor d-block fw-6 mb-2 fs-14">
+                            {{ $t('auth.spec') }} 
+                    </label>
+
+                    <MultiSelect v-model="selectedSpec" :options="specs"  :maxSelectedLabels="3" optionLabel="name" :placeholder="$t('auth.specPlc')" class="default_input w-100 w-full md:w-14rem" @change="handleSpecs" />
 
                 </div>
 
-                <div class="form-group mb-3 position-relative">
-                    <label for="" class="blackColor d-block fw-6 mb-2 fs-14">
-                            رقم الجوال 
-                    </label>
-
-                    <InputText type="text" v-model="phone" name="phone" class="default_input w-100" placeholder="الرجاء ادخال رقم الجوال" />
-
-                    <!-- country code  -->
-                    <Dropdown v-model="selectedCountry" :options="countries" optionLabel="name"  class="default_input country_code  w-full md:w-14rem" />
-
-                </div>
-
                 <div class="form-group mb-3">
                     <label for="" class="blackColor d-block fw-6 mb-2 fs-14">
-                            البريد الالكتروني 
-                    </label>
-                    <InputText type="text" v-model="email" name="email" class="default_input w-100" placeholder="الرجاء ادخال البريد الالكتروني" />
-                </div>
-
-                <div class="form-group mb-3">
-                    <label for="" class="blackColor d-block fw-6 mb-2 fs-14">
-                            التخصص 
+                            {{ $t('auth.city') }} 
                     </label>
 
-                    <MultiSelect v-model="selectedSpec" :options="specs"  :maxSelectedLabels="3" optionLabel="name" placeholder="الرجاء اختيار التخصص" class="default_input w-100 w-full md:w-14rem" />
-
-                </div>
-
-                <div class="form-group mb-3">
-                    <label for="" class="blackColor d-block fw-6 mb-2 fs-14">
-                            المدينة 
-                    </label>
-
-                    <Dropdown v-model="selectedCity" :options="cities" optionLabel="name" placeholder="الرجاء اختيار مدينة" class="default_input w-100 w-full md:w-14rem" />
+                    <Dropdown v-model="selectedCity" :options="cities" optionLabel="name" :placeholder="$t('auth.cityPlc')" class="default_input w-100 w-full md:w-14rem" />
 
                 </div>
 
@@ -75,45 +88,56 @@
                 <div class="form-group mb-3">
 
                     <label for="" class="blackColor d-block fw-6 mb-2 fs-14">
-                            العنوان 
+                            {{ $t('auth.address') }} 
                     </label>
-                    <InputText type="text" v-model="address"  @focus="googleMap=true" class="default_input w-100" placeholder="الرجاء ادخال العنوان على الخريطة" />
+                    <InputText type="text" v-model="address"  @focus="googleMap=true" class="default_input w-100" :placeholder="$t('auth.addressPlc')" />
                     
                 </div>
 
-                <div class="form-group mb-3">
+                <div class="form-group mb-3 ">
                     <label for="" class="blackColor d-block fw-6 mb-2 fs-14">
-                        رقم الترخيص
+                        {{ $t('auth.licenseName') }}
                     </label>
-                    <InputNumber v-model="commercialNumber" inputId="integeronly" class="default_input w-100" placeholder="الرجاء ادخال رقم الترخيص"/>
+                    <!-- <InputNumber v-model="commercialNumber" inputId="integeronly" class="default_input w-100" :placeholder="$t('auth.numberPlc')"/> -->
+                    <input type="number" v-model="commercialNumber" class="default_input form-control w-100" :placeholder="$t('auth.numberPlc')">
+
+                    <span class="error text-danger fs-14" v-if="showCom">
+                        هذا الحقل مطلوب
+                    </span>
                 </div>
 
                 <div class="form-group mb-3">
                     <label for="" class="blackColor d-block fw-6 mb-2 fs-14">
-                            اسم المالك 
+                        {{ $t('auth.ownerName') }}
                     </label>
-                    <InputText type="text" v-model="ownerName" name="ownerName" class="default_input w-100" placeholder="الرجاء ادخال اسم المالك" />
+                    <InputText type="text" v-model="ownerName" name="ownerName" class="default_input w-100" :placeholder="$t('auth.ownerPlc')" />
+                    <span class="error text-danger fs" v-if="showOwn">
+                        هذا الحقل مطلوب
+                    </span>
                 </div>
 
                 <div class="form-group mb-3">
                     <label for="" class="blackColor d-block fw-6 mb-2 fs-14">
-                            اسم البنك 
+                            {{ $t('auth.bankName') }} 
                     </label>
-                    <InputText type="text" v-model="bankName"  name="bankName" class="default_input w-100" placeholder="الرجاء ادخال اسم البنك" />
+                    <InputText type="text" v-model="bankName"  name="bankName" class="default_input w-100" :placeholder="$t('auth.bankPlc')" />
+                    <span class="error text-danger fs" v-if="showBank">
+                        هذا الحقل مطلوب
+                    </span>
                 </div>
 
                 <div class="form-group mb-3">
                     <label for="" class="blackColor d-block fw-6 mb-2 fs-14">
-                            رقم الايبان 
+                            {{ $t('auth.iban') }} 
                     </label>
-                    <InputText type="text" v-model="iban" name="iban" class="default_input w-100" placeholder="الرجاء ادخال رقم الايبان" />
+                    <InputText type="text" v-model="iban" name="iban" class="default_input w-100" :placeholder="$t('auth.ibanPlc')" />
                 </div>
 
 
                 <!-- upload images  -->
                 <div class="form-group mb-3">
                     <label for="" class="blackColor d-block fw-6 mb-2 fs-14">
-                            صور الاعتمادات والخبرات 
+                            {{ $t('auth.images') }} 
                     </label>
 
                     <!-- container  -->
@@ -124,7 +148,7 @@
                                 class="upload_file_input"
                                 accept="image/*"
                                 multiple
-                                name="images[]"
+                                name="images"
                                 @change="uploadAdImages($event.target)"
                              >
                             <span class="icon">
@@ -158,7 +182,7 @@
 
                 <div class="d-flex justify-content-center align-items-center mt-3">
                     <button class="btn main_btn w-100 pt-2 pb-2" :disabled="disabled"> 
-                        <span v-if="!disabled">تسجيل</span> 
+                        <span v-if="!disabled"> {{ $t('auth.sign') }} </span> 
                         <div class="spinner-border" role="status" v-if="disabled">
                             <span class="visually-hidden">Loading...</span>
                         </div>
@@ -170,7 +194,7 @@
             <div class="flex_center mt-3">
                 <p class="grayColor">
                     هل لديك حساب  ؟
-                    <router-link to="/login" class="third-color"> تسجيل الدخول </router-link>
+                    <router-link to="/login" class="third-color"> {{ $t('auth.login') }} </router-link>
                 </p>
             </div>
         </section>
@@ -205,14 +229,22 @@
 import InputText from 'primevue/inputtext';
 import Dropdown from 'primevue/dropdown';
 import Dialog from 'primevue/dialog';
-import InputNumber from 'primevue/inputnumber';
+// import InputNumber from 'primevue/inputnumber';
 import Toast from 'primevue/toast';
 
 import { mapActions, mapGetters } from 'vuex';
 import MultiSelect from 'primevue/multiselect';
 
 import axios from 'axios';
+
+// vuelidate 
+import { useVuelidate } from '@vuelidate/core';
+import { required, email } from '@vuelidate/validators'
 export default {
+    // use validate 
+    setup(){
+        return { v$ : useVuelidate() }
+    },
     data(){
         return{
             locations:
@@ -228,38 +260,118 @@ export default {
             imagesName : [],
             singleImage :null,
 
-            selectedCountry : {
+            // selectedCity : {
+            //     "id": "64ae5989a2f2fd0c04737761",
+            //     "name": "السعودية",
+            //     "image": "https://azzam.4hoste.com/assets/uploads/country/image941689583177874.png",
+            //     "code": "+966",
+            // },
+            selectedSpec : [],
+            selectedCity : {
                 "id": "64ae5989a2f2fd0c04737761",
                 "name": "السعودية",
                 "image": "https://azzam.4hoste.com/assets/uploads/country/image941689583177874.png",
                 "code": "+966",
-            },
-            selectedSpec : [],
-            selectedCity : null , 
+            } , 
             cities : [],
             ownerName : '',
             name : '',
             phone : '',
-            commercialNumber : null,
+            commercialNumber : '',
             email : '',
             bankName : '',
             iban : '',
-            disabled : false
+            disabled : false,
+            new_specs : [],
+
+
+            nameTouched: false,
+            phoneTouched: false,
+            showrError : false,
+            showEmail : false,
+            showCom : false,
+            showOwn : false,
+            showBank : false,
+            showName : false
+
         }
     },
+    validations(){
+        return{
+            name : { required },
+            phone : { required },
+            email : { required , email }
+        }
+    },
+    watch:{
+        phone(){
+            let inputString = this.phone.toString();
+            if( this.phone === '' || inputString.length < 9 ){
+                this.showrError = true ; 
+            }else if(this.phone !== '' ){
+                this.showrError = false;
+            }
+        },
+        email(){
+            if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.email)) {
+                this.showEmail = false ;
+            } else {
+                this.showEmail = true ;
+            }
+        },
+        commercialNumber(){
+            if( this.commercialNumber === ''  ){
+                this.showCom = true ; 
+            }else if(this.commercialNumber !== '' ){
+                this.showCom = false;
+            }
+        },
+        ownerName(){
+            if( this.ownerName === ''  ){
+                this.showOwn = true ; 
+            }else if(this.ownerName !== '' ){
+                this.showOwn = false;
+            }
+        },
+        bankName(){
+            if( this.bankName === ''  ){
+                this.showBank = true ; 
+            }else if(this.bankName !== '' ){
+                this.showBank = false;
+            }
+        },
+        name(){
+            if( this.name === ''  ){
+                this.showName = true ; 
+            }else if(this.name !== '' ){
+                this.showName = false;
+            }
+        },
+    },
     computed:{
-        ...mapGetters('setting',['countries', 'specs'])
+        ...mapGetters('setting',['countries', 'specs']),
+
+        isNameValid(){
+            return this.name.trim() !== '';
+        },
+        isPhoneValid() {
+            return this.phoneTouched ? this.phone.length >= 9 : true;
+        },
     },
     components:{
         InputText,
         Dropdown,
         Dialog,
-        InputNumber,
+        // InputNumber,
         Toast,
         MultiSelect
     },
     methods:{
         ...mapActions('setting',['getCountries']),
+        chooseCountry(){
+            document.querySelector('.p-dropdown-label').innerHTML = this.selectedCity.code ;
+        },
+
         uploadProfilePic(e){
             const file = e.target.files[0];
             this.$refs.profile.src = URL.createObjectURL(file);
@@ -267,7 +379,7 @@ export default {
         },
         // get cities 
         async getCities(){
-            await axios.get(`/cities?countryId=${this.selectedCountry.id}`)
+            await axios.get(`/cities?countryId=${this.selectedCity.id}`)
             .then( (res)=>{
                 this.cities = res.data.data ;
             } )
@@ -346,10 +458,20 @@ export default {
           }
         },
 
+        handleSpecs(){
+            // const newspecs = [] ;
+            for( let i = 0 ; i<this.selectedSpec.length ; i++ ){
+                this.new_specs.push(this.selectedSpec[i].id) 
+            }
+            console.log(JSON.stringify(this.new_specs)) ;
+            // this.new_specs = Object.values(newspecs) ;
+            // // console.log( this.new_specs)
+        },
+
         // register 
         async register(){
             const fd = new FormData( this.$refs.register );
-            fd.append( 'countryCode', this.selectedCountry.code )
+            fd.append( 'countryCode', this.selectedCity.code )
             fd.append( 'addressAr', this.address )
             fd.append( 'addressEn', this.address )
             fd.append( 'latitude', this.locations.lat );
@@ -357,34 +479,42 @@ export default {
             fd.append( 'city', this.selectedCity.id );
             fd.append( 'commercialNumber', this.commercialNumber );
 
-            for( let i = 0 ; i<this.selectedSpec.length ; i++ ){
-                fd.append( 'specialization', this.selectedSpec[i].id );
+            // for( let i = 0 ; i<this.selectedSpec.length ; i++ ){
+            //     this.specs.push(this.selectedSpec[i].id) 
+            // }
+            // const newSpecs = Object.values(this.new_specs);
+
+            // console.log(JSON.parse(newSpecs)) ;
+            fd.append( 'specialization', JSON.stringify(this.new_specs));
+
+            if( this.showName == false ||this.showrError == false || this.showBank == false || this.showCom == false || this.showEmail == false || this.showOwn == false ){
+                this.disabled=true ;
+                await axios.post('/signup-center', fd)
+                .then((res)=>{
+                    console.log("res",res);
+                    if( res.data.key === 'success' ){
+                        this.$toast.add({ severity: 'success', summary: res.data.message, life: 3000 });
+                        setTimeout(() => {
+                            this.$router.push('/login')
+                        }, 3000);
+                        this.disabled=false ;
+                    }else{
+                        this.$toast.add({ severity: 'error', summary: res.data.message, life: 3000 });
+                        this.disabled=false ;
+                    }
+                } ).catch ((err)=> {
+                    this.$toast.add({ severity: 'error', summary: err.response.data.message, life: 3000 });
+                    this.disabled=false ;
+                } )
             }
-
-
-            this.disabled=true ;
-            await axios.post('/signup-center', fd)
-            .then((res)=>{
-                console.log("res",res);
-                if( res.data.key === 'success' ){
-                    this.$toast.add({ severity: 'success', summary: res.message, life: 3000 });
-                    setTimeout(() => {
-                        this.$router.push('/login')
-                    }, 3000);
-                    this.disabled=false ;
-                }else{
-                    this.$toast.add({ severity: 'error', summary: res.message, life: 3000 });
-                    this.disabled=false ;
-                }
-            } ).catch ((err)=> {
-                this.$toast.add({ severity: 'error', summary: err, life: 3000 });
-            } )
+            
         }
     },
     mounted(){
         this.geolocation();
         this.getCountries();
         this.getCities();
+        document.querySelector('.p-dropdown-label').innerHTML = this.selectedCity.code ;
     }
 }
 </script>
@@ -397,6 +527,14 @@ export default {
     }
 </style>
 <style lang="scss">
+.p-multiselect .p-multiselect-label.p-placeholder , .p-dropdown .p-dropdown-label.p-placeholder {
+    color: #aaa5a5c9 !important; 
+    font-size: 12px;
+}
+.p-inputtext{
+    font-family: "Cairo", sans-serif !important;
+}
+
 .vue-map{
     width: 100% !important;
     height: 72vh !important;
