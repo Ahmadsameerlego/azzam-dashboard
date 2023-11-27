@@ -22,6 +22,7 @@ import contact from '@/views/contactUs.vue';
 import editDoctor from '@/views/editDoctor.vue';
 import addSession from '@/views/addSession.vue';
 import addGroup from '@/views/addGroup.vue'
+import editPriceOffer from '@/views/editPriceOffer.vue'
 const routes = [
   {
     path: '/',
@@ -92,6 +93,11 @@ const routes = [
     path : '/priceOffer/:id',
     name : 'priceOffer',
     component : priceOffer
+  },
+  {
+    path : '/editPriceOffer/:id',
+    name : 'editPriceOffer',
+    component : editPriceOffer
   },
   {
     path : '/supportManage/:id',

@@ -447,11 +447,12 @@ export default {
           }
         })
         .catch((err) => {
-          this.$toast.add({
-            severity: "error",
-            summary: err.response.data.message,
-            life: 3000,
-          });
+          // this.$toast.add({
+          //   severity: "error",
+          //   summary: err.response.data,
+          //   life: 3000,
+          // });
+          console.log(err)
           this.disabled = false;
         });
     },

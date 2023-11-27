@@ -154,7 +154,7 @@
 
     <!-- client info  -->
     <section class="main-bg pt-3 pb-3 mx-5 mb-3" v-if="isShown">
-        <h6 class="sec-color fs-17 fw-6 px-5 mb-2"> بيانات العميل </h6>
+        <h6 class="sec-color fs-17 fw-6 px-5 mb-2"> {{ $t('treat.clientInfo') }} </h6>
         <!-- main info  -->
         <section class="client_info mx-5 d-flex align-items-center">
             <!-- client image  -->
@@ -188,7 +188,7 @@
 
     <!-- spcialist info  -->
     <section class="main-bg pt-3 pb-3 mx-5 mb-3" v-if="isShown">
-        <h6 class="sec-color fs-17 fw-6 px-5 mb-2"> بيانات الاخصائي </h6>
+        <h6 class="sec-color fs-17 fw-6 px-5 mb-2"> {{ $t('common.spec') }} </h6>
         <!-- main info  -->
         <section class="client_info mx-5 d-flex mt-3">
             <!-- client image  -->
@@ -225,7 +225,7 @@
 
     <!-- report  -->
     <section class="main-bg pt-3 pb-3 mx-5 mb-3" v-if="isReported==true">
-        <h6 class="sec-color fs-17 fw-6 px-5 mb-3"> تقرير الاستشارة </h6>
+        <h6 class="sec-color fs-17 fw-6 px-5 mb-3"> {{ $t('common.note') }} </h6>
 
         <p class="grayColor mx-5 fs-14">
             {{ report.note }}

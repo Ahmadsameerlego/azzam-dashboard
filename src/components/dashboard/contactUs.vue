@@ -1,9 +1,9 @@
 <template>
     <section class="pt-3 pb-3 px-5 ">
         <div>
-            <h6 class="fw-bold blackColor"> تواصل معنا </h6>
+            <h6 class="fw-bold blackColor"> {{ $t('con.title') }} </h6>
             <p class="grayColor"> 
-                يمكنك التواصل مع ادارة التطبيق من هنا
+                {{ $t('con.desc') }}
             </p>
         </div>
     </section>
@@ -13,23 +13,23 @@
             
             <!-- title  -->
             <div class="border-bottom">
-                <h6 class="blackColor fw-bold"> تواصل معنا </h6>
+                <h6 class="blackColor fw-bold"> {{ $t('con.title') }} </h6>
             </div>
 
             <form class="mt-4 w-50" >
                 <div class="form-group mb-3">
                     <label for="" class="blackColor d-block fw-6 mb-2 fs-14">
-                            اسم المركز 
+                            {{ $t('con.name') }} 
                     </label>
-                    <InputText type="text" v-model="name" class="default_input w-100" placeholder="الرجاء ادخال اسم المركز" />
+                    <InputText type="text" v-model="name" class="default_input w-100" :placeholder="$t('offer.namePlc')" />
                 </div>
 
                 <div class="form-group mb-3 position-relative">
                     <label for="" class="blackColor d-block fw-6 mb-2 fs-14 d-flex justify-content-between">
-                            <span>رقم الجوال</span> 
+                            <span>{{ $t('con.phone') }}</span> 
                     </label>
 
-                    <InputText type="text" v-model="phone" class="default_input w-100" placeholder="الرجاء ادخال رقم الجوال" />
+                    <InputText type="text" v-model="phone" class="default_input w-100" :placeholder="$t('con.phonePlc')" />
 
                     <!-- country code  -->
                     <Dropdown v-model="selectedCity" :options="countries" @change="chooseCountry" optionLabel="name" placeholder="Select a City" class="default_input country_code  w-full md:w-14rem" />
@@ -38,16 +38,16 @@
 
                 <div class="form-group mb-3">
                     <label for="" class="blackColor d-block fw-6 mb-2 fs-14">
-                            البريد الالكتروني 
+                        {{ $t('common.email') }}
                     </label>
-                    <InputText type="email" v-model="email" class="default_input w-100" placeholder="الرجاء ادخال البريد الالكتروني" />
+                    <InputText type="email" v-model="email" class="default_input w-100" :placeholder="$t('common.emailPlace')" />
                 </div>
 
                 <div class="form-group">
                     <label for="" class="blackColor d-block fw-6 mb-2 fs-14">
-                            الرسالة 
+                            {{ $t('common.text') }} 
                     </label>
-                    <Textarea v-model="message" autoResize rows="5" class="default_input default_textarea w-100" cols="30" placeholder="الرجاء ادخال رسالتك" />
+                    <Textarea v-model="message" autoResize rows="5" class="default_input default_textarea w-100" cols="30" :placeholder="$t('common.textPlc')" />
                 </div>
 
             </form>
@@ -57,7 +57,7 @@
     
     <div class="d-flex mx-5  mt-3">
         <button class="btn main_btn w-25  pt-2 pb-2" :disabled="disabled" @click="sendMessage"> 
-            <span v-if="!loader">ارسال</span> 
+            <span v-if="!loader">{{ $t('common.send') }}</span> 
             <div class="spinner-border" role="status" v-if="loader">
                 <span class="visually-hidden">Loading...</span>
             </div>

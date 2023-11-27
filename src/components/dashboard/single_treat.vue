@@ -607,6 +607,21 @@
           <div class="spinner-small-white" v-if="disabled"></div>
         </div>
       </button>
+
+    </div> 
+
+    <!-- send offer  -->
+    <div class="send_offer mx-5 mb-4" v-if="treat.sendOfferButton == true">
+        <router-link :to="'/priceOffer/'+treat.id" @click="storePatient">
+            {{ $t('treat.sendOffer') }}
+        </router-link>
+    </div>
+    <!-- edit offer  -->
+    <div class="send_offer mx-5 mb-4" v-if="treat.status == 'cancelled'">
+        <router-link :to="'/editPriceOffer/'+this.$route.params.id">
+            {{ $t('treat.editOffer') }}
+        </router-link>
+>>>>>>> Stashed changes
     </div>
   </Dialog>
 </template>
@@ -769,8 +784,7 @@ export default {
       if (this.selectedDoctor) {
         for (let i = 0; i < this.selectedDoctor.length; i++) {
           docorsIds.push(this.selectedDoctor[i].id);
-        }
-      }
+
       let patiensIds = [];
       if (this.selectedPatient) {
         for (let i = 0; i < this.selectedPatient.length; i++) {
@@ -821,7 +835,17 @@ export default {
           });
         });
       this.disabled = false;
-    },
+    }
+    }},
+
+
+    // sameeeer
+
+      storePatient(){
+          localStorage.setItem('patient', JSON.stringify(this.patient))
+      },
+
+      
   },
   mounted() {
     this.getTreatment();

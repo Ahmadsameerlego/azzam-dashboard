@@ -83,6 +83,7 @@
       </div>
     </form>
   </section>
+  
   <Skeleton v-else style="width:90%;margin:auto" class="mb-3" height="14rem"></Skeleton>
 
   <section v-if="isShown">

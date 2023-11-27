@@ -19,7 +19,7 @@
                 </router-link>
 
                 <!-- admin  -->
-                <div class="admin d-flex">
+                <div class="admin d-flex position-relative mx-3"  @click="switchDrop">
                     <div class="admin_image">
                         <img :src="image" alt="admin image">
                     </div>
@@ -27,6 +27,23 @@
                         <h6 class="name fw-bold"> {{ name }} </h6>
                         <span class="title fw-6"> {{ title }} </span>
                     </div>
+                    <span class="profile_icon">
+                        <i class="fa-solid fa-angle-down"></i>
+                    </span>
+
+                    <!-- profile dropdown  -->
+                    <div class="profile_drop pt-2 pb-2" ref="profile">
+                        <div class="single mb-2 px-3 pb-2 text-center">
+                            <router-link to="/"> عن التطبيق </router-link>
+                        </div>
+                        <div class="single mb-2 px-3 pb-2 text-center">
+                            <router-link to="/"> أسئلة متكررة </router-link>
+                        </div>
+                        <div class="single mb-2 px-3 pb-2 text-center">
+                            <router-link to="/"> الشروط والأحكام </router-link>
+                        </div>
+                    </div>
+                    
                 </div>
 
                 <div class="dropdown">
@@ -87,6 +104,9 @@ export default {
 
             location.reload()
 
+        },
+        switchDrop(){
+            this.$refs.profile.classList.toggle('active')
         }
 
     },
@@ -99,9 +119,38 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
+    .profile_drop{
+        position: absolute;
+        top: 50px;
+        left: -42px;
+        border-radius: 6px;
+        background-color: #fff;
+        box-shadow: 0px 0px 10px #33333343;
+        width: 170px;
+        opacity: 0;
+        transition: .3s all;
+        .single{
+            color:#333;
+            &:not(:last-of-type){
+                border-bottom: 1px solid #cccccc4d;
+            }
+        }
+        &.active{
+            opacity: 1;
+        }
+    }
+    .profile_icon{
+        position: absolute;
+        left: -10px;
+        font-size: 13px;
+        top: 27%;
+    }
     .flag_img{
         width: 25px;
     }
     .dropdown-toggle::after{display: none !important;}
+    .admin{
+        cursor: pointer;
+    }
 </style>

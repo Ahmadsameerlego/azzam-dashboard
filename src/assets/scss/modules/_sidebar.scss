@@ -1,12 +1,12 @@
-#sidebar{
-    .logo{
-        width: 100px;
-        height: 100px;
-    }
-    .test{
-        color: $main-color;
-    }
-}
+// #sidebar{
+//     .logo{
+//         width: 100px;
+//         height: 100px;
+//     }
+//     .test{
+//         color: $main-color;
+//     }
+// }
 #sidebar{
     position: fixed;
     top: 0;
@@ -20,8 +20,8 @@
         padding-right: 15px;
     }
     .logo{
-        width: 200px;
-        height: 200px;
+        width: 167px;
+        height: 183px;    
         margin: auto;
     }
     .sidebar_nav{

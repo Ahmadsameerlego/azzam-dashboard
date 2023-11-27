@@ -15,7 +15,7 @@
   <script>
   import sidebar from '@/components/layout/side-bar.vue';
   import dash_header from '@/components/layout/dash-header.vue';
-  import home from '@/components/dashboard/addGroupComp.vue'
+  import home from '@/components/dashboard/priceOfferComp.vue'
   export default {
     name: 'HomeView',
     components: {

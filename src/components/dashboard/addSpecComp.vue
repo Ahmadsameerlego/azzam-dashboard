@@ -235,6 +235,7 @@
                             optionLabel="title"
                             :placeholder="appointment.dayText"
                             class="default_input w-100 w-full md:w-14rem"
+                            
                         />
                     </div>
                     </div>
@@ -265,9 +266,21 @@
                     </div>
                     </div>
                     <div class="col-md-1 mb-3">
-                        <button class="btn removeAppointment" @click.prevent="removeAppointment(index)">
-                            <i class="fa-solid fa-trash-can text-danger"></i>
+                        <button class="btn removeAppointment" type="button" @click="deleteApp[index]=true">
+                            <i class="fa-solid fa-trash-can text-danger" v-if="!deleteDisabled[index]"></i>
                         </button>
+
+
+                        <Dialog v-model:visible="deleteApp[index]" modal :style="{ width: '50rem' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
+                            <h6 class="text-center"> هل انت متأكد من حذف المعاد ؟ </h6>
+                            <div class="mt-3 d-flex">
+                                <button class="btn btn-danger w-50" @click.prevent="removeAppointment(index, appointment.day , appointment.startTime, appointment.endTime)">
+                                     نعم 
+                                </button>
+                                <button class="btn btn-secondary w-50 mx-2" type="button" @click="deleteApp[index]=false"> لا </button>
+                            </div>
+                        </Dialog>
+
                     </div>
                 </div>
             </div>
@@ -284,10 +297,10 @@
             <div class="d-flex justify-content-center align-items-center mt-3">
                 <button class="btn main_btn w-50 mx-auo pt-2 pb-2" :disabled="disabled2" @click.prevent="updateDoctor">
                      <span v-if="!disabled">
-                        {{ $t('common.add') }} 
+                       حفظ التعديلات
                      </span>
                      <div class="spinner-border" role="status" v-if="disabled">
-                        <span class="visually-hidden">Loading...</span>
+                        <span class="visually-hidden ">Loading...</span>
                     </div>
                 </button>
             </div>
@@ -310,6 +323,7 @@ import Textarea from 'primevue/textarea';
 import { mapActions, mapGetters } from 'vuex';
 import Calendar from 'primevue/calendar';
 import axios from 'axios';
+import Dialog from 'primevue/dialog';
 
 import Toast from 'primevue/toast';
 
@@ -394,6 +408,12 @@ export default {
             addDoc : false,
             editDoc : false,
 
+            appoint_length : '',
+            disabledOld : [],
+            deleteDisabled : [],
+
+            deleteApp : [],
+            avatar_image : null
 
 
         }
@@ -403,22 +423,25 @@ export default {
             console.log(this.dateeee)
         },
         new_appointments: {
+            
             deep: true,
             handler(newAppointments) {
-            // Check if any of the properties in any appointment is null
-            const anyNull = newAppointments.some(appointment => {
-                return (
-                appointment.selectedDay === null ||
-                appointment.startTime === null ||
-                appointment.endTime === null
-                );
-            });
+            if( this.$route.fullPath.includes('addSpecialist') ){
+                // Check if any of the properties in any appointment is null
+                const anyNull = newAppointments.some(appointment => {
+                    return (
+                        appointment.selectedDay === null ||
+                        appointment.startTime === null ||
+                        appointment.endTime === null
+                    );
+                });
 
-            if (anyNull) {
-                // Do something when any of the properties is null
-                this.disabled2 = true ;
-            }else{
-                this.disabled2 = false ;
+                if (anyNull) {
+                    // Do something when any of the properties is null
+                    this.disabled2 = true ;
+                }else{
+                    this.disabled2 = false ;
+                }
             }
             }
         }
@@ -442,14 +465,43 @@ export default {
             this[input] = true ;
         },
         // remove appointment 
-        removeAppointment(index){
-            this.new_appointments.splice(index,1)
+        async removeAppointment(index, day , start , end){
+            
+            console.log(index)
+            const fd = new FormData();
+            fd.append('id', this.$route.params.id);
+            fd.append('day', day);
+            fd.append('startTime', start);
+            fd.append('endTime', end);
+            await axios.put(`/delete-appointment`, fd ,{
+                headers : {
+                    Authorization : `Bearer ${localStorage.getItem('token')}`
+                }
+            })
+            .then( (res)=>{            
+                if( res.data.key === 'success' ){
+                    this.$toast.add({ severity: 'success', summary: res.data.message, life: 3000 });
+                    // this.deleteDisabled[index] = false ;
+                    setTimeout(() => {
+                        this.getDoctorData();
+                    }, 500);
+                    this.deleteApp[index] = false ; 
+                }else{
+                    this.$toast.add({ severity: 'error', summary: res.data.message, life: 3000 });
+                    // this.deleteDisabled[index] = false ;
+                }
+            } )
+            .catch( (err)=>{
+                this.$toast.add({ severity: 'error', summary: err.response.data.message, life: 3000 });
+                this.deleteApp[index] = false ; 
+            } )
         },
         // handle input type number 
         
         // upload pic image 
         uploadProfilePic(e){
             const file = e.target.files[0];
+            this.avatar_image = e.target.files[0];
             this.$refs.profile.src = URL.createObjectURL(file);
         },
         // add another appointment 
@@ -459,8 +511,9 @@ export default {
                 startTime: null,
                 endTime: null,
             });
-        },
 
+            // this.disabledOld[index] = true
+        },
         // format time 
         formatTimeTo12HourFormat(time) {
             const hours = time.getHours();
@@ -473,8 +526,8 @@ export default {
             return `${formattedHours}:${formattedMinutes} ${amPm}`;
         },
 
-        // Add New Spcialist 
-        async addDoctor(){
+        // store appointment 
+        storeAppointment(){
             // loop through appended appointments
             if (this.new_appointments.length > 0) {
                 const uniqueAppointments = [];
@@ -497,7 +550,45 @@ export default {
 
                 this.dates = uniqueAppointments;
             }
+        },
+        // store emp for edit 
+        storeForEdit(){
+            // loop through appended appointments
+            if (this.new_appointments.length > 0) {
 
+                for (let i = 0; i < this.new_appointments.length; i++) {
+                    let sendedDay = null ;
+                    let startTime = null ;
+                    let endTime = null ;
+                    if(typeof this.new_appointments[i].day === 'object'){
+                        sendedDay = this.new_appointments[i].day.name ;
+                        startTime = this.formatTimeTo12HourFormat(this.new_appointments[i].startTime)  ;
+                        endTime = this.formatTimeTo12HourFormat(this.new_appointments[i].endTime)  ;
+                        console.log('yes')
+                    } else if( !(typeof this.new_appointments[i].day === 'object')){
+                        sendedDay = this.new_appointments[i].day ;
+                        startTime = this.new_appointments[i].startTime;
+                        endTime = this.new_appointments[i].endTime  ;
+                        console.log('No')
+                    }
+
+                    this.dates.push({
+                        day: sendedDay,
+                        startTime: startTime,
+                        endTime: endTime,
+                    });
+
+
+                    console.log(typeof this.new_appointments[i].day)
+                }
+            }
+        },
+        // Add New Spcialist 
+        async addDoctor(){
+
+
+            
+            this.storeAppointment()
             
             this.disabled = true ;
             this.disabled2 = true ;
@@ -539,7 +630,6 @@ export default {
                 this.disabled2 = false ;    
             } )
         },
-
         // get doctor data 
         async getDoctorData(){
             await axios.get(`/doctors-details?id=${this.$route.params.id}`, {
@@ -573,40 +663,36 @@ export default {
 
                     this.$refs.profile.src = response.avatar ;
 
-                    this.new_appointments = response.appointments
+                    this.new_appointments = response.appointments;
+
+                    for( let i = 0 ; i < this.new_appointments.length  ; i++ ){
+                        for( let x = 0 ; x < this.days.length  ; x++ ){
+                            if( this.new_appointments[i].day == this.days[x].name ){
+                                // this.new_appointments[i].selectedDay = this.day[x];
+                                
+                                // this.new_appointments.push( {
+                                //     selectedDay : this.days[x]
+                                // } )
+                                console.log(this.days[x].name);
+                                console.log(this.new_appointments);
+
+                            }
+                        }
+                    }
+                    this.appoint_length = response.appointments.length ;
+
+                    console.log(this.new_appointments)
                 }
             } )
             .catch( (err)=>{
-                this.$toast.add({ severity: 'error', summary: err.response.data.message, life: 3000 });
+                // this.$toast.add({ severity: 'error', summary: err.response.data.message, life: 3000 });
+                console.log(err)
             } )
         },
-
         // update doctors 
         async updateDoctor(){
-            // loop through appended appointments
-            // if (this.new_appointments.length > 0) {
-            //     const uniqueAppointments = [];
-            //     const seen = new Set();
-
-            //     for (let i = 0; i < this.new_appointments.length; i++) {
-            //         const key = this.new_appointments[i].selectedDay.name +
-            //                     this.formatTimeTo12HourFormat(this.new_appointments[i].startTime) +
-            //                     this.formatTimeTo12HourFormat(this.new_appointments[i].endTime);
-
-            //         if (!seen.has(key)) {
-            //             seen.add(key);
-            //             uniqueAppointments.push({
-            //                 day: this.new_appointments[i].selectedDay.name,
-            //                 startTime: this.formatTimeTo12HourFormat(this.new_appointments[i].startTime),
-            //                 endTime: this.formatTimeTo12HourFormat(this.new_appointments[i].endTime),
-            //             });
-            //         }
-            //     }
-
-            //     this.dates = uniqueAppointments;
-            // }
-
-            
+           
+            this.storeForEdit()
             this.disabled = true ;
             this.disabled2 = true ;
             const fd = new FormData() ;
@@ -631,11 +717,17 @@ export default {
             }
             if( this.selectedCountry ){
                 fd.append('countryCode', this.selectedCountry.code);
-            }             
+            }    
+            if( this.avatar_image ){
+                fd.append('avatar', this.avatar_image)
+            }       
+            fd.append('descriptionEn', this.descriptionEn);  
+            fd.append('descriptionAr', this.descriptionAr);  
             fd.append('userType', 'doctor');
             fd.append('center', JSON.parse(localStorage.getItem('user')).id);
 
-            // fd.append('appointments', JSON.stringify(this.dates));
+            
+            fd.append( 'appointments', JSON.stringify(this.dates.splice(this.appoint_length) ) );
 
             await axios.put('/edit-doctor', fd , {
                 headers : {
@@ -650,24 +742,29 @@ export default {
                     // setTimeout(() => {
                     //     this.$router.push('/specialistsManage')
                     // }, 1000);
-                    
+                    console.log('ffffffffffffffff')
+                    // this.dates = [];
+                    // this.new_appointments = [];
                 }else{
                     this.$toast.add({ severity: 'error', summary: res.data.message, life: 3000 });
                     this.disabled = false ; 
                     this.disabled2 = false ; 
+                    // this.dates = [];
+                    // this.new_appointments = [];
                 }
             } )
             .catch( (err)=>{
-                this.$toast.add({ severity: 'error', summary: err.response.data.message, life: 3000 });
+                this.$toast.add({ severity: 'error', summary: err.response.data, life: 3000 });
+                console.log(err)
                 this.disabled = false ;
                 this.disabled2 = false ;
+                // this.dates = [];
+                // this.new_appointments = [];
             } )
         },
-
         chooseCountry(){
             document.querySelector('.phone .p-dropdown-label').innerHTML = this.selectedCountry.code ;
         },
-
     },
     components:{
         InputText,
@@ -675,7 +772,8 @@ export default {
         InputNumber,
         Textarea,
         Calendar,
-        Toast
+        Toast,
+        Dialog
     },
     beforeMount(){
         if( this.$route.fullPath.includes('addSpecialist') ){
@@ -685,13 +783,13 @@ export default {
             this.addDoc = false ;
             this.editDoc = true ;
             this.getDoctorData();
+
+            this.disabled2 = false ;
         }
     },
     mounted(){
-        this.getCountries();
-        
+        this.getCountries();   
         document.querySelector('.phone .p-dropdown-label').innerHTML = this.selectedCountry.code ;
-        
     }
 }
 </script>

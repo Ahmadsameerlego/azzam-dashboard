@@ -55,7 +55,7 @@
 
                     <div class="d-flex">
                         <!-- edit  -->
-                        <router-link  :to="'/rates/'+slotProps.data.id" class="" @click="click(slotProps.data._id)">
+                        <router-link  :to="'/rates/'+slotProps.data.id" class="" >
                             عرض التقييم
                         </router-link>
                        
@@ -67,11 +67,11 @@
                 <template #body="slotProps">
 
                    <div class="">
-                        <button class="btn deactivate"  v-if="slotProps.data.isApproved== true" @click="deactive(slotProps.data.id)"> 
+                        <button class="btn deactivate" :disabled="disabledActive[slotProps.index]" v-if="slotProps.data.isApproved== true" @click="deactive(slotProps.data.id,  slotProps.index)"> 
                             الغاء تفعيل الحساب 
 
                         </button>
-                        <button class="btn activate"  v-if="slotProps.data.isApproved== false" @click="deactive(slotProps.data.id)">  
+                        <button class="btn activate"  :disabled="disabledActive[slotProps.index]" v-if="slotProps.data.isApproved== false" @click="deactive(slotProps.data.id, slotProps.index)">  
                             تفعيل الحساب 
                         </button>
                    </div>
@@ -92,8 +92,11 @@
                             <i class="fa-regular fa-bell"></i>
                         </span>
                         <!-- delete  -->
-                        <span class="delete" @click="deleteDoctor(slotProps.data.id)">
-                            <i class="fa-regular fa-trash-can"></i>
+                        <span class="delete" @click="deleteDoctor(slotProps.data.id, slotProps.index)">
+                            <i class="fa-regular fa-trash-can" v-if="!showDeleted[slotProps.index]"></i>
+                            <div class="spinner-border" role="status" v-else>
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
                         </span>
                    </div>
                 </template>
@@ -185,6 +188,8 @@ export default {
             titleEn : '',
             messageAr : '',
             messageEn : '',
+            disabledActive : [],
+            showDeleted : []
         };
     },
     components:{
@@ -200,7 +205,8 @@ export default {
     },
     methods:{
         // deactive 
-        async deactive(id){
+        async deactive(id, index){
+            this.disabledActive[index] = true ;
             const fd = new FormData();
             await axios.put(`/show-hidden-doctor?id=${id}`, fd ,{
                 headers:{
@@ -210,22 +216,23 @@ export default {
             .then( (res)=>{
                 if( res.data.key == 'success' ){
                     this.$toast.add({ severity: 'success', summary: res.data.message, life: 3000 });
-                    this.disabled = false ;
                     // setTimeout(() => {
                         this.getDoctors()
                     // }, 1000);
+                    this.disabledActive[index] = false ;
                 }else{
                     this.$toast.add({ severity: 'error', summary: res.data.message, life: 3000 });
-                    this.disabled = false ;
+                    this.disabledActive[index] = false ;
                 }
             } )
             .catch( (err)=>{
                 this.$toast.add({ severity: 'error', summary: err.response.data.message, life: 3000 });
-                this.disabled = false ;
+                this.disabledActive[index] = false ;
             } )
         },
         // delete doctors 
-        async deleteDoctor(id){
+        async deleteDoctor(id, index){
+            this.showDeleted[index] = true ;
             await axios.delete(`/delete-doctor?id=${id}`,{
                 headers:{
                     Authorization : `Bearer ${localStorage.getItem('token')}`
@@ -234,18 +241,18 @@ export default {
             .then( (res)=>{
                 if( res.data.key == 'success' ){
                     this.$toast.add({ severity: 'success', summary: res.data.message, life: 3000 });
-                    this.disabled = false ;
                     // setTimeout(() => {
                         this.getDoctors()
                     // }, 1000);
+                    this.showDeleted[index] = false ;
                 }else{
                     this.$toast.add({ severity: 'error', summary: res.data.message, life: 3000 });
-                    this.disabled = false ;
+                    this.showDeleted[index] = false ;
                 }
             } )
             .catch( (err)=>{
                 this.$toast.add({ severity: 'error', summary: err.response.data.message, life: 3000 });
-                this.disabled = false ;
+                this.showDeleted[index] = false ;
             } )
         },
         openNotiftDialog(id){
@@ -274,7 +281,7 @@ export default {
 
                     setTimeout(() => {
                         this.visible = false ;
-                    }, 2000);
+                    }, 1000);
                 }else{
                     this.$toast.add({ severity: 'error', summary: res.data.message, life: 3000 });
                     this.disabled = false ;
@@ -312,7 +319,17 @@ export default {
 }
 </script>
 
+
+<style scoped>
+.spinner-border {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    color: #df342f;
+}
+</style>
 <style lang="scss">
+    
     #specManage{    
         .form-group{
             input{

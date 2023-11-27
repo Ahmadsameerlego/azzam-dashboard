@@ -9,9 +9,11 @@
                     <section class="single_card  px-3 pt-4 pb-3 flex_between" 
                     :class="{
                         dark:sta.key==$t('home.docNum')
-                        ||sta.key==$t('home.supportNum'), green : sta.key==$t('home.total')
-                        ||sta.key==$t('home.urgentNum')
-                        ||sta.key==$t('home.personsNum'), blue:sta.key==$t('home.treatNum')
+                        ||sta.key==$t('home.supportNum'),
+                        green : sta.key==$t('home.total')
+                        ||sta.key==$t('home.personsNum'),
+                        grad :sta.key==$t('home.urgentNum'),
+                        blue:sta.key==$t('home.treatNum')
                     }">
                         <div>
                             <h4 class="fw-bold whiteColor"> {{ sta.count }} </h4>
@@ -280,7 +282,9 @@ export default {
             &.green{
                 background-color: #4aa236;
             }
-
+            &.grad{
+                background: radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(214,229,213,1) 0%, rgba(145,186,141,1) 0%, rgba(152,190,149,1) 6%, rgba(114,166,109,1) 21%, rgba(77,143,71,1) 48%, rgba(58,131,51,1) 81%);
+            }
             &::before{
                 content: "";
                 position: absolute;

@@ -39,7 +39,7 @@
                         </section>
                     </div>
                 </div>
-                <div class="row mb-3" v-else>
+                <div class="row mb-3 pb-3 px-4" v-else>
                     <div class="col-md-6">
                         <Skeleton style="width:100%" height="5rem"></Skeleton>
                     </div>
@@ -49,9 +49,14 @@
                 </div>
             <!-- </section> -->
             
-            <!-- <div class="text-center text-danger fs-14" v-else>
-                لا توجد تقييمات
-            </div> -->
+            <div class="mb-3 pb-3 px-4" v-if="islength">
+                
+                <Message severity="error">
+                    لا توجد تقييمات
+                </Message>
+            </div>
+            
+
         </section>
     </section>
 </template>
@@ -60,6 +65,7 @@
 import Rating from 'primevue/rating';
 import axios from 'axios';
 import Skeleton from 'primevue/skeleton';
+import Message from 'primevue/message';
 
 export default {
     data(){
@@ -82,20 +88,20 @@ export default {
                 if( res.data.key === 'success' ){
                     this.rates = res.data.data ;
                     this.isShown = true ;
-                    setTimeout(() => {
-                        if( res.data.data.lenght > 0 ){
-                            this.islength = true ;
-                        }else{
-                            this.islength = false ;
-                        }
-                    }, 1000);
+                    
+                    if( res.data.data.length === 0 ){
+                        this.islength = true ;
+                    }else{
+                        this.islength = false ;
+                    }
                 }
             } )
         }
     },
     components:{
         Rating,
-        Skeleton 
+        Skeleton ,
+        Message
     },
     mounted(){
         this.getRates();
@@ -104,6 +110,14 @@ export default {
 </script>
 
 <style lang="scss">
+    .p-message-close.p-link{
+        margin-right: auto !important;
+        margin-left: 0 !important;
+    }
+    .p-message .p-message-icon{
+        margin-left: .5rem !important;
+        margin-right: 0 !important;
+    }
     .rates{
         background-color: #fff;
         border-radius: 5px;
