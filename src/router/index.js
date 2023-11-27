@@ -20,6 +20,7 @@ import profile from '@/views/profileView.vue';
 import changePhone from '@/views/changePhone.vue';
 import contact from '@/views/contactUs.vue';
 import editDoctor from '@/views/editDoctor.vue';
+import addSession from '@/views/addSession.vue';
 import addGroup from '@/views/addGroup.vue'
 const routes = [
   {
@@ -131,6 +132,11 @@ const routes = [
     path : '/addGroup',
     name : 'addGroup',
     component :addGroup 
+  },
+  {
+    path : '/addSession/:id',
+    name : 'addSession',
+    component :addSession 
   }
 ]
 

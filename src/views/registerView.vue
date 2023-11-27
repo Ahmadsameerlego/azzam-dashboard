@@ -589,4 +589,25 @@ export default {
     height:25px;
     border: none;
 }
+.p-multiselect.p-multiselect-chip .p-multiselect-token{
+    background: #fff !important;
+    border: 1px solid #ddd !important;
+    min-width: 120px;
+    position: relative;
+    justify-content: center;
+    text-align: center;
+}
+.p-multiselect.p-multiselect-chip .p-multiselect-token .p-multiselect-token-icon{
+    position: absolute;
+    right: -2px;
+    top: -2px;
+    background: #f00;
+    color: #fff;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 </style>
