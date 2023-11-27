@@ -291,7 +291,6 @@ export default {
     },
     methods:{
 
-        // get profile 
         async handleProfile(){
             const fd = new FormData();
             await axios.put('/edit-center',fd , {
