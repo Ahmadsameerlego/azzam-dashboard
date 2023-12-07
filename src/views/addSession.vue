@@ -239,7 +239,26 @@
   };
   </script>
   
+  <style scoped>
+  .p-dropdown .p-dropdown-label.p-placeholder,
+  .p-inputtext {
+    color: #495057 !important;
+    font-size: 15px;
+  }
+  .p-dropdown {
+    border: 1px solid #ddd !important;
+    border-radius: 25px !important;
+    box-shadow: none !important;
+    width: 100%;
+  }
+  </style>
   <style lang="scss">
+  .p-dropdown .p-dropdown-label.p-placeholder,
+  .p-inputtext 
+  {
+    font-family: "Cairo", sans-serif !important;
+
+  }
   /* Firefox */
   input[type="number"] {
     -moz-appearance: textfield;
@@ -250,19 +269,8 @@
     -webkit-appearance: none;
     margin: 0;
   }
-  .p-dropdown {
-    border: 1px solid #ddd !important;
-    //   background-color: #f8f8f8 !important;
-    border-radius: 25px !important;
-    box-shadow: none !important;
-    width: 100%;
-  }
-  .p-dropdown .p-dropdown-label.p-placeholder,
-  .p-inputtext {
-    color: #495057 !important;
-    font-family: "Cairo", sans-serif !important;
-    font-size: 15px;
-  }
+
+  
   .font-bold {
     font-weight: bold;
   }

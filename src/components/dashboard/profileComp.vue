@@ -1,8 +1,8 @@
 <template>
   <section class="pt-3 pb-3 px-5">
     <div>
-      <h6 class="fw-bold blackColor">الملف الشخصي</h6>
-      <p class="grayColor">ادارة الملف الشخصي</p>
+      <h6 class="fw-bold blackColor">{{ $t('nav.profile') }}</h6>
+      <p class="grayColor"> {{$t('profile.manage')  }} </p>
     </div>
   </section>
 
@@ -10,7 +10,7 @@
     <section id="login" class="mx-0 px-0" style="width: 40%">
       <!-- title  -->
       <div class="">
-        <h6 class="blackColor fw-bold">بيانات الملف الشخصي</h6>
+        <h6 class="blackColor fw-bold"> {{ $t('profile.title') }} </h6>
       </div>
       <!-- form  -->
       <form @submit.prevent="editProfile" ref="profileform">
@@ -27,13 +27,13 @@
 
         <div class="form-group mb-3">
           <label for="" class="blackColor d-block fw-6 mb-2 fs-14">
-            اسم المركز
+            {{ $t('auth.centerName') }}
           </label>
           <InputText
             type="text"
             v-model="name"
             class="default_input w-100"
-            placeholder="الرجاء ادخال اسم المركز"
+            :placeholder="$t('auth.namePlc')"
           />
         </div>
 
@@ -42,9 +42,9 @@
             for=""
             class="blackColor d-block fw-6 mb-2 fs-14 d-flex justify-content-between"
           >
-            <span>رقم الجوال</span>
+            <span> {{ $t('auth.phone') }} </span>
             <span class="grayColor" @click="sendCode" style="cursor: pointer"
-              >تغيير رقم الجوال</span
+              >{{ $t('auth.changePhone') }}</span
             >
           </label>
 
@@ -52,7 +52,7 @@
             type="text"
             v-model="phone"
             class="default_input w-100"
-            placeholder="الرجاء ادخال رقم الجوال"
+            :placeholder="$t('auth.phonePlc')"
           />
 
           <!-- country code  -->
@@ -60,7 +60,7 @@
             v-model="selectedCountry"
             @change="chooseCountry"
             :options="countries"
-            optionLabel="code"
+            optionLabel="name"
             class="default_input country_code w-full md:w-14rem"
           >
             <template #value="slotProps">
@@ -76,19 +76,19 @@
 
         <div class="form-group mb-3">
           <label for="" class="blackColor d-block fw-6 mb-2 fs-14">
-            البريد الالكتروني
+            {{ $t('auth.email') }}
           </label>
           <InputText
             type="email"
             v-model="email"
             class="default_input w-100"
-            placeholder="الرجاء ادخال البريد الالكتروني"
+            :placeholder="$t('auth.emailPlc')"
           />
         </div>
 
         <div class="form-group mb-3">
           <label for="" class="blackColor d-block fw-6 mb-2 fs-14">
-            التخصص
+            {{ $t('auth.spec') }}
           </label>
 
           <Dropdown
@@ -102,7 +102,7 @@
 
         <div class="form-group mb-3">
           <label for="" class="blackColor d-block fw-6 mb-2 fs-14">
-            المدينة
+            {{ $t('auth.city') }}
           </label>
 
           <Dropdown
@@ -117,70 +117,70 @@
         <!-- google map  -->
         <div class="form-group mb-3">
           <label for="" class="blackColor d-block fw-6 mb-2 fs-14">
-            العنوان
+            {{ $t('auth.address') }}
           </label>
           <InputText
             type="text"
             v-model="address"
             @focus="googleMap = true"
             class="default_input w-100"
-            placeholder="الرجاء ادخال العنوان على الخريطة"
+            :placeholder="$t('auth.addressPlc')"
           />
         </div>
 
         <div class="form-group default_input mb-5">
           <label for="" class="blackColor d-block fw-6 mb-2 fs-14">
-            رقم الترخيص
+            {{ $t('auth.licenseName') }}
           </label>
           <!-- <InputNumber v-model="commercialNumber" inputId="integeronly" class="default_input w-100" placeholder="الرجاء ادخال رقم الترخيص"/> -->
           <input
             type="number"
             v-model="commercialNumber"
             class="form-control w-100"
-            placeholder="الرجاء ادخال رقم الترخيص"
+            :placeholder="$t('auth.numberPlc')"
           />
         </div>
 
         <div class="form-group mb-3">
           <label for="" class="blackColor d-block fw-6 mb-2 fs-14">
-            اسم المالك
+            {{ $t('auth.ownerName') }}
           </label>
           <InputText
             type="text"
             v-model="ownerName"
             class="default_input w-100"
-            placeholder="الرجاء ادخال اسم المالك"
+            :placeholder="$t('auth.ownerPlc')"
           />
         </div>
 
         <div class="form-group mb-3">
           <label for="" class="blackColor d-block fw-6 mb-2 fs-14">
-            اسم البنك
+            {{ $t('auth.bankName') }}
           </label>
           <InputText
             type="text"
             v-model="bankName"
             class="default_input w-100"
-            placeholder="الرجاء ادخال اسم البنك"
+            :placeholder="$t('auth.bankPlc')"
           />
         </div>
 
         <div class="form-group mb-3">
           <label for="" class="blackColor d-block fw-6 mb-2 fs-14">
-            رقم الايبان
+            {{ $t('auth.iban') }}
           </label>
           <InputText
             type="text"
             v-model="iban"
             class="default_input w-100"
-            placeholder="الرجاء ادخال رقم الايبان"
+            :placeholder="$t('auth.ibanPlc')"
           />
         </div>
 
         <!-- upload images  -->
         <div class="form-group mb-3">
           <label for="" class="blackColor d-block fw-6 mb-2 fs-14">
-            صور الاعتمادات والخبرات
+            {{ $t('auth.images') }}
           </label>
 
           <!-- container  -->
@@ -257,7 +257,7 @@
             class="btn main_btn w-100 pt-2 pb-2 d-flex justify-content-center"
             :disabled="disabled"
           >
-            <div v-if="!disabled">تعديل</div>
+            <div v-if="!disabled">{{ $t('auth.edit') }}</div>
             <div class="loading" role="status" v-if="disabled">
               <div class="spinner-small-white" v-if="disabled"></div>
             </div>
@@ -289,11 +289,14 @@
     </GMapMap>
   </Dialog>
 
+
+
+
   <!-- change phone otp  -->
   <Dialog v-model:visible="changePhoneModal" modal :style="{ width: '50vw' }">
     <div style="margin: 0 135px">
-      <h6 class="fw-bold blackColor">الملف الشخصي</h6>
-      <p class="grayColor">ادارة الملف الشخصي</p>
+      <h6 class="fw-bold blackColor"> {{ $t('nav.profile') }} </h6>
+      <p class="grayColor"> {{ $t('profile.manage') }} </p>
     </div>
 
     <form>
@@ -331,15 +334,15 @@
           type="button"
           @click="activation"
         >
-          تأكيد
+          {{ $t('auth.confirm') }}
         </button>
       </div>
 
       <div class="flex_center mt-3">
         <p class="grayColor">
-          لم يصلك الكود ؟
+          {{ $t('auth.getNoCode') }} ؟
           <span class="third-color pointer-click" @click="resendCode">
-            إعادة ارسال
+            {{ $t('auth.resend') }}
           </span>
         </p>
       </div>
@@ -404,7 +407,7 @@ export default {
       sendedImgs: [],
       cityPlace: "",
       code: "",
-    };
+    }
   },
   components: {
     InputText,
@@ -582,7 +585,10 @@ export default {
 
     chooseCountry() {
       document.querySelector(".p-dropdown-label").innerHTML =
-        this.selectedCountry.code;
+          `
+            <img src="${this.selectedCountry.image}" class="country_image">
+            ${this.selectedCountry.code}
+            ` ;
       this.getSpecialists();
     },
     // get cities
@@ -729,7 +735,11 @@ export default {
   },
   mounted() {
     this.geolocation();
-
+    // document.querySelector(".p-dropdown-label").innerHTML =
+    //       `
+    //         <img src="${this.selectedCountry.image}" class="country_image">
+    //         ${this.selectedCountry.code}
+    //         ` ;
     this.getProfile();
     this.getSpecialists();
     this.chooseCountry();
@@ -741,7 +751,7 @@ export default {
 <style>
 .country_code {
   position: absolute !important;
-  width: 27% !important;
+  width: 29% !important;
   left: 0;
   top: 40%;
 }

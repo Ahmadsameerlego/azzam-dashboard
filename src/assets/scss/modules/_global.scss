@@ -57,6 +57,11 @@ a{
     width: calc(100% - 300px);
     margin-right: 300px;
     margin-top: 100px;
+    transition: .3s all;
+    &.active{
+        width: calc(100% - 80px);
+        margin-right: 80px;
+    }
 }
 
 .fw-6{

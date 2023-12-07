@@ -21,6 +21,7 @@ import ToastService from 'primevue/toastservice';
 
 // import style 
 import '@/assets/scss/style.scss';
+import '@/assets/scss/style_ltr.scss';
 // import bootstrap
 import "bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";

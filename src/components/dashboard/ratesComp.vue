@@ -1,12 +1,12 @@
 <template>
     <section class="pt-3 pb-3 px-5">
         <div>
-            <h6 class="fw-bold blackColor"> تقييمات الاخصائي </h6>
-            <p class="grayColor"> يمكنك استعراض تقييمات الاخصائي من هنا </p>
+            <h6 class="fw-bold blackColor"> {{ $t('rate.title') }} </h6>
+            <p class="grayColor"> {{ $t('rate.desc') }} </p>
         </div>
         <!-- rates  -->
         <section class="rates">
-            <h6 class="fw-bold blackColor border-bottom pb-3 fs-14 px-3 pt-3"> تقييمات الاخصائي </h6>
+            <h6 class="fw-bold blackColor border-bottom pb-3 fs-14 px-3 pt-3"> {{ $t('rate.specTitle') }} </h6>
             
             <!-- if length  -->
             <!-- <section v-if="islength"> -->
@@ -52,7 +52,7 @@
             <div class="mb-3 pb-3 px-4" v-if="islength">
                 
                 <Message severity="error">
-                    لا توجد تقييمات
+                    {{ $t('rate.not') }}
                 </Message>
             </div>
             

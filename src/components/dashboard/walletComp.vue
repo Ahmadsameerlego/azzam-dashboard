@@ -12,19 +12,79 @@
             <div class="wallet_img mb-2">
                 <img :src="require('@/assets/imgs/wallet.png')" alt="wallet">
             </div>
-            <h3 class="sec-color fw-bold mb-2">
-                1000 رس
-            </h3>
+            <h3 class="sec-color fw-bold mb-2" v-html="wallet"></h3>
             <div>
-                <button class="main_btn btn w-100 px-5"> {{ $t('wallet.withdraw') }} </button>
+                <button class="main_btn btn w-100 px-5" :disabled="disabled" @click.prevent="widthDraw">
+                     <span v-if="!disabled"> {{ $t('wallet.withdraw') }} </span>
+                     <div class="spinner-border" role="status" v-if="disabled">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </button>
             </div>
         </div>
     </section>
+
+    <Toast />
 </template>
 
 <script>
-export default {
+import Toast from 'primevue/toast';
 
+import axios from 'axios';
+export default {
+    data(){
+        return{
+            wallet : '',
+            disabled : false
+        }
+    },
+    methods:{
+        // get wallet data 
+        async getWallet(){
+            await axios.get('/wallet' , {
+                headers : {
+                    Authorization : `Bearer ${localStorage.getItem('token')}`
+                }
+            })
+            .then( (res)=>{
+                if( res.data.key == 'success' ){
+                    this.wallet = res.data.data ;
+                }
+            } )
+        },
+        // withdraw 
+        async widthDraw(){
+            const fd = new FormData();
+            this.disabled = true ;
+            await axios.post('/balance-withdrawal', fd , {
+                headers : {
+                    Authorization : `Bearer ${localStorage.getItem('token')}`
+                }
+            })
+            .then( (res)=>{
+                if( res.data.key === 'success' ){
+                    this.$toast.add({ severity: 'success', summary: res.data.message, life: 3000 });
+                    this.disabled = false ;
+                    setTimeout(() => {
+                        this.getWallet();
+                    }, 1000);
+                }else{
+                    this.$toast.add({ severity: 'error', summary: res.data.message, life: 3000 });
+                    this.disabled = false ;
+                }
+            } )
+            .catch( (err)=>{
+                this.$toast.add({ severity: 'error', summary: err.response.data.message, life: 3000 });
+                this.disabled = false ;
+            } )
+        }
+    },
+    components:{
+        Toast
+    },
+    mounted(){
+        this.getWallet();
+    }
 }
 </script>
 

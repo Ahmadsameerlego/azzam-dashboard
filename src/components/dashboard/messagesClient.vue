@@ -1,11 +1,11 @@
 <template>
     <!-- filter  -->
-    <section class="table_filter" style="width:90%;margin-right:auto;margin-left:auto">
+    <section class="table_filter mt-5" style="width:90%;margin-right:auto;margin-left:auto;margin-top: 125px !important;">
         <button class="filter_item" :class="{'active' : activeFilter === 0 }" @click="setActiveFilter(0, 'doctor', 'رسائل الاخصائيين')">
-            رسائل الاخصائيين
+            {{ $t('message.specMessage') }}
         </button>
         <button class="filter_item" :class="{'active' : activeFilter === 1 }" @click="setActiveFilter(1, 'patient', 'رسائل العملاء')">
-            رسائل العملاء
+            {{ $t('message.clientMessage') }}
         </button>
     </section>
 
@@ -19,15 +19,15 @@
             </p>
 
             <p class="fs-13 fw-6 mb-2">
-                رقم الجوال  : {{ message.phone }}
+                {{ $t('message.phone') }}  : {{ message.phone }}
             </p>
 
             <p class="fs-13 fw-6 mb-2">
-                موضوع الرسالة  : {{ message.title }}
+                {{ $t('message.title') }}  : {{ message.title }}
             </p>
 
             <p class="fs-13 fw-6 mb-1">
-                محتوى الرسالة : 
+                {{ $t('message.sub') }} : 
             </p>
 
             <p class="fs-12 fw-6 mb-2">

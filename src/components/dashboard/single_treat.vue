@@ -13,10 +13,17 @@
             name: 'addSession',
             params: { id: traatmentPlanId },
           }"
+          v-if="addAdditionalSessionsButton"
           class="main-btn xl"
           >اضافة جلسة جديدة</router-link
         >
-        <button type="button"     @click="endTeatmentPlan" class="main-btn bg-red xl" :disabled="disabled">
+        <button
+          type="button"
+          v-if="finishTreatmentPlanButton"
+          @click="endTeatmentPlan"
+          class="main-btn bg-red xl"
+          :disabled="disabled"
+        >
           <div v-if="!disabled">انهاء الخطة العلاجية</div>
           <div class="loading" role="status" v-if="disabled">
             <div class="spinner-small-white" v-if="disabled"></div>
@@ -29,7 +36,7 @@
   <!-- steps  -->
   <section
     class="main-bg steps flex_between pt-3 pb-3 px-5 mx-5 mb-3"
-    v-if="isShown"
+    v-if="isShown && stepper"
   >
     <!-- single step  -->
     <div class="step d-flex align-items-center">
@@ -58,6 +65,7 @@
         {{ $t("common.new") }}
       </span>
     </div>
+
     <span
       class="line"
       :class="{
@@ -117,14 +125,17 @@
         {{ $t("dash.finish") }}
       </span>
     </div>
-    <span class="line" :class="{ active: treat.status == 'cancelled' }"></span>
+    <span
+      class="line d-none"
+      :class="{ active: treat.status == 'cancelled' }"
+    ></span>
     <!-- single step  -->
-    <div class="step d-flex align-items-center">
+    <div class="step d-flex align-items-center d-none">
       <span
         class="step_number"
         :class="{ active: treat.status == 'cancelled' }"
       >
-        3
+        3fgf
       </span>
       <span
         class="step-text grayColor mx-2"
@@ -135,7 +146,7 @@
     </div>
   </section>
   <Skeleton
-    v-else
+    v-if="!stepper && !isShown"
     class="px-5 mb-3 mx-auto"
     style="width: 90%"
     height="4rem"
@@ -173,7 +184,7 @@
         </div>
       </div>
       <!-- single info -->
-      <div class="gray-bg pt-2 pb-2 px-5">
+      <div class="gray-bg pt-2 pb-2 px-5" v-if="treat.dateOfOrder">
         <div class="single_info gray-bg flex_between">
           <span class="info_key"> {{ $t("treat.date") }} </span>
           <span class="info_value"> {{ treat.dateOfOrder }} </span>
@@ -187,66 +198,94 @@
         </div>
       </div>
       <!-- single info -->
-      <div class="gray-bg pt-2 pb-2 px-5">
+      <div class="gray-bg pt-2 pb-2 px-5" v-if="treat.gender">
         <div class="single_info gray-bg flex_between">
           <span class="info_key"> {{ $t("treat.gender") }} </span>
           <span class="info_value"> {{ treat.gender }} </span>
         </div>
       </div>
       <!-- single info -->
-      <div class="white_bg pt-2 pb-2 px-5">
+      <div class="white_bg pt-2 pb-2 px-5" v-if="treat.age">
         <div class="single_info flex_between">
           <span class="info_key"> {{ $t("treat.age") }} </span>
           <span class="info_value"> {{ treat.age }} </span>
         </div>
       </div>
       <!-- single info -->
-      <div class="gray-bg pt-2 pb-2 px-5">
+      <div class="gray-bg pt-2 pb-2 px-5" v-if="treat.name">
         <div class="single_info gray-bg flex_between">
           <span class="info_key"> {{ $t("treat.name") }} </span>
           <span class="info_value"> {{ treat.name }} </span>
         </div>
       </div>
       <!-- single info -->
-      <div class="white_bg pt-2 pb-2 px-5">
+      <div class="white_bg pt-2 pb-2 px-5" v-if="treat.typeOfAddiction">
         <div class="single_info flex_between">
           <span class="info_key"> {{ $t("common.addType") }} </span>
           <span class="info_value"> {{ treat.typeOfAddiction }} </span>
         </div>
       </div>
       <!-- single info -->
-      <div class="gray-bg pt-2 pb-2 px-5">
+      <div class="gray-bg pt-2 pb-2 px-5" v-if="treat.socialSituation">
         <div class="single_info gray-bg flex_between">
           <span class="info_key"> {{ $t("treat.social") }} </span>
           <span class="info_value"> {{ treat.socialSituation }} </span>
         </div>
       </div>
       <!-- single info -->
-      <div class="white_bg pt-2 pb-2 px-5">
+      <div class="white_bg pt-2 pb-2 px-5" v-if="treat.job">
         <div class="single_info flex_between">
           <span class="info_key"> {{ $t("treat.job") }} </span>
           <span class="info_value"> {{ treat.job }} </span>
         </div>
       </div>
       <!-- single info -->
-      <div class="gray-bg pt-2 pb-2 px-5">
+      <div class="gray-bg pt-2 pb-2 px-5" v-if="treat.typeOfJob">
         <div class="single_info gray-bg flex_between">
           <span class="info_key"> {{ $t("treat.jobType") }} </span>
           <span class="info_value"> {{ treat.typeOfJob }} </span>
         </div>
       </div>
       <!-- single info -->
-      <div class="white_bg pt-2 pb-2 px-5">
+      <div class="white_bg pt-2 pb-2 px-5" v-if="treat.isSymptoms">
         <div class="single_info flex_between">
           <span class="info_key"> {{ $t("treat.symp") }} ؟ </span>
           <span class="info_value"> {{ treat.isSymptoms }} </span>
         </div>
       </div>
       <!-- single info -->
-      <div class="gray-bg pt-2 pb-2 px-5">
+      <div class="gray-bg pt-2 pb-2 px-5" v-if="treat.mentallyIll">
         <div class="single_info gray-bg flex_between">
           <span class="info_key"> {{ $t("treat.mental") }} ؟ </span>
           <span class="info_value"> {{ treat.mentallyIll }} </span>
+        </div>
+      </div>
+      <!-- single info -->
+      <div class="white_bg pt-2 pb-2 px-5" v-if="treat.duration">
+        <div class="single_info flex_between">
+          <span class="info_key"> مدة انتهاء الخطة </span>
+          <span class="info_value"> {{ treat.duration }} </span>
+        </div>
+      </div>
+      <!-- single info -->
+      <div class="gray-bg pt-2 pb-2 px-5" v-if="treat.price">
+        <div class="single_info gray-bg flex_between">
+          <span class="info_key"> قيمة الخطة العلاجية</span>
+          <span class="info_value"> {{ treat.price }} </span>
+        </div>
+      </div>
+      <!-- single info -->
+      <div class="white_bg pt-2 pb-2 px-5" v-if="treat.vatPrice">
+        <div class="single_info flex_between">
+          <span class="info_key"> قيمة الضريبة</span>
+          <span class="info_value"> {{ treat.vatPrice }} </span>
+        </div>
+      </div>
+      <!-- single info -->
+      <div class="gray-bg pt-2 pb-2 px-5 all-total" v-if="treat.total">
+        <div class="single_info gray-bg flex_between">
+          <span class="sec-col"> الاجمالي</span>
+          <span> {{ treat.total }} ر.س </span>
         </div>
       </div>
     </section>
@@ -393,137 +432,340 @@
   <section class="sessions pt-3 pb-3 mx-5 mb-3" v-if="isShown">
     <h4 class="text-black fw-bold fs-19">{{ $t("treat.plan") }}</h4>
     <!-- single session  -->
-    <section
-      class="main-bg pt-3 pb-3 mb-3"
-      v-for="session in treat.sessions"
-      :key="session.id"
-    >
-      <h6 class="sec-color fs-17 fw-6 px-5 mb-2">
-        {{ session.sessionNumber }}
-      </h6>
-      <!-- all infos  -->
-      <section class="infos">
-        <!-- single info -->
-        <div class="white_bg pt-2 pb-2 px-5">
-          <div class="single_info flex_between">
-            <span class="info_key"> {{ $t("treat.sessionType") }} </span>
-            <span class="info_value"> {{ session.typeText }} </span>
+
+    <section v-for="(session, index) in treat.sessions" :key="session.id">
+      <section class="main-bg pt-3 pb-3 mb-3">
+        <div class="flex-bet-main mb-3">
+          <h6 class="sec-color fs-17 fw-6 px-5 mb-2">
+            {{ session.sessionNumber }}
+          </h6>
+          <div
+            class="px-3 seccolor changedspe"
+            :class="{
+              textDanger:
+                session.acceptRejectButton ||
+                (session.centerRejectDelay && session.isDelayed),
+            }"
+            :ref="sessionStatustext + [index]"
+          >
+            {{ session.statusText }}
           </div>
         </div>
-        <!-- single info -->
-        <div class="gray-bg pt-2 pb-2 px-5">
-          <div class="single_info gray-bg flex_between">
-            <span class="info_key"> {{ $t("treat.sessinName") }} </span>
-            <span class="info_value"> {{ session.name }} </span>
+        <!-- all infos  -->
+        <section class="infos">
+          <!-- single info -->
+          <div class="white_bg pt-2 pb-2 px-5" v-if="session.typeText">
+            <div class="single_info flex_between">
+              <span class="info_key"> {{ $t("treat.sessionType") }} </span>
+              <span class="info_value"> {{ session.typeText }} </span>
+            </div>
           </div>
-        </div>
-        <!-- single info -->
-        <div class="white_bg pt-2 pb-2 px-5">
-          <div class="single_info flex_between">
-            <span class="info_key"> {{ $t("treat.spec") }} </span>
-            <span class="info_value"> {{ session.specialization }} </span>
+          <!-- single info -->
+          <div class="gray-bg pt-2 pb-2 px-5" v-if="session.name">
+            <div class="single_info gray-bg flex_between">
+              <span class="info_key"> اسم الجلسة </span>
+              <span class="info_value"> {{ session.name }} </span>
+            </div>
           </div>
-        </div>
-        <!-- single info -->
-        <div class="gray-bg pt-2 pb-2 px-5">
-          <div class="single_info gray-bg flex_between">
-            <span class="info_key"> {{ $t("treat.duration") }} </span>
-            <span class="info_value"> {{ session.duration }} </span>
+          <!-- single info -->
+          <div
+            class="white_bg pt-2 pb-2 px-5"
+            v-if="session.specializationText"
+          >
+            <div class="single_info flex_between">
+              <span class="info_key"> {{ $t("treat.spec") }} </span>
+              <span class="info_value"> {{ session.specializationText }} </span>
+            </div>
           </div>
-        </div>
-        <!-- single info -->
-        <div class="gray-bg pt-2 pb-2 px-5">
-          <div class="single_info gray-bg flex_between">
-            <span class="info_key"> {{ $t("treat.appoint") }} </span>
-            <span class="info_value"> {{ session.date }} </span>
+          <!-- single info -->
+          <div class="gray-bg pt-2 pb-2 px-5" v-if="session.duration">
+            <div class="single_info gray-bg flex_between">
+              <span class="info_key"> {{ $t("treat.duration") }} </span>
+              <span class="info_value"> {{ session.duration }} </span>
+            </div>
           </div>
-        </div>
-        <!-- single info -->
-        <div class="white_bg pt-2 pb-2 px-5">
-          <div class="single_info flex_between">
-            <span class="info_key"> {{ $t("treat.sessionInst") }} </span>
-            <span class="info_value"> {{ session.instructions }} </span>
+          <!-- single info -->
+          <div class="white_bg pt-2 pb-2 px-5" v-if="session.priceText">
+            <div class="single_info flex_between">
+              <span class="info_key"> السعر</span>
+              <span class="info_value"> {{ session.priceText }} </span>
+            </div>
+          </div>
+          <!-- single info -->
+          <div class="gray-bg pt-2 pb-2 px-5" v-if="session.date">
+            <div class="single_info gray-bg flex_between">
+              <span class="info_key"> {{ $t("treat.appoint") }} </span>
+              <span class="info_value"> {{ session.date }} </span>
+            </div>
+          </div>
+          <!-- single info -->
+          <div class="white_bg pt-2 pb-2 px-5" v-if="session.instructions">
+            <div class="single_info flex_between">
+              <span class="info_key"> {{ $t("treat.sessionInst") }} </span>
+              <span class="info_value"> {{ session.instructions }} </span>
+            </div>
+          </div>
+        </section>
+
+        <!-- give the session  -->
+        <!-- show onlu when the status is current  -->
+        <div v-if="treat.status == 'current'">
+          <!-- {{session.duration}} -->
+          <button
+            class="btn send_offer mx-5 mb-4 pt-2 pb-2 mt-3"
+            v-if="
+              session.reassignmentSessionButton ||
+              session.addDoctorsToSession ||
+              session.rescheduleSessionButton
+            "
+            @click="
+              getSessionId(
+                session.id,
+                session.type,
+                session.duration,
+                session.specialization
+              )
+            "
+          >
+            <span v-if="session.addDoctorsToSession">{{
+              $t("treat.addDoc")
+            }}</span>
+            <span v-if="session.reassignmentSessionButton"
+              >اعادة اسناد الجلسة</span
+            >
+            <span v-if="session.rescheduleSessionButton"
+              >اعادة جدولة الجلسة</span
+            >
+          </button>
+
+          <div class="doctors-main mt-4">
+            <!--reports-->
+            <template v-if="session.isReported">
+              <div
+                class="loop-here mb-4"
+                v-for="doctor in session.reportsAndRatings"
+                :key="doctor"
+              >
+                <div class="flex-sm-gap mb-2">
+                  <img
+                    :src="doctor.report.doctor.avatar"
+                    class="doctor-img"
+                    alt=""
+                  />
+                  <div class="w-100">
+                    <div class="flex-bet-main mb-3">
+                      <div class="flex-sm-gap">
+                        <div class="doc-name">
+                          {{ doctor.report.doctor.name }}
+                        </div>
+                        <div class="doc-rate">
+                          <i class="fa-solid fa-star"></i>
+                          <div class="rate-num">
+                            {{ doctor.report.doctor.rate }}
+                          </div>
+                        </div>
+                      </div>
+                      <!--red-danger-->
+                      <!-- <div class="sec-color" v-if="doctor.isConfirmed">
+                    قام بقبول الانضمام الى الجلسة
+                  </div>
+                  <div class="sec-color red-danger" v-if="doctor.isDelayed">
+                    قام برفض الانضمام الى الجلسة
+                  </div> -->
+                    </div>
+                    <div class="doc-spicialist mb-2">
+                      {{ doctor.report.doctor.specialization }}
+                    </div>
+                    <p>{{ doctor.report.doctor.description }}</p>
+                  </div>
+                </div>
+                <h6 class="main-color">استعراض تقارير الجلسة</h6>
+                <a
+                  :href="doctor.report.file"
+                  target="_blank"
+                  class="pdf-cont mt-3 mb-3"
+                >
+                  <img :src="pdfImg" alt="" />
+                </a>
+                <div class="row-rate mb-4" v-if="doctor.rating.patient.id">
+                  <div class="flex-sm-gap mb-3">
+                    <div class="doc-name sec-color">تقييم العميل للاخصائي</div>
+                    <div class="doc-rate">
+                      <i class="fa-solid fa-star"></i>
+                      <div class="rate-num">
+                        {{ doctor.rating.patient.rate }}
+                      </div>
+                    </div>
+                  </div>
+                  <p>{{ doctor.rating.patient.comment }}</p>
+                </div>
+                <div class="row-rate mb-4" v-if="doctor.rating.doctor.rate">
+                  <div class="flex-sm-gap mb-3">
+                    <div class="doc-name sec-color">تقييم الاخصائي للعميل</div>
+                    <div class="doc-rate">
+                      <i class="fa-solid fa-star"></i>
+                      <div class="rate-num">
+                        {{ doctor.rating.doctor.rate }}
+                      </div>
+                    </div>
+                  </div>
+                  <p>{{ doctor.rating.doctor.comment }}</p>
+                </div>
+              </div>
+            </template>
+            <div class="all-doctors">
+              <h5 class="sec-color mb-4" v-if="session.doctors.length">
+                <div
+                  v-if="
+                    session.type == 'group' ||
+                    (session.doctors.length > 1 && session.type == 'individual')
+                  "
+                >
+                  بيانات الاخصائيين المضافين للجلسة
+                </div>
+                <div
+                  v-if="
+                    session.type == 'individual' && session.doctors.length == 1
+                  "
+                >
+                  بيانات الاخصائي
+                </div>
+              </h5>
+              <div
+                class="loop-here mb-4"
+                v-for="doctor in session.doctors"
+                :key="doctor"
+              >
+                <div class="flex-sm-gap mb-2">
+                  <img :src="doctor.avatar" class="doctor-img" alt="" />
+                  <div class="w-100">
+                    <div class="flex-bet-main mb-3">
+                      <div class="flex-sm-gap">
+                        <div class="doc-name">
+                          {{ doctor.name }}
+                        </div>
+                        <div class="doc-rate">
+                          <i class="fa-solid fa-star"></i>
+                          <div class="rate-num">
+                            {{ doctor.rate }}
+                          </div>
+                        </div>
+                      </div>
+                      <!--red-danger-->
+                      <div
+                        class="sec-color replaceme"
+                        :class="{ textDanger: doctor.isDelayed }"
+                      >
+                        {{ doctor.statusText }}
+                      </div>
+                    </div>
+                    <div class="doc-spicialist mb-2">
+                      {{ doctor.specialization }}
+                    </div>
+                    <p>{{ doctor.description }}</p>
+
+                    <div class="flex-sm-gap" v-if="doctor.acceptRejectButton">
+                      <button
+                        class="main-btn lg"
+                        @click="
+                          getSessionId(
+                            session.id,
+                            session.type,
+                            session.duration,
+                            doctor.specialization,
+                            session.doctors
+                          )
+                        "
+                      >
+                        sss قبول التاجيل
+                      </button>
+                      <button
+                        class="main-btn lg bg-red"
+                        @click="refuseDealy($event, session.id, doctor.id)"
+                      >
+                        رفض التاجيل
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <h5 class="sec-color mb-4" v-if="session.members.length">
+              بيانات المرضى المضافين للجلسة
+            </h5>
+            <div
+              class="loop-members mb-4"
+              v-for="member in session.members"
+              :key="member"
+            >
+              <div class="flex-sm-gap mb-2">
+                <img :src="member.avatar" class="doctor-img" alt="" />
+                <div class="w-100">
+                  <div class="flex-bet-main mb-3">
+                    <div class="flex-sm-gap">
+                      <div class="doc-name">
+                        {{ member.name }}
+                      </div>
+                    </div>
+                    <!--red-danger-->
+                    <div
+                      class="sec-color"
+                      :class="{ textDanger: member.isDelayed }"
+                    >
+                      {{ member.statusText }}
+                    </div>
+                  </div>
+                  <div v-if="member.reason">{{ member.reason }}</div>
+                </div>
+              </div>
+            </div>
+            <template v-if="session.isCompanions">
+              <h5 class="sec-color mb-4" v-if="session.companions.length">
+                بيانات المرافقين
+              </h5>
+              <div
+                class="loop-members mb-4"
+                v-for="companion in session.companions"
+                :key="companion"
+              >
+                <div class="flex-sm-gap mb-2">
+                  <img :src="companion.avatar" class="doctor-img" alt="" />
+                  <div class="w-100">
+                    <div class="flex-bet-main mb-3">
+                      <div>
+                        <div class="doc-name mb-2">
+                          {{ companion.name }}
+                        </div>
+                        <div>{{ companion.kinship }}</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </template>
           </div>
         </div>
       </section>
 
-      <!-- give the session  -->
-      <!-- show onlu when the status is current  -->
-      <div v-if="treat.status == 'current'">
-        <!-- {{session.duration}} -->
+      <!-- accept && refuse  -->
+      <div
+        class="flex-sm-gap px-3 top-minus"
+        v-if="session.acceptRejectButton === true"
+      >
         <button
-          class="btn send_offer mx-5 mb-4 pt-2 pb-2 mt-3"
+          class="main-btn lg"
           @click="getSessionId(session.id, session.type, session.duration)"
         >
-          {{ $t("treat.addDoc") }}
+          قبول التاجيل
         </button>
-
-        <div class="doctors-main">
-          <h5 class="sec-color mb-4" v-if="session.doctors.length">بيانات الاخصائي</h5>
-          <div
-            class="loop-here mb-4"
-            v-for="doctor in session.doctors"
-            :key="doctor"
-          >
-            <div class="flex-sm-gap mb-2">
-              <img :src="doctor.avatar" class="doctor-img" alt="" />
-              <div class="w-100">
-                <div class="flex-bet-main mb-3">
-                  <div class="flex-sm-gap">
-                    <div class="doc-name">
-                      {{ doctor.name }}
-                    </div>
-                    <div class="doc-rate">
-                      <i class="fa-solid fa-star"></i>
-                      <div class="rate-num">{{ doctor.rate }}</div>
-                    </div>
-                  </div>
-                  <!--red-danger-->
-                  <div class="sec-color" v-if="doctor.isConfirmed">
-                    قام بقبول الانضمام الى الجلسة
-                  </div>
-                  <div class="sec-color red-danger" v-if="doctor.isDelayed">
-                    قام بقبول الانضمام الى الجلسة
-                  </div>
-                </div>
-                <div class="doc-spicialist mb-2">
-                  {{ doctor.specialization }}
-                </div>
-                <p>{{ doctor.description }}</p>
-              </div>
-            </div>
-            <h6 class="main-color">استعراض تقارير الجلسة</h6>
-            <a href="" class="pdf-cont">
-              <img :src="pdfImg" alt="" />
-            </a>
-          </div>
-          <h5 class="sec-color mb-4" v-if="session.members.length">بيانات المرضى</h5>
-          <div
-            class="loop-members mb-4"
-            v-for="member in session.members"
-            :key="member"
-          >
-            <div class="flex-sm-gap mb-2">
-              <img :src="member.avatar" class="doctor-img" alt="" />
-              <div class="w-100">
-                <div class="flex-bet-main mb-3">
-                  <div class="flex-sm-gap">
-                    <div class="doc-name">
-                      {{ member.name }}
-                    </div>
-                  </div>
-                  <!--red-danger-->
-                  <div class="sec-color" v-if="member.isConfirmed">
-                    قام بقبول الانضمام الى الجلسة
-                  </div>
-                  <div class="sec-color red-danger" v-if="member.isDelayed">
-                    قام بقبول الانضمام الى الجلسة
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <button
+          class="main-btn lg bg-red"
+          :disabled="refuseSessionDisabled"
+          @click="refuseSessionDealy($event, session.id)"
+        >
+          رفض التاجيل
+        </button>
       </div>
     </section>
   </section>
@@ -559,7 +801,8 @@
       <div class="main-input-cont mb-4">
         <h6 class="mb-2 font14">وقت الجلسة</h6>
         <Calendar
-          id="calendar-timeonly"
+          hourFormat="12"
+          id="calendar-12h"
           v-model="time"
           placeholder="الرجاء اختيار وقت الجلسة"
           timeOnly
@@ -607,21 +850,19 @@
           <div class="spinner-small-white" v-if="disabled"></div>
         </div>
       </button>
-
-    </div> 
+    </div>
 
     <!-- send offer  -->
     <div class="send_offer mx-5 mb-4" v-if="treat.sendOfferButton == true">
-        <router-link :to="'/priceOffer/'+treat.id" @click="storePatient">
-            {{ $t('treat.sendOffer') }}
-        </router-link>
+      <router-link :to="'/priceOffer/' + treat.id" @click="storePatient">
+        {{ $t("treat.sendOffer") }}
+      </router-link>
     </div>
     <!-- edit offer  -->
     <div class="send_offer mx-5 mb-4" v-if="treat.status == 'cancelled'">
-        <router-link :to="'/editPriceOffer/'+this.$route.params.id">
-            {{ $t('treat.editOffer') }}
-        </router-link>
->>>>>>> Stashed changes
+      <router-link :to="'/editPriceOffer/' + this.$route.params.id">
+        {{ $t("treat.editOffer") }}
+      </router-link>
     </div>
   </Dialog>
 </template>
@@ -655,6 +896,14 @@ export default {
       Patients: [],
       doctorsShow: [],
       pdfImg: "",
+      addAdditionalSessionsButton: null,
+      finishTreatmentPlanButton: null,
+      refuseSessionDisabled: false,
+
+      isSessionRefused: false,
+      specialization: null,
+      stepper: true,
+      sessionDoctors: [],
     };
   },
   components: {
@@ -702,12 +951,16 @@ export default {
         });
       this.disabled = false;
     },
-    getSessionId(id, type, duration) {
+    getSessionId(id, type, duration, specialization, sessionDoctors) {
       this.getdoctor = true;
       this.sessionId = id;
       this.sessionType = type;
       this.duration = duration;
-      this.getPatients();
+      this.specialization = specialization;
+      this.getPatients(duration);
+      this.doctors = sessionDoctors;
+
+      this.selectedDoctor = sessionDoctors;
     },
     // get treatment
     async getTreatment() {
@@ -718,12 +971,17 @@ export default {
           },
         })
         .then((res) => {
-          console.log(res.data.data.sessions);
+          console.log(res.data.data);
           if (res.data.key === "success") {
             this.treat = res.data.data;
             this.patient = res.data.data.patient;
             this.traatmentPlanId = res.data.data.id;
             this.isShown = true;
+            this.stepper = res.data.data.stepper;
+            this.finishTreatmentPlanButton =
+              res.data.data.finishTreatmentPlanButton;
+            this.addAdditionalSessionsButton =
+              res.data.data.addAdditionalSessionsButton;
           }
         })
         .catch((err) => {
@@ -731,7 +989,6 @@ export default {
         });
     },
     // get doctors
-
     async getDoctors() {
       await axios
         .get(
@@ -740,7 +997,7 @@ export default {
           )}&startTime=${this.time.toLocaleTimeString([], {
             hour: "2-digit",
             minute: "2-digit",
-          })}&duration=${this.duration}`,
+          })}&duration=${this.duration}&specialization=${this.specialization}`,
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -750,6 +1007,8 @@ export default {
         .then((res) => {
           if (res.data.key === "success") {
             console.log(res.data.data);
+            // this.doctors = [],
+            // this.selectedDoctor = null
             this.doctors = res.data.data;
           }
         })
@@ -757,13 +1016,16 @@ export default {
           console.log(err);
         });
     },
-    async getPatients() {
+    async getPatients(duration) {
       await axios
-        .get(`/patients-sessions?id=${this.sessionId}`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        })
+        .get(
+          `/patients-sessions?id=${this.$route.params.id}&duration=${duration}`,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        )
         .then((res) => {
           if (res.data.key === "success") {
             console.log(res.data.data);
@@ -784,6 +1046,8 @@ export default {
       if (this.selectedDoctor) {
         for (let i = 0; i < this.selectedDoctor.length; i++) {
           docorsIds.push(this.selectedDoctor[i].id);
+        }
+      }
 
       let patiensIds = [];
       if (this.selectedPatient) {
@@ -818,6 +1082,7 @@ export default {
               life: 3000,
             });
             this.getdoctor = false;
+            this.getTreatment();
           } else {
             this.$toast.add({
               severity: "error",
@@ -835,22 +1100,110 @@ export default {
           });
         });
       this.disabled = false;
-    }
-    }},
-
+    },
 
     // sameeeer
 
-      storePatient(){
-          localStorage.setItem('patient', JSON.stringify(this.patient))
-      },
+    storePatient() {
+      localStorage.setItem("patient", JSON.stringify(this.patient));
+    },
 
-      
+    // solia
+    // refuse delay for doctor
+
+    async refuseDealy(e, sessionId, doctorId, isMain) {
+      this.disabled = true;
+      e.currentTarget.closest(".w-100").querySelector(".replaceme").innerHTML =
+        "تم رفض طلب التأجيل";
+      e.currentTarget.closest(".flex-sm-gap").remove();
+
+      const fd = new FormData();
+      fd.append("id", sessionId);
+      if (doctorId) {
+        fd.append("doctor", doctorId);
+      }
+
+      await axios
+        .put("/refuse-delayed-session", fd, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        })
+        .then((res) => {
+          if (res.data.key === "success") {
+            this.$toast.add({
+              severity: "success",
+              summary: res.data.message,
+              life: 3000,
+            });
+
+            if (isMain == "mainStatus") {
+              this.$refs.sessionStatustext = "تم رفض طلب التأجيل";
+            }
+          } else {
+            this.$toast.add({
+              severity: "error",
+              summary: res.data.message,
+              life: 3000,
+            });
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      this.disabled = false;
+    },
+
+    //sameer
+    // refuse delay for session
+    async refuseSessionDealy(e, sessionId) {
+      this.refuseSessionDisabled = true;
+      const fd = new FormData();
+      fd.append("id", sessionId);
+      console.log(e.currentTarget);
+      e.currentTarget
+        .closest("section")
+        .querySelector(".changedspe").innerHTML = "تم رفض طلب التأجيل";
+      e.currentTarget.closest(".top-minus").remove();
+
+      await axios
+        .put("/refuse-delayed-session", fd, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        })
+        .then((res) => {
+          if (res.data.key === "success") {
+            this.$toast.add({
+              severity: "success",
+              summary: res.data.message,
+              life: 3000,
+            });
+          } else {
+            this.$toast.add({
+              severity: "error",
+              summary: res.data.message,
+              life: 3000,
+            });
+          }
+          this.refuseSessionDisabled = false;
+        })
+        .catch((err) => {
+          console.log(err);
+          this.refuseSessionDisabled = false;
+        });
+    },
+  },
+  beforeMount() {
+    this.getTreatment();
   },
   mounted() {
-    this.getTreatment();
     // this.getPatients();
     // this.getDoctors();
+    // setTimeout(() => {
+    // this.$refs.sessionStatustext1 = 'تم رفض طلب التأجيل';
+    // this.$refs.sessionStatustext1.classList.add('textDanger');
+    // }, 2000);
   },
   watch: {
     time(newTime, old) {
@@ -989,7 +1342,7 @@ export default {
 }
 .p-inputtext {
   font-family: "myfont", sans-serif !important;
-  margin-top: 2px !important;
+  // margin-top: 2px !important;
 }
 .p-multiselect {
   width: 100%;
@@ -1083,5 +1436,29 @@ export default {
 }
 .sec-color.red-danger {
   color: #de0303;
+}
+.profile_drop {
+  pointer-events: none;
+}
+.profile_drop.active {
+  pointer-events: auto;
+}
+.all-total {
+  color: #4aa236 !important;
+  font-size: 17px;
+}
+.seccolor {
+  color: #3aa323 !important;
+}
+.textDanger {
+  color: #e43232 !important;
+}
+.doc-spicialist {
+  font-size: 13px;
+}
+.top-minus button {
+  width: 50% !important;
+  border-radius: 4px !important;
+  margin-bottom: 40px;
 }
 </style>

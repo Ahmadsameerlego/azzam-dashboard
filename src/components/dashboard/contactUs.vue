@@ -119,7 +119,10 @@ export default {
     methods:{
         ...mapActions('setting',['getCountries']),
         chooseCountry(){
-            document.querySelector('.p-dropdown-label').innerHTML = this.selectedCity.code ;
+            document.querySelector('.p-dropdown-label').innerHTML = `
+            <img src="${this.selectedCity.image}" class="country_image">
+            ${this.selectedCity.code}
+            `  ;
         },
 
         // send message 
@@ -162,7 +165,10 @@ export default {
         this.phone = user.phone ;
         this.email = user.email ;
         this.selectedCity.code = user.countryCode ;
-        document.querySelector('.p-dropdown-label').innerHTML = user.countryCode ;
+        document.querySelector('.p-dropdown-label').innerHTML =      `
+            <img src="${this.selectedCity.image}" class="country_image">
+            ${this.selectedCity.code}
+            ` ;
     }
 }
 </script>

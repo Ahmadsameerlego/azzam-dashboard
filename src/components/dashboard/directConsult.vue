@@ -2,15 +2,15 @@
     <!-- header  -->
     <section id="specManage" class="pt-3 pb-3 px-5 flex_between">
         <div>
-            <h6 class="fw-bold blackColor"> ادارة الاستشارات المباشرة </h6>
-            <p class="grayColor"> متابعة الاستشارات المباشرة </p>
+            <h6 class="fw-bold blackColor"> {{ $t('con.title_con') }} </h6>
+            <p class="grayColor"> {{ $t('con.desc_con') }} </p>
         </div>
 
         <!-- user interaction => search && add -->
         <div class="d-flex">
             <!-- search  -->
             <div class="form-group position-relative">
-                <InputText v-model="filters['global'].value" placeholder="كلمات مفتاحية" />
+                <InputText v-model="filters['global'].value" :placeholder="$t('con.keywords')" />
                 <span class="search">
                     <i class="fa-solid fa-magnifying-glass"></i>
                 </span>
@@ -22,16 +22,16 @@
     <!-- filter  -->
     <section class="table_filter" style="width:90%;margin-right:auto;margin-left:auto">
         <button class="filter_item" :class="{'active' : activeFilter === 0 }" @click="setActiveFilter(0, 'new')">
-            جديدة
+            {{ $t('common.new') }}
         </button>
         <button class="filter_item" :class="{'active' : activeFilter === 1 }" @click="setActiveFilter(1 , 'current')">
-            حالية او قادمة
+            {{ $t('common.currentAnd') }}
         </button>
         <button class="filter_item" :class="{'active' : activeFilter === 2 }" @click="setActiveFilter(2, 'finish')">
-            منتهية
+            {{ $t('common.finish') }}
         </button>
         <button class="filter_item" :class="{'active' : activeFilter === 3 }" @click="setActiveFilter(3, 'cancelled')">
-            ملغية
+            {{ $t('common.cancel')}}
         </button>
     </section>
     <!-- table  -->
@@ -48,7 +48,7 @@
             v-if="isShown"
         >
              
-            <template #empty> No consultations found. </template>
+            <template #empty> {{ $t('con.notFound') }} </template>
 
             <Column  header="رقم" >
                 <template #body="slotProps">
@@ -56,10 +56,10 @@
                 {{  slotProps.index + 1  }}
                 </template>
             </Column>
-            <Column field="name" header="اسم العميل" sortable></Column>
-            <Column field="phone" header="رقم الجوال" sortable></Column>
-            <Column field="specialistName" header="اسم الاخصائي المطلوب" sortable></Column>
-            <Column field="date" header="الموعد" sortable ></Column>
+            <Column field="name" :header="$t('con.clientName')" sortable></Column>
+            <Column field="phone" :header="$t('con.phone')" sortable></Column>
+            <Column field="specialistName" :header="$t('con.specName')" sortable></Column>
+            <Column field="date" :header="$t('session.appoint')" sortable ></Column>
 
             <Column  header="" >
                 <template #body="slotProps">
@@ -67,7 +67,7 @@
                    <div class="d-flex">
                         <!-- edit  -->
                         <router-link  :to="'/consult/'+slotProps.data.id" class="show_more fw-6" @click="click(slotProps.data._id)">
-                                عرض التفاصيل
+                                {{ $t('session.details') }}
                         </router-link>
                    </div>
 

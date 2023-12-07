@@ -8,7 +8,7 @@
         </div>
     </section>
 
-    <section class="main-bg pt-3 pb-3 mx-5 mb-3" v-if="isShown">
+    <section class="  pt-3 pb-3 mx-5 mb-3" v-if="isShown">
         <h6 class="sec-color fs-17 fw-6 px-5 mb-2"> {{ $t('offer.info') }} </h6>
         <form class="mx-5 mt-3" @submit.prevent="sendSessionsInfo">
 

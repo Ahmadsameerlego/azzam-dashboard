@@ -212,7 +212,7 @@
 
         <!-- single nav item  -->
         <li class="nav_item">
-          <button @click="signOut" class="btn flex_between">
+          <button @click="signOut" class="btn flex_between px-0 pt-0 pb-0" :disabled="disabled" style="color: inherit !important;">
             <div class="d-flex align-items-center">
               <span class="icon logout">
                 <i class="fa-solid fa-arrow-right-from-bracket"></i>
@@ -221,6 +221,10 @@
               <span class="mx-2 nav_name">
                 {{  $t('nav.logout')  }}
               </span>
+            </div>
+
+            <div class="spinner-border" role="status" v-if="disabled">
+                <span class="visually-hidden">Loading...</span>
             </div>
 
             <span class="left">
@@ -241,12 +245,18 @@ import axios from 'axios';
 import Toast from 'primevue/toast';
 
 export default {
+  data(){
+    return{
+      disabled : false
+    }
+  },
   components:{
     Toast
   },
   methods:{
     async signOut(){
       const fd = new FormData;
+      this.disabled = true ;
       fd.append('deviceId', localStorage.getItem('device_id'));
       const token = localStorage.getItem('token');
       const headers = {
@@ -261,16 +271,29 @@ export default {
           this.$toast.add({ severity: 'success', summary: res.data.message, life: 3000 });
           setTimeout(() => {
             this.$router.push('/login')
-          }, 3000);
+          }, 1000);
+          this.disabled = false ;
         }else{
           this.$toast.add({ severity: 'error', summary: res.data.message, life: 3000 });
+          this.disabled = false ;
         }
+      } )
+      .catch( (err)=>{
+          this.$toast.add({ severity: 'error', summary: err.response.data.message, life: 3000 });
+          this.disabled = false ;
       } )
     }
   }
 }
 </script>
 
-<style>
-
+<style  scoped>
+  .spinner-border{
+    position: absolute;
+    top: 19%;
+    left: 49%;
+    width: 25px;
+    height: 25px;
+  }
 </style>
+

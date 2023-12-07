@@ -73,8 +73,8 @@
   <!-- change phone otp  -->
   <Dialog v-model:visible="changePhoneModal" modal :style="{ width: '50vw' }">
     <div style="margin: 0 135px">
-      <h6 class="fw-bold blackColor">الملف الشخصي</h6>
-      <p class="grayColor">ادارة الملف الشخصي</p>
+      <h6 class="fw-bold blackColor">{{ $t('nav.profile') }}</h6>
+      <p class="grayColor"> {{ $t('profile.manage') }} </p>
     </div>
 
     <form>
@@ -112,15 +112,15 @@
           type="button"
           @click="updatePhone"
         >
-          تأكيد
+          {{ $t('auth.confirm') }}
         </button>
       </div>
 
       <div class="flex_center mt-3">
         <p class="grayColor">
-          لم يصلك الكود ؟
+          {{ $t('auth.getNoCode') }} ؟
           <span class="third-color pointer-click" @click="resendCode">
-            إعادة ارسال
+            {{ $t('auth.resend') }}
           </span>
         </p>
       </div>

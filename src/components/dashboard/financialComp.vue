@@ -2,37 +2,37 @@
     <!-- header  -->
     <section id="specManage" class="financial pt-3 pb-0 px-5 flex_between">
         <div>
-            <h6 class="fw-bold blackColor"> ادارة الحسابات المالية والأرباح </h6>
-            <p class="grayColor"> متابعة الحسابات المالية والأرباح </p>
+            <h6 class="fw-bold blackColor"> {{ $t('fin.title') }} </h6>
+            <p class="grayColor"> {{ $t('fin.desc') }} </p>
         </div>
 
             <!-- search  -->
             <div class="form-group position-relative">
-                <InputText v-model="filters['global'].value" placeholder="كلمات مفتاحية" />
+                <InputText v-model="filters['global'].value" :placeholder="$t('treat.keys')" />
                 <span class="search">
                     <i class="fa-solid fa-magnifying-glass"></i>
                 </span>
             </div>
 
             <div class="position-relative form-group d-flex align-items-center">
-                <span class="grayColor"> من </span>
-                <Calendar v-model="startDate" placeholder="اختر التاريخ" class="mx-2" />
+                <span class="grayColor"> {{ $t('common.from') }} </span>
+                <Calendar v-model="startDate" :placeholder="$t('fin.chooseDate')" class="mx-2" />
                 <div class="calender">
                     <i class="fa-regular fa-calendar"></i>
                 </div>
             </div>
 
             <div class="position-relative form-group d-flex align-items-center">
-                <span class="grayColor"> الى </span>
-                <Calendar v-model="endDate" placeholder="اختر التاريخ" class="mx-2" />
+                <span class="grayColor"> {{ $t('common.to') }} </span>
+                <Calendar v-model="endDate"  :placeholder="$t('fin.chooseDate')" class="mx-2" />
                 <div class="calender">
                     <i class="fa-regular fa-calendar"></i>
                 </div>
             </div>
 
             <div class="form-group d-flex align-items-center types_financial">
-                <span class="grayColor"> فلتر حسب </span>
-                <Dropdown v-model="selectedType" :options="types" @change="reHandleTable" optionLabel="title" placeholder="اختر النوع" class="mx-2 w-full md:w-14rem" />
+                <span class="grayColor"> {{ $t('fin.filter') }} </span>
+                <Dropdown v-model="selectedType" :options="types" @change="reHandleTable" optionLabel="title" :placeholder="$t('fin.chooseType')" class="mx-2 w-full md:w-14rem" />
 
             </div>
            
@@ -53,21 +53,21 @@
             
         >
              
-            <template #empty> No customers found. </template>
+            <template #empty> {{ $t('fin.notFound') }} </template>
 
-            <Column header="رقم" >
+            <Column :header="$t('common.num')" >
                 <template #body="slotProps">
                 <!-- Add row numbers to your table -->
                 {{  slotProps.index + 1  }}
                 </template>
             </Column>
-            <Column field="orderNumber" header="رقم الطلب" sortable></Column>
-            <Column field="price" header="الاجمالي" sortable></Column>
-            <Column field="orderType" header="نوع الطلب" sortable></Column>
-            <Column field="appPercentage" header="نسبة التطبيق" sortable ></Column>
-            <Column field="appCommission" header="نسبة المركز" sortable ></Column>
-            <Column field="reportNumber" header="رقم التقرير" sortable ></Column>
-            <Column field="timeAdd" header="التاريخ" sortable ></Column>
+            <Column field="orderNumber" :header="$t('dash.orderNum')" sortable></Column>
+            <Column field="price" :header="$t('fin.total')" sortable></Column>
+            <Column field="orderType" :header="$t('fin.orderType')" sortable></Column>
+            <Column field="appPercentage" :header="$t('fin.appPercent')" sortable ></Column>
+            <Column field="appCommission" :header="$t('fin.centerCom')" sortable ></Column>
+            <Column field="reportNumber" :header="$t('fin.report')" sortable ></Column>
+            <Column field="timeAdd" :header="$t('session.date')" sortable ></Column>
 
             
         </DataTable>

@@ -15,6 +15,24 @@
     width: 300px;
     height: 100vh;
     overflow-y: auto;
+    transition: .3s all;
+    &.active{
+        width: 80px;
+        .nav_name{
+            width: 0px !important;
+            opacity: 0;
+        }
+        .left{
+            svg{
+                font-size: 0px !important;
+            }
+        }
+        .logo {
+            width: 66px;
+            height: 76px;
+            margin: auto;
+        }
+    }
     .list{
         padding-left: 0px;
         padding-right: 15px;
@@ -28,6 +46,8 @@
         .nav_item{  
             position: relative;
             margin-bottom: 24px;   
+            transition: .3s all;
+            
             .icon{
                 background-color: #f7f7f7;
                 width: 30px;
@@ -44,10 +64,12 @@
                     position: absolute;
                     left: 30px;
                     top: 17px;
+                    transition: .3s all;
                 }
             }
             .nav_name{
                 font-size: 14px;
+                transition: .3s all;
             }
             
         }

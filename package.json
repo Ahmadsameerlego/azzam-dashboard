@@ -29,7 +29,8 @@
     "vue-i18n": "^9.2.2",
     "vue-router": "^4.0.3",
     "vue3-otp-input": "^0.4.1",
-    "vuex": "^4.0.0"
+    "vuex": "^4.0.0",
+    "firebase": "^9.17.1"
   },
   "devDependencies": {
     "@babel/core": "^7.12.16",

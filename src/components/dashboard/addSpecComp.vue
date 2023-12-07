@@ -6,7 +6,7 @@
         </div>
     </section>
 
-    <section class="card mx-5 pt-2 pb-2 px-4 border-none">
+    <section class=" card mx-5 pt-2 pb-2 px-4 border-none">
         <h6 class="sec-color fw-6"> {{ $t('common.specInfo') }} </h6>
 
         <form class="add_spec_form" ref="addDoctorForm">
@@ -133,7 +133,7 @@
 
 
     <!-- add docotr form  -->
-    <section class="card mt-3 mx-5 pt-2 pb-2 px-4 border-none" v-if="addDoc">
+    <section class="add_doctor_main card mt-3 mx-5 pt-2 pb-2 px-4 border-none" v-if="addDoc">
         <h6 class="sec-color fw-6"> {{ $t('common.workDate')  }} </h6>
 
         <form class="add_spec_form"  >
@@ -149,7 +149,7 @@
                             v-model="appointment.selectedDay"
                             :options="days"
                             optionLabel="title"
-                            placeholder="اختر اليوم"
+                            :placeholder="$t('common.chooseDay')"
                             class="default_input w-100 w-full md:w-14rem"
                         />
                     </div>
@@ -162,7 +162,7 @@
                             v-model="appointment.startTime"
                             timeOnly
                             class="default_input w-100 w-full md:w-14rem"
-                            placeholder="من"
+                            :placeholder="$t('common.from')"
                             hour-format="12"
                         />
                     </div>
@@ -175,7 +175,7 @@
                             v-model="appointment.endTime"
                             timeOnly
                             class="default_input w-100 w-full md:w-14rem"
-                            placeholder="إلى"
+                            :placeholder="$t('common.to')"
                             hour-format="12"
                         />
                     </div>
@@ -217,7 +217,7 @@
     </section>
 
        <!-- edit doctor form  -->
-    <section class="card mt-3 mx-5 pt-2 pb-2 px-4 border-none" v-else-if="editDoc">
+    <section class="add_doctor_main card mt-3 mx-5 pt-2 pb-2 px-4 border-none" v-else-if="editDoc">
         <h6 class="sec-color fw-6"> {{ $t('common.workDate')  }} </h6>
 
         <form class="add_spec_form"  >
@@ -247,7 +247,7 @@
                             v-model="appointment.startTime"
                             timeOnly
                             class="default_input w-100 w-full md:w-14rem"
-                            placeholder="من"
+                            :placeholder="$t('common.from')"
                             hour-format="12"
                         />
                     </div>
@@ -260,7 +260,7 @@
                             v-model="appointment.endTime"
                             timeOnly
                             class="default_input w-100 w-full md:w-14rem"
-                            placeholder="إلى"
+                            :placeholder="$t('common.to')"
                             hour-format="12"
                         />
                     </div>
@@ -272,12 +272,12 @@
 
 
                         <Dialog v-model:visible="deleteApp[index]" modal :style="{ width: '50rem' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
-                            <h6 class="text-center"> هل انت متأكد من حذف المعاد ؟ </h6>
+                            <h6 class="text-center"> {{ $t('common.delApp') }} </h6>
                             <div class="mt-3 d-flex">
                                 <button class="btn btn-danger w-50" @click.prevent="removeAppointment(index, appointment.day , appointment.startTime, appointment.endTime)">
-                                     نعم 
+                                     {{ $t('common.yes') }} 
                                 </button>
-                                <button class="btn btn-secondary w-50 mx-2" type="button" @click="deleteApp[index]=false"> لا </button>
+                                <button class="btn btn-secondary w-50 mx-2" type="button" @click="deleteApp[index]=false"> {{ $t('common.no') }} </button>
                             </div>
                         </Dialog>
 
@@ -297,7 +297,7 @@
             <div class="d-flex justify-content-center align-items-center mt-3">
                 <button class="btn main_btn w-50 mx-auo pt-2 pb-2" :disabled="disabled2" @click.prevent="updateDoctor">
                      <span v-if="!disabled">
-                       حفظ التعديلات
+                       {{ $t('common.saveChanges') }}
                      </span>
                      <div class="spinner-border" role="status" v-if="disabled">
                         <span class="visually-hidden ">Loading...</span>
@@ -307,10 +307,6 @@
         </form>
         
     </section>
-
- 
-
-
 
     <Toast />
 </template>
@@ -794,7 +790,16 @@ export default {
 }
 </script>
 
+<style scoped>
+    
+</style>
 <style lang="scss">
+    .add_doctor_main {
+        .p-calendar .p-inputtext {
+            background-color: #fff !important;
+        }
+    }
+
     .removeAppointment{
         font-size: 22px !important;
         margin-top: 31px;

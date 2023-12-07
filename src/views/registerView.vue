@@ -30,7 +30,7 @@
                     <label for="" class="blackColor d-block fw-6 mb-2 fs-14">
                             {{ $t('auth.centerName') }} 
                     </label>
-                    <InputText type="text" v-model="name" name="name" class="default_input w-100" :placeholder="$t('auth.namePlc')" @blur="nameTouched=true" />
+                    <InputText type="text"  v-model="name" name="name" class="default_input w-100" :placeholder="$t('auth.namePlc')" @blur="nameTouched=true" />
 
                     <!-- validation message  -->
                     <div class="error text-danger fs-14"  v-if="showName"> يرجى ملئ هذا الحقل  </div>
@@ -43,10 +43,10 @@
                             {{ $t('auth.phone') }} 
                         </label>
 
-                        <input type="number"  v-model="phone" name="phone" class="default_input form-control w-100" :placeholder="$t('auth.phonePlc')" @blur="phoneTouched=true">
+                        <input type="number"   v-model="phone" name="phone" class="default_input form-control w-100" :placeholder="$t('auth.phonePlc')" @blur="phoneTouched=true">
 
                         <!-- country code  -->
-                        <Dropdown v-model="selectedCity" :options="countries" optionLabel="code"  @change="chooseCountry"  class="default_input country_code  w-full md:w-14rem" />
+                        <Dropdown v-model="selectedCountry" :options="countries" optionLabel="code"  @change="chooseCountry"  class="default_input country_code  w-full md:w-14rem" />
 
                     </div>
                     
@@ -73,6 +73,9 @@
 
                     <MultiSelect v-model="selectedSpec" :options="specs"  :maxSelectedLabels="3" optionLabel="name" :placeholder="$t('auth.specPlc')" class="default_input w-100 w-full md:w-14rem" @change="handleSpecs" />
 
+                    <span class="error text-danger fs-14" v-if="showSpecError">
+                        يرجى اختيار اخصائي
+                    </span>
                 </div>
 
                 <div class="form-group mb-3">
@@ -82,6 +85,9 @@
 
                     <Dropdown v-model="selectedCity" :options="cities" optionLabel="name" :placeholder="$t('auth.cityPlc')" class="default_input w-100 w-full md:w-14rem" />
 
+                    <span class="error text-danger fs-14" v-if="showCityError">
+                        يرجى اختيار مدينة
+                    </span>
                 </div>
 
                 <!-- google map  -->
@@ -181,7 +187,7 @@
                 
 
                 <div class="d-flex justify-content-center align-items-center mt-3">
-                    <button class="btn main_btn w-100 pt-2 pb-2" :disabled="disabled"> 
+                    <button class="btn main_btn w-100 pt-2 pb-2" :disabled="isDisabled"> 
                         <span v-if="!disabled"> {{ $t('auth.sign') }} </span> 
                         <div class="spinner-border" role="status" v-if="disabled">
                             <span class="visually-hidden">Loading...</span>
@@ -209,7 +215,7 @@
             style="width: 100vw; height: 900px"
         >
             <GMapAutocomplete
-                placeholder="This is a placeholder"
+                placeholder="ابحث عن عنوان"
                 @place_changed="onPlaceChanged"
             >
             </GMapAutocomplete>
@@ -259,6 +265,7 @@ export default {
             images : [],
             imagesName : [],
             singleImage :null,
+            selectedCity : null,
 
             // selectedCity : {
             //     "id": "64ae5989a2f2fd0c04737761",
@@ -267,7 +274,7 @@ export default {
             //     "code": "+966",
             // },
             selectedSpec : [],
-            selectedCity : {
+            selectedCountry : {
                 "id": "64ae5989a2f2fd0c04737761",
                 "name": "السعودية",
                 "image": "https://azzam.4hoste.com/assets/uploads/country/image941689583177874.png",
@@ -292,7 +299,10 @@ export default {
             showCom : false,
             showOwn : false,
             showBank : false,
-            showName : false
+            showName : false,
+
+            showSpecError : false,
+            showCityError : false,
 
         }
     },
@@ -347,6 +357,8 @@ export default {
                 this.showName = false;
             }
         },
+
+
     },
     computed:{
         ...mapGetters('setting',['countries', 'specs']),
@@ -357,6 +369,26 @@ export default {
         isPhoneValid() {
             return this.phoneTouched ? this.phone.length >= 9 : true;
         },
+
+        // very important 
+        // isDisabled() {
+        //     return (
+        //             this.images.length === 0||
+        //             !this.iban ||
+        //             !this.bankName ||
+        //             !this.ownerName ||
+        //             !this.commercialNumber||
+        //             !this.name ||
+        //             !this.phone||
+        //             !this.email||
+        //             !this.address||
+        //             !this.showrError === false ||
+        //             !this.showEmail === false ||
+        //             this.selectedCity === null ||
+        //             this.selectedSpec.length === 0
+        //         )
+        // }
+
     },
     components:{
         InputText,
@@ -368,8 +400,82 @@ export default {
     },
     methods:{
         ...mapActions('setting',['getCountries']),
+
+        // register 
+        async register(){
+            let inputString = this.phone.toString();
+            if( this.phone === '' || inputString.length < 9  ){
+                this.showrError = true ; 
+            }
+            else if(this.phone !== '' ){
+                this.showrError = false;
+            }
+            // name 
+            if( this.name === ''  ){
+                this.showName = true ; 
+            }else if(this.name !== '' ){
+                // this.mainSubmitForm();   
+                this.showName = false;
+            }
+            // email 
+            if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.email)) {
+                this.showEmail = false ;
+            } else {
+                this.showEmail = true ;
+            }
+
+            if( this.selectedSpec.length == 0 ){
+                this.showSpecError = true ;
+            } else{
+                this.showSpecError = false ;
+            }
+
+            if( this.selectedCity == null ){
+                this.showCityError = true ;
+            }else{
+                this.showCityError = false ;
+            }
+
+
+            
+            
+            
+        },
+
+        async mainSubmitForm(){
+            const fd = new FormData( this.$refs.register );
+                fd.append( 'countryCode', this.selectedCountry.code )
+                fd.append( 'addressAr', this.address )
+                fd.append( 'addressEn', this.address )
+                fd.append( 'latitude', this.locations.lat );
+                fd.append( 'longitude', this.locations.lng );
+                if( this.selectedCity !== null ){
+                    fd.append( 'city', this.selectedCity.id );
+                }
+                fd.append( 'commercialNumber', this.commercialNumber );
+                fd.append( 'specialization', JSON.stringify(this.new_specs));
+                this.disabled=true ;
+                await axios.post('/signup-center', fd)
+                .then((res)=>{
+                    console.log("res",res);
+                    if( res.data.key === 'success' ){   
+                        this.$toast.add({ severity: 'success', summary: res.data.message, life: 3000 });
+                        setTimeout(() => {
+                            this.$router.push('/login')
+                        }, 1000);
+                        this.disabled=false ;
+                    }else{
+                        this.$toast.add({ severity: 'error', summary: res.data.message, life: 3000 });
+                        this.disabled=false ;
+                    }
+                } ).catch ((err)=> {
+                    this.$toast.add({ severity: 'error', summary: err.response.data.message, life: 3000 });
+                    this.disabled=false ;
+                } )
+        },
         chooseCountry(){
-            document.querySelector('.p-dropdown-label').innerHTML = this.selectedCity.code ;
+            document.querySelector('.p-dropdown-label').innerHTML = this.selectedCountry.code ;
+            this.getCities()
         },
 
         uploadProfilePic(e){
@@ -379,7 +485,7 @@ export default {
         },
         // get cities 
         async getCities(){
-            await axios.get(`/cities?countryId=${this.selectedCity.id}`)
+            await axios.get(`/cities?countryId=${this.selectedCountry.id}`)
             .then( (res)=>{
                 this.cities = res.data.data ;
             } )
@@ -468,53 +574,13 @@ export default {
             // // console.log( this.new_specs)
         },
 
-        // register 
-        async register(){
-            const fd = new FormData( this.$refs.register );
-            fd.append( 'countryCode', this.selectedCity.code )
-            fd.append( 'addressAr', this.address )
-            fd.append( 'addressEn', this.address )
-            fd.append( 'latitude', this.locations.lat );
-            fd.append( 'longitude', this.locations.lng );
-            fd.append( 'city', this.selectedCity.id );
-            fd.append( 'commercialNumber', this.commercialNumber );
-
-            // for( let i = 0 ; i<this.selectedSpec.length ; i++ ){
-            //     this.specs.push(this.selectedSpec[i].id) 
-            // }
-            // const newSpecs = Object.values(this.new_specs);
-
-            // console.log(JSON.parse(newSpecs)) ;
-            fd.append( 'specialization', JSON.stringify(this.new_specs));
-
-            if( this.showName == false ||this.showrError == false || this.showBank == false || this.showCom == false || this.showEmail == false || this.showOwn == false ){
-                this.disabled=true ;
-                await axios.post('/signup-center', fd)
-                .then((res)=>{
-                    console.log("res",res);
-                    if( res.data.key === 'success' ){
-                        this.$toast.add({ severity: 'success', summary: res.data.message, life: 3000 });
-                        setTimeout(() => {
-                            this.$router.push('/login')
-                        }, 3000);
-                        this.disabled=false ;
-                    }else{
-                        this.$toast.add({ severity: 'error', summary: res.data.message, life: 3000 });
-                        this.disabled=false ;
-                    }
-                } ).catch ((err)=> {
-                    this.$toast.add({ severity: 'error', summary: err.response.data.message, life: 3000 });
-                    this.disabled=false ;
-                } )
-            }
-            
-        }
+        
     },
     mounted(){
         this.geolocation();
         this.getCountries();
         this.getCities();
-        document.querySelector('.p-dropdown-label').innerHTML = this.selectedCity.code ;
+        document.querySelector('.p-dropdown-label').innerHTML = this.selectedCountry.code ;
     }
 }
 </script>
@@ -525,9 +591,20 @@ export default {
     #auth #login{
         transform: translateY(10%);
     }
+    .p-multiselect{
+        background-color: #fff !important;
+    }
+    .p-multiselect .p-multiselect-label.p-placeholder {
+        color: #c3c0c0 !important;
+    }
+
+    .p-dropdown .p-dropdown-label.p-placeholder {
+        color: #bbb7b7 !important;
+        font-size: 13px;
+    }
 </style>
 <style lang="scss">
-.p-multiselect .p-multiselect-label.p-placeholder , .p-dropdown .p-dropdown-label.p-placeholder {
+.p-multiselect .p-multiselect-label.p-placeholder  {
     color: #aaa5a5c9 !important; 
     font-size: 12px;
 }

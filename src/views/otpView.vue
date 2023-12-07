@@ -87,12 +87,13 @@ export default {
     methods:{
         // send code 
         async sendCode(){
+            console.log(localStorage.getItem('FCMToken'))
             this.disabled = true ;
             this.loader = true ;
             const fd = new FormData();
             fd.append('loginKey', localStorage.getItem('loginKey'));
             fd.append('countryCode', localStorage.getItem('countryCode'));
-            fd.append('deviceId', localStorage.getItem('device_id'));
+            fd.append('deviceId', localStorage.getItem('FCMToken'));
             fd.append('deviceType', 'web');
             fd.append('activationCode', this.code);
 
@@ -104,7 +105,7 @@ export default {
                     this.loader = false ;
                     setTimeout(() => {
                         this.$router.push('/')
-                    }, 3000);
+                    }, 1000);
                     localStorage.setItem('user', JSON.stringify(res.data.data));
                     localStorage.setItem('token', res.data.data.token);
                 }else{
@@ -120,22 +121,58 @@ export default {
             } )
         },
 
-        // resend code 
-        async resendCode(){
+        // // resend code 
+        // async resendCode(){
+        //     const fd = new FormData();
+        //     fd.append('loginKey', localStorage.getItem('loginKey'));
+        //     fd.append('countryCode', localStorage.getItem('countryCode'));
+        //     // fd.append('deviceType', 'web');
+        //     fd.append('userType', 'center');
+        //     // fd.append('deviceId', localStorage.getItem('FCMToken'));
+        //     await axios.patch('/resend-code', fd)
+        //     .then( (res)=>{
+        //         console.log('done')
+
+        //         if( res.data.key === 'success' ){
+        //             this.$toast.add({ severity: 'success', summary: res.data.message, life: 3000 });
+        //         }else{
+        //             this.$toast.add({ severity: 'error', summary: res.data.message, life: 3000 });
+        //         }
+        //     } )
+        //     .catch( (err)=>{
+        //         this.$toast.add({ severity: 'error', summary: err.message, life: 3000 });
+        //         console.log(err)
+        //     } )
+        // }
+
+        resendCode() {
             const fd = new FormData();
             fd.append('loginKey', localStorage.getItem('loginKey'));
             fd.append('countryCode', localStorage.getItem('countryCode'));
-            fd.append('deviceType', 'web');
-            fd.append('deviceId', localStorage.getItem('device_id'));
-            await axios.patch('/resend-code', fd)
-            .then( (res)=>{
-                if( res.data.key === 'success' ){
+            fd.append('userType', 'center');
+
+            axios.patch('/resend-code', fd)
+                .then((res) => {
+                try {
+                    console.log('done');
+
+                    if (res.data.key === 'success') {
                     this.$toast.add({ severity: 'success', summary: res.data.message, life: 3000 });
-                }else{
+                    } else {
                     this.$toast.add({ severity: 'error', summary: res.data.message, life: 3000 });
+                    }
+                } catch (error) {
+                    // Handle specific error scenarios if needed
+                    console.error(error);
                 }
-            } )
+                })
+                .catch((err) => {
+                this.$toast.add({ severity: 'error', summary: err.message, life: 3000 });
+                console.log(err);
+                });
+            
         }
+
     },
     watch:{
         code(){

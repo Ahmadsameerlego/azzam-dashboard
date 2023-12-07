@@ -2,50 +2,53 @@
     <header id="header" class="pt-4 pb-4 px-4">
         <section class="header_content flex_between">
             <!-- toggle icon  -->
-            <button class="btn toggle_icon">
+            <button class="btn toggle_icon" @click="switchSide()">
                 <i class="fa-solid fa-bars-staggered"></i>
             </button>
 
             <!-- user interaction  -->
-            <div class="d-flex align-items-baseline">
-                <!-- lang  -->
-                <!-- <button class="btn lang">
-                    <i class="fa-solid fa-globe"></i>
-                </button> -->
+           <div class="d-flex align-items-baseline">
+                
 
                 <!-- notfications  -->
-                <router-link to="/" class="btn nots mx-3">
+                <router-link to="/notification" class="position-relative btn nots mx-3">
                     <i class="fa-regular fa-bell"></i>
+                    <span class="not_count" v-if="notifyCount>0">
+                        {{ notifyCount }}
+                    </span>
                 </router-link>
 
                 <!-- admin  -->
-                <div class="admin d-flex position-relative mx-3"  @click="switchDrop">
-                    <div class="admin_image">
-                        <img :src="image" alt="admin image">
-                    </div>
-                    <div class="admin_info mx-2">
-                        <h6 class="name fw-bold"> {{ name }} </h6>
-                        <span class="title fw-6"> {{ title }} </span>
-                    </div>
-                    <span class="profile_icon">
-                        <i class="fa-solid fa-angle-down"></i>
-                    </span>
+                
 
-                    <!-- profile dropdown  -->
-                    <div class="profile_drop pt-2 pb-2" ref="profile">
-                        <div class="single mb-2 px-3 pb-2 text-center">
-                            <router-link to="/"> عن التطبيق </router-link>
+                <div class="admin dropdown">
+                    <button class="btn  d-flex dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                        <div class="admin_image">
+                            <img :src="image" alt="admin image">
                         </div>
-                        <div class="single mb-2 px-3 pb-2 text-center">
-                            <router-link to="/"> أسئلة متكررة </router-link>
+                        <div class="admin_info mx-2">
+                            <h6 class="name fw-bold"> {{ name }} </h6>
+                            <span class="title fw-6"> {{ title }} </span>
                         </div>
-                        <div class="single mb-2 px-3 pb-2 text-center">
-                            <router-link to="/"> الشروط والأحكام </router-link>
-                        </div>
-                    </div>
-                    
+                        <span class="profile_icon">
+                            <i class="fa-solid fa-angle-down"></i>
+                        </span>
+
+                    </button>
+                    <ul class="dropdown-menu " aria-labelledby="dropdownMenuButton1">
+                        <li class="single">
+                            <router-link to="/about"> {{ $t('dash.about') }} </router-link>
+                        </li>
+                        <li class="single">
+                            <router-link to="/faqs"> {{ $t('dash.fqs') }}  </router-link>
+                        </li>
+                        <li class="single">
+                            <router-link to="/terms"> {{ $t('dash.terms') }} </router-link>
+                        </li>
+                    </ul>
                 </div>
 
+                <!-- language  -->
                 <div class="dropdown">
                     <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
 
@@ -53,23 +56,23 @@
                         <img class="flag_img" :src="require('@/assets/imgs/en.png')" alt=""  v-else-if="$i18n.locale=='en'">
                         
                         <span v-if="$i18n.locale=='ar'">
-                            العربية
+                            {{ $t('dash.arabic') }}
                         </span>
                         <span v-else-if="$i18n.locale=='en'">
-                            الانجليزية
+                            {{ $t('dash.english') }}
                         </span>
                         <i class="fa-solid fa-angle-down"></i>
                     </button>
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                         <li>
                             <a class="dropdown-item" href="#" @click="switchLanguage('ar')">
-                                عربي
+                                {{ $t('dash.arabic') }}
                                 <img class="flag_img" :src="require('@/assets/imgs/sudia.png')" alt="">
                             </a>
                         </li>
                         <li>
                             <a class="dropdown-item" href="#" @click="switchLanguage('en')">
-                                انجليزي
+                                {{ $t('dash.english') }}
                                 <img class="flag_img" :src="require('@/assets/imgs/en.png')" alt="">
                             </a>
                         </li>
@@ -82,12 +85,14 @@
 </template>
 
 <script>
+import axios from 'axios';
 export default {
     data(){
         return{
             name : '',
             title : '',
-            image : ''
+            image : '',
+            notifyCount : ''
         }
     },
     methods:{
@@ -107,6 +112,26 @@ export default {
         },
         switchDrop(){
             this.$refs.profile.classList.toggle('active')
+        },
+
+        // get home 
+        async getHome(){
+            const token = localStorage.getItem('token');
+            const headers = {
+                Authorization: `Bearer ${token}`,
+            };
+
+            await axios.get('/home-center', {headers})
+            .then( (res)=>{
+                this.notifyCount = res.data.data.notifyCount ;
+            } )
+        },
+
+        switchSide(){
+            console.log()
+            document.querySelector('#sidebar').classList.toggle('active');
+            document.querySelector('#header').classList.toggle('active');
+            document.querySelector('#content').classList.toggle('active');
         }
 
     },
@@ -115,23 +140,38 @@ export default {
         this.name = user.name ;
         this.title = user.ownerName ;
         this.image = user.avatar ;
+
+        this.getHome();
     }
 }
 </script>
 
 <style lang="scss">
-    .profile_drop{
+    .not_count{
         position: absolute;
-        top: 50px;
-        left: -42px;
-        border-radius: 6px;
-        background-color: #fff;
-        box-shadow: 0px 0px 10px #33333343;
+        background: #3290d8;
+        color: #fff;
+        width: 20px;
+        height: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 50%;
+        top: -10px;
+        left: -8px;
+        font-size: 12px;
+    }
+    .dropdown-menu{
+        border-radius: 6px !important;
+        background-color: #fff !important;
+        box-shadow: 0px 0px 10px rgba(51, 51, 51, 0.262745098) !important;
         width: 170px;
-        opacity: 0;
-        transition: .3s all;
+        transition: 0.6s all;
+        border: none !important;
         .single{
             color:#333;
+            text-align: center;
+            padding-bottom: 8px;
             &:not(:last-of-type){
                 border-bottom: 1px solid #cccccc4d;
             }
@@ -142,7 +182,7 @@ export default {
     }
     .profile_icon{
         position: absolute;
-        left: -10px;
+        left: 3px;
         font-size: 13px;
         top: 27%;
     }
@@ -152,5 +192,8 @@ export default {
     .dropdown-toggle::after{display: none !important;}
     .admin{
         cursor: pointer;
+    }
+    .btn.show{
+        border: none !important;
     }
 </style>

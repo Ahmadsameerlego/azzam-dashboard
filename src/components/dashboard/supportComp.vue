@@ -2,15 +2,15 @@
     <!-- header  -->
     <section id="specManage" class="pt-3 pb-0 px-5 flex_between">
         <div>
-            <h6 class="fw-bold blackColor"> ادارة مجموعة الدعم </h6>
-            <p class="grayColor"> متابعة مجموعة الدعم </p>
+            <h6 class="fw-bold blackColor"> {{ $t('support.title') }} </h6>
+            <p class="grayColor"> {{ $t('support.desc') }} </p>
         </div>
 
         <!-- user interaction => search && add -->
         <div class="d-flex">
             <!-- search  -->
             <div class="form-group position-relative">
-                <InputText v-model="filters['global'].value" placeholder="كلمات مفتاحية" />
+                <InputText v-model="filters['global'].value" :placeholder="$t('treat.keys')" />
                 <span class="search">
                     <i class="fa-solid fa-magnifying-glass"></i>
                 </span>
@@ -41,17 +41,17 @@
              
             <template #empty> No customers found. </template>
 
-            <Column header="رقم" >
+            <Column :header="$t('common.num')" >
                 <template #body="slotProps">
                 <!-- Add row numbers to your table -->
                 {{  slotProps.index + 1  }}
                 </template>
             </Column>
-            <Column field="name" header="اسم المجموعة" sortable></Column>
-            <Column field="seats" header="عدد المقاعد" sortable></Column>
-            <Column field="reservedSeats" header="المقاعد المحجوزة" sortable></Column>
-            <Column field="sessionsCount" header="عدد الجلسات" sortable></Column>
-            <Column field="price" header="السعر" sortable ></Column>
+            <Column field="name" :header="$t('support.name')" sortable></Column>
+            <Column field="seats" :header="$t('group.seats')" sortable></Column>
+            <Column field="reservedSeats" :header="$t('support.reserved')" sortable></Column>
+            <Column field="sessionsCount" :header="$t('offer.num')" sortable></Column>
+            <Column field="price" :header="$t('group.price')" sortable ></Column>
 
             <Column  header="" >
                 <template #body="slotProps">
@@ -59,7 +59,7 @@
                    <div class="d-flex">
                         <!-- edit  -->
                         <router-link  :to="'/supportManage/'+slotProps.data.id" class="show_more fw-6" @click="click(slotProps.data.id)">
-                                عرض التفاصيل
+                                {{ $t('session.details') }}
                         </router-link>
                    </div>
 

@@ -1,15 +1,15 @@
 <template>
     <section id="specManage" class="pt-3 pb-3 px-5 flex_between">
         <div>
-            <h6 class="fw-bold blackColor"> ادارة الاخصائيين </h6>
-            <p class="grayColor"> يمكنك اضافة اخصائي جديد وامكانية تعديله او حذفه </p>
+            <h6 class="fw-bold blackColor"> {{ $t('spec.title') }} </h6>
+            <p class="grayColor"> {{ $t('spec.desc') }} </p>
         </div>
 
         <!-- user interaction => search && add -->
         <div class="d-flex">
             <!-- search  -->
             <div class="form-group position-relative">
-                <InputText v-model="filters['global'].value" placeholder="كلمات مفتاحية" />
+                <InputText v-model="filters['global'].value" :placeholder="$t('treat.keys')" />
                 <span class="search">
                     <i class="fa-solid fa-magnifying-glass"></i>
                 </span>
@@ -38,25 +38,25 @@
             v-if="isShown"
         >
              
-            <template #empty> No customers found. </template>
+            <template #empty> {{ $t('spec.not') }} </template>
 
-            <Column  header="رقم" >
+            <Column  :header="$t('common.num')" >
                 <template #body="slotProps">
                 <!-- Add row numbers to your table -->
                 {{  slotProps.index + 1  }}
                 </template>
             </Column>
-            <Column field="name" header="اسم الاخصائي" sortable></Column>
-            <Column field="phone" header="رقم الجوال" sortable></Column>
-            <Column field="email" header="البريد الالكتروني" sortable></Column>
-            <Column field="sessionCount" header="عدد الجلسات التي قام بها" sortable class="sessions"></Column>
-            <Column field="averageRating" header="التقييم" sortable class="rate">
+            <Column field="name" :header="$t('common.specName')" sortable></Column>
+            <Column field="phone" :header="$t('auth.phone')" sortable></Column>
+            <Column field="email" :header="$t('auth.email')" sortable></Column>
+            <Column field="sessionCount" :header="$t('spec.sessionNum')" sortable class="sessions"></Column>
+            <Column field="averageRating" :header="$t('spec.rate')" sortable class="rate">
                 <template #body="slotProps">
 
                     <div class="d-flex">
                         <!-- edit  -->
                         <router-link  :to="'/rates/'+slotProps.data.id" class="" >
-                            عرض التقييم
+                            {{ $t('spec.showRate') }}
                         </router-link>
                        
                     </div>
@@ -68,11 +68,11 @@
 
                    <div class="">
                         <button class="btn deactivate" :disabled="disabledActive[slotProps.index]" v-if="slotProps.data.isApproved== true" @click="deactive(slotProps.data.id,  slotProps.index)"> 
-                            الغاء تفعيل الحساب 
+                            {{ $t('spec.deactive') }} 
 
                         </button>
                         <button class="btn activate"  :disabled="disabledActive[slotProps.index]" v-if="slotProps.data.isApproved== false" @click="deactive(slotProps.data.id, slotProps.index)">  
-                            تفعيل الحساب 
+                            {{ $t('spec.active') }} 
                         </button>
                    </div>
                 </template>
@@ -109,42 +109,42 @@
 
     <!-- send notification  -->
     <Dialog v-model:visible="visible" modal  :style="{ width: '50vw' }">
-        <h4 class="text-center main-color fw-6"> ارسال اشعار </h4>
+        <h4 class="text-center main-color fw-6"> {{ $t('spec.sendNot') }} </h4>
         <form @submit.prevent="sendNot()" ref="not_form">
                 <div class="form-group mb-2">
                     <label for="" class="d-block fw-6 mb-2">
-                            عنوان الاشعار بالعربية 
+                            {{ $t('spec.nameAr') }} 
                     </label>
-                    <InputText type="text" v-model="titleAr" name="titleAr" class="default_input w-100" placeholder="الرجاء ادخال عنوان الاشعار بالعربية" />
+                    <InputText type="text" v-model="titleAr" name="titleAr" class="default_input w-100" :placeholder="$t('spec.arPlc')" />
 
                 </div>
 
                 <div class="form-group mb-2">
                     <label for="" class="d-block fw-6 mb-2">
-                            عنوان الاشعار بالانجليزية 
+                            {{ $t('spec.nameEn') }} 
                     </label>
-                    <InputText type="text" v-model="titleEn" name="titleEn" class="default_input w-100" placeholder="الرجاء ادخال عنوان الاشعار بالانجليزية" />
+                    <InputText type="text" v-model="titleEn" name="titleEn" class="default_input w-100" :placeholder="$t('spec.enPlc')" />
 
                 </div>
 
 
                 <div class="form-group mb-2">
                     <label for="" class="d-block fw-6 mb-2">
-                            محتوى الاشعار بالعربية 
+                            {{ $t('spec.contentAr') }} 
                     </label>
-                    <Textarea v-model="messageAr" name="messageAr" autoResize rows="5" class="default_input default_textarea w-100" cols="30" placeholder="الرجاء ادخال محتوى الاشعار بالعربية" />
+                    <Textarea v-model="messageAr" name="messageAr" autoResize rows="5" class="default_input default_textarea w-100" cols="30" :placeholder="$t('spec.arCon')" />
                 </div>
 
                 <div class="form-group mb-2">
                     <label for="" class="d-block fw-6 mb-2">
-                            محتوى الاشعار بالانجليزية 
+                        {{ $t('spec.contentEn') }} 
                     </label>
-                    <Textarea v-model="messageEn" name="messageEn" autoResize rows="5" class="default_input default_textarea w-100" cols="30" placeholder="الرجاء ادخال محتوى الاشعار بالانجليزية" />
+                    <Textarea v-model="messageEn" name="messageEn" autoResize rows="5" class="default_input default_textarea w-100" cols="30" :placeholder="$t('spec.EnCon')" />
                 </div>
 
                 <div class="d-flex justify-content-center align-items-center mt-3">
                     <button class="btn main_btn w-50 mx-auo pt-2 pb-2" :disabled="disabled">
-                         <span v-if="!disabled">ارسال</span> 
+                         <span v-if="!disabled">{{ $t('common.send') }}</span> 
                          <div class="spinner-border" role="status" v-if="disabled">
                             <span class="visually-hidden">Loading...</span>
                         </div>

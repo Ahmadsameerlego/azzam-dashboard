@@ -23,10 +23,10 @@
 
                     
                     <!-- country code  -->
-                    <Dropdown v-model="selectedCity" :options="countries" optionLabel="code"     class="default_input country_code  w-full md:w-14rem" @change="chooseCountry">
+                    <Dropdown v-model="selectedCity" :options="countries" optionLabel="name"     class="default_input country_code  w-full md:w-14rem" @change="chooseCountry">
                         <template #value="slotProps">
                             <div class="flex align-items-center">
-                                <!-- <img :alt="slotProps.image" :src="slotProps.image" :class="`mr-2 flag flag-${slotProps.code.toLowerCase()}`" style="width: 18px" /> -->
+                                <!-- <img :alt="slotProps.data.image" :src="slotProps.data.image"  style="width: 18px" /> -->
                                 <span>
                                     {{slotProps}}
                                 </span>
@@ -80,7 +80,7 @@ export default {
                 "image": "https://azzam.4hoste.com/assets/uploads/country/image941689583177874.png",
                 code: "+966",
             },
-            disabled : true,
+            disabled : false,
             loader : false,
             showrError : false
         }
@@ -89,10 +89,10 @@ export default {
         loginKey(){
             let inputString = this.loginKey.toString();
             if( this.loginKey === '' || inputString.length < 9 ){
-                this.disabled = true ;
+                // this.disabled = true ;
                 this.showrError = true ; 
             }else if(this.loginKey !== '' ){
-                this.disabled = false ; 
+                // this.disabled = false ; 
                 this.showrError = false;
             }
         }
@@ -105,41 +105,53 @@ export default {
 
         // login 
         async login(){
-            this.disabled = true ;
-            this.loader = true ;
-            const fd = new FormData() ;
-            fd.append('loginKey', this.loginKey);
-            fd.append('countryCode', this.selectedCity.code);
-            fd.append('deviceId', localStorage.getItem('device_id'));
-            fd.append('deviceType', 'web');
+            let inputString = this.loginKey.toString();
+            if( this.loginKey === '' || inputString.length < 9 ){
+                // this.disabled = true ;
+                this.showrError = true ; 
+            }else{
+                this.showrError = false ; 
+                this.disabled = true ;
+                this.loader = true ;
+                const fd = new FormData() ;
+                fd.append('loginKey', this.loginKey);
+                fd.append('countryCode', this.selectedCity.code);
+                fd.append('deviceId', localStorage.getItem('FCMToken'));
+                fd.append('deviceType', 'web');
 
-            await axios.post('/signin-center', fd)
-            .then( (res)=>{
-                if(  res.data.key === 'needActive' ){
-                    this.$toast.add({ severity: 'success', summary: res.data.message, life: 3000 });
+                await axios.post('/signin-center', fd)
+                .then( (res)=>{
+                    if(  res.data.key === 'needActive' ){
+                        this.$toast.add({ severity: 'success', summary: res.data.message, life: 3000 });
+                        this.disabled = false ;
+                        this.loader = false ;
+                        localStorage.setItem('loginKey', this.loginKey);
+                        localStorage.setItem('countryCode', this.selectedCity.code);
+                        setTimeout(() => {
+                            this.$router.push('/activeCode');
+                        }, 1000);
+                    }else{
+                        this.$toast.add({ severity: 'error', summary: res.data.message, life: 3000 });
+                        this.disabled = false ;
+                        this.loader = false ;
+                    }
+
+                } )
+                .catch( (err)=>{
+                    console.log(err.response.data.message)
+                    this.$toast.add({ severity: 'error', summary: err.response.data.message, life: 3000 });
                     this.disabled = false ;
                     this.loader = false ;
-                    localStorage.setItem('loginKey', this.loginKey);
-                    localStorage.setItem('countryCode', this.selectedCity.code);
-                    setTimeout(() => {
-                        this.$router.push('/activeCode');
-                    }, 3000);
-                }else{
-                    this.$toast.add({ severity: 'error', summary: res.data.message, life: 3000 });
-                    this.disabled = false ;
-                    this.loader = false ;
-                }
+                } )
+            }
 
-            } )
-            .catch( (err)=>{
-                console.log(err.response.data.message)
-                this.$toast.add({ severity: 'error', summary: err.response.data.message, life: 3000 });
-                this.disabled = false ;
-                this.loader = false ;
-            } )
+            
         },
         chooseCountry(){
-            document.querySelector('.p-dropdown-label').innerHTML = this.selectedCity.code ;
+            document.querySelector('.p-dropdown-label').innerHTML = `
+            <img src="${this.selectedCity.image}" class="country_image">
+            ${this.selectedCity.code}
+            ` ;
         },
 
     },
@@ -151,12 +163,11 @@ export default {
     mounted(){
         this.getCountries();
         // this.getCountries();
-        document.querySelector('.p-dropdown-label').innerHTML = this.selectedCity.code ;
+        document.querySelector('.p-dropdown-label').innerHTML = `
+            <img src="${this.selectedCity.image}" class="country_image">
+            ${this.selectedCity.code}
+            `  ;
         // get random device_id 
-        fetch('https://api.ipify.org?format=json')
-        .then(response => response.json())
-        .then(data => localStorage.setItem('device_id', data.ip))
-        .catch(error => console.error(error));
     }
 }
 </script>
@@ -165,8 +176,17 @@ export default {
     #auth #login{
         transform: translateY(50%);
     }
+    
 </style>
 <style lang="scss">
+    .p-dropdown .p-dropdown-trigger{
+        width: 30px !important;
+    }
+    .country_image{
+        width: 25px;
+        height: 20px;
+        object-fit: contain;
+    }
 .error{
     transition: .3s all;
     .valid{
@@ -204,7 +224,7 @@ export default {
         }
         .country_code{
             position: absolute !important;
-            width: 27% !important;
+            width: 29% !important;
             left: 0;
             top: 40%;        
         }

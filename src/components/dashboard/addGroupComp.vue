@@ -1,16 +1,16 @@
 <template>
     <section class="pt-3 pb-3 px-5 ">
             <div>
-                <h6 class="fw-bold blackColor"> ادارة مجموعة الدعم </h6>
+                <h6 class="fw-bold blackColor"> {{ $t('group.title') }} </h6>
                 <p class="grayColor"> 
-                    متابعة مجموعة الدعم
+                    {{ $t('group.desc') }}
                 </p>
             </div>
     </section>
 
     <!-- form  -->
     <section class="main-bg pt-3 pb-3 mx-5 mb-3" >
-        <h6 class="sec-color fs-17 fw-6 px-5 mb-2"> بيانات المجموعة </h6>
+        <h6 class="sec-color fs-17 fw-6 px-5 mb-2"> {{ $t('group.info') }} </h6>
 
         <form class="mx-5 mt-3" ref="sessionForm">
         <div class="row">
@@ -18,38 +18,38 @@
             <div class="col-md-6 mb-3">
                 <div class="form-group ">
                     <label for="" class="blackColor d-block fw-6 mb-2 fs-14">
-                        اسم المجموعة بالعربية
+                        {{ $t('group.nameAr') }}
                         <i class="fa-solid fa-asterisk text-danger fs-10"></i>
                     </label>
-                    <InputText type="text" v-model="groupNameAr" name="groupNameAr" class="default_input w-100" placeholder="الرجاء ادخال اسم المجموعة" />
+                    <InputText type="text" v-model="groupNameAr" name="groupNameAr" class="default_input w-100" :placeholder="$t('group.namePlc')" />
                 </div>
             </div>
             <div class="col-md-6 mb-3">
                 <div class="form-group ">
                     <label for="" class="blackColor d-block fw-6 mb-2 fs-14">
-                        اسم المجموعة بالانجليزية
+                        {{ $t('group.nameEn') }}
                         <i class="fa-solid fa-asterisk text-danger fs-10"></i>
                     </label>
-                    <InputText type="text" v-model="groupNameEn" name="groupNameEn" class="default_input w-100" placeholder="الرجاء ادخال اسم المجموعة" />
+                    <InputText type="text" v-model="groupNameEn" name="groupNameEn" class="default_input w-100" :placeholder="$t('group.namePlc')" />
                 </div>
             </div>
 
             <div class="col-md-6 mb-3">
                 <div class="form-group ">
                     <label for="" class="blackColor d-block fw-6 mb-2 fs-14">
-                         الوصف بالعربية
+                         {{ $t('group.descAr') }}
                         <i class="fa-solid fa-asterisk text-danger fs-10"></i>
                     </label>
-                    <InputText type="text" v-model="groupDescriptionAr" name="groupDescriptionAr" class="default_input w-100" placeholder="الرجاء ادخال الوصف" />
+                    <InputText type="text" v-model="groupDescriptionAr" name="groupDescriptionAr" class="default_input w-100" :placeholder="$t('group.descPlc')" />
                 </div>
             </div>
             <div class="col-md-6 mb-3">
                 <div class="form-group ">
                     <label for="" class="blackColor d-block fw-6 mb-2 fs-14">
-                        الوصف بالانجليزية
+                        {{ $t('group.descEn') }}
                         <i class="fa-solid fa-asterisk text-danger fs-10"></i>
                     </label>
-                    <InputText type="text" v-model="groupDescriptionEn" name="groupDescriptionEn" class="default_input w-100" placeholder="الرجاء ادخال الوصف" />
+                    <InputText type="text" v-model="groupDescriptionEn" name="groupDescriptionEn" class="default_input w-100" :placeholder="$t('group.descPlc')" />
                 </div>
             </div>
 
@@ -57,21 +57,21 @@
             <div class="col-md-6 mb-2">
                 <div class="form-group ">
                     <label for="" class="blackColor d-block fw-6 mb-2 fs-14">
-                        قيمة المجموعة 
+                        {{ $t('group.value') }} 
                         <i class="fa-solid fa-asterisk text-danger fs-10"></i>
                     </label>
 
-                    <Dropdown v-model="selectedType" :options="values" optionLabel="title" placeholder="الرجاء تحديد قيمة المجموعة" class="default_input w-100 w-full md:w-14rem" />
+                    <Dropdown v-model="selectedType" :options="values" optionLabel="title" :placeholder="$t('group.valuePlc')" class="default_input w-100 w-full md:w-14rem" />
                 </div>
             </div>
 
             <div class="col-md-6 mb-2" v-if="isPaid">
                 <div class="form-group ">
                     <label for="" class="blackColor d-block fw-6 mb-2 fs-14">
-                        السعر
+                        {{ $t('group.price') }}
                         <i class="fa-solid fa-asterisk text-danger fs-10"></i>
                     </label>
-                    <InputNumber v-model="price" name="price" inputId="integeronly" class="default_input w-100" placeholder="الرجاء ادخال السعر " />
+                    <InputNumber v-model="price" name="price" inputId="integeronly" class="default_input w-100" :placeholder="$t('group.pricePlc')" />
                 </div>
             </div>
 
@@ -79,11 +79,11 @@
             <div class="col-md-6 mb-2">
                 <div class="form-group default_input">
                     <label for="" class="blackColor d-block fw-6 mb-2 fs-14">
-                        عدد الجلسات
+                        {{ $t('group.count') }}
                         <i class="fa-solid fa-asterisk text-danger fs-10"></i>
                     </label>
                     <!-- <InputNumber v-model="sessionsCount" name="sessionsCount" inputId="integeronly" class="default_input w-100" placeholder="الرجاء ادخال عدد الجلسات "  @input="handleError"/> -->
-                    <input type="number" v-model="sessionsCount" name="sessionsCount" class="form-control default_input w-100" placeholder="الرجاء ادخال عدد الجلسات " >
+                    <input type="number" v-model="sessionsCount" name="sessionsCount" class="form-control default_input w-100" :placeholder="$t('group.countPlc')" >
                 </div>
             </div>
 
@@ -91,10 +91,10 @@
             <div class="col-md-6 mb-2">
                 <div class="form-group ">
                     <label for="" class="blackColor d-block fw-6 mb-2 fs-14">
-                        عدد المقاعد
+                        {{ $t('group.seats') }}
                         <i class="fa-solid fa-asterisk text-danger fs-10"></i>
                     </label>
-                    <InputNumber v-model="seats" name="seats" inputId="integeronly" class="default_input w-100" placeholder="الرجاء ادخال عدد المقاعد "  />
+                    <InputNumber v-model="seats" name="seats" inputId="integeronly" class="default_input w-100" :placeholder="$t('group.seatsPlc')"  />
                 </div>
             </div>
 
@@ -102,7 +102,7 @@
         </div>
 
         <div class="mt-2">
-            <button class="btn w-25 sec-bg main_btn" @click.prevent="setSessions" :disabled="disabledSession"> تأكيد </button>
+            <button class="btn w-25 sec-bg main_btn" @click.prevent="setSessions" :disabled="disabledSession"> {{ $t('auth.confirm') }} </button>
         </div>
         </form>
     </section>
@@ -110,7 +110,7 @@
     <!-- number of sessions  -->
     <section v-if="showSession">
         <section class="main-bg pt-3 pb-3 mx-5 mb-3" v-for="(session, index) in sessionsCount" :key="index">
-        <h6 class="sec-color fs-17 fw-6 px-5 mb-2"> جلسة {{index + 1}} </h6>
+        <h6 class="sec-color fs-17 fw-6 px-5 mb-2"> {{ $t('group.session') }} {{index + 1}} </h6>
 
         <form class="mx-5 mt-3">
             <div class="row">
@@ -119,48 +119,48 @@
             <div class="col-md-6 mb-3">
                 <div class="form-group ">
                     <label for="" class="blackColor d-block fw-6 mb-2 fs-14">
-                        اسم الجلسة بالعربية
+                        {{ $t('group.nameAr') }}
                         <i class="fa-solid fa-asterisk text-danger fs-10"></i>
                     </label>
-                    <InputText type="text" v-model="namesAr[index]" class="default_input w-100" placeholder="الرجاء ادخال اسم الجلسة" />
+                    <InputText type="text" v-model="namesAr[index]" class="default_input w-100" :placeholder="$t('session.namePlc')" />
                 </div>
             </div>
             <div class="col-md-6 mb-3">
                 <div class="form-group ">
                     <label for="" class="blackColor d-block fw-6 mb-2 fs-14">
-                        اسم الجلسة بالإنجليزية
+                        {{ $t('group.nameEn') }}
                         <i class="fa-solid fa-asterisk text-danger fs-10"></i>
                     </label>
-                    <InputText type="text" v-model="namesEn[index]" class="default_input w-100" placeholder="الرجاء ادخال اسم الجلسة" />
+                    <InputText type="text" v-model="namesEn[index]" class="default_input w-100" :placeholder="$t('session.namePlc')" />
                 </div>
             </div>
 
             <div class="col-md-6 mb-3">
                 <div class="form-group ">
                     <label for="" class="blackColor d-block fw-6 mb-2 fs-14">
-                        الوصف بالعربية
+                        {{ $t('group.descAr') }}
                         <i class="fa-solid fa-asterisk text-danger fs-10"></i>
                     </label>
-                    <InputText type="text" v-model="descriptionsAr[index]"  class="default_input w-100" placeholder="الرجاء ادخال الوصف" />
+                    <InputText type="text" v-model="descriptionsAr[index]"  class="default_input w-100" :placeholder="$t('group.descPlc')" />
                 </div>
             </div>
             <div class="col-md-6 mb-3">
                 <div class="form-group ">
                     <label for="" class="blackColor d-block fw-6 mb-2 fs-14">
-                        الوصف بالإنجليزية
+                        {{ $t('group.descEn') }}
                         <i class="fa-solid fa-asterisk text-danger fs-10"></i>
                     </label>
-                    <InputText type="text" v-model="descriptionsEn[index]"  class="default_input w-100" placeholder="الرجاء ادخال الوصف" />
+                    <InputText type="text" v-model="descriptionsEn[index]"  class="default_input w-100" :placeholder="$t('group.descPlc')" />
                 </div>
             </div>
 
             <div class="col-md-6 mb-3">
                 <div class="form-group position-relative">
                     <label for="" class="blackColor d-block fw-6 mb-2 fs-14">
-                        التاريخ
+                        {{ $t('session.date') }}
                         <i class="fa-solid fa-asterisk text-danger fs-10"></i>
                     </label>
-                    <Calendar v-model="dates[index]" @select="getDocotrs(index)" class="default_input w-100" placeholder="الرجاء ادخال التاريخ" />
+                    <Calendar v-model="dates[index]" @select="getDocotrs(index)" class="default_input w-100" :placeholder="$t('session.datePlc')" />
                     <span class="icon_date">
                         <i class="fa-solid fa-calendar-days"></i>
                     </span>
@@ -170,10 +170,10 @@
             <div class="col-md-6 mb-3">
                 <div class="form-group position-relative">
                     <label for="" class="blackColor d-block fw-6 mb-2 fs-14">
-                        الموعد
+                        {{ $t('session.appoint') }}
                         <i class="fa-solid fa-asterisk text-danger fs-10"></i>
                     </label>
-                    <Calendar v-model="times[index]" @select="getDocotrs(index)" class="default_input w-100" placeholder="الرجاء ادخال الموعد" timeOnly hourFormat="12" />
+                    <Calendar v-model="times[index]" @select="getDocotrs(index)" class="default_input w-100" :placeholder="$t('session.appPlc')" timeOnly hourFormat="12" />
                     <span class="icon_date">
                         <i class="fa-solid fa-clock"></i>
                     </span>
@@ -184,24 +184,24 @@
             <div class="col-md-6 mb-3">
                 <div class="form-group ">
                     <label for="" class="blackColor d-block fw-6 mb-2 fs-14">
-                        المدة
+                        {{ $t('session.duration') }}
                         <i class="fa-solid fa-asterisk text-danger fs-10"></i>
                     </label>
-                    <InputText type="text"  v-model="durations[index]" @input="getDocotrs(index)" class="default_input w-100" placeholder="الرجاء ادخال المدة" />
+                    <InputText type="text"  v-model="durations[index]" @input="getDocotrs(index)" class="default_input w-100" :placeholder="$t('session.durationPlc')" />
                 </div>
             </div>
 
             <div class="col-md-6 mb-3">
                 <div class="form-group ">
                     <label for="" class="blackColor d-block fw-6 mb-2 fs-14">
-                        الاخصائي
+                        {{ $t('session.spec') }}
                         <i class="fa-solid fa-asterisk text-danger fs-10"></i>
                     </label>
-                    <Dropdown v-model="selectedDoctors[index]" :options="doctors[index]" optionLabel="name" placeholder="الرجاء تحديد الأخصائي المتاح" class="default_input w-100 w-full md:w-14rem" />
+                    <Dropdown v-model="selectedDoctors[index]" :options="doctors[index]" optionLabel="name" :placeholder="$t('session.specPlc')" class="default_input w-100 w-full md:w-14rem" />
                 </div>
                 <ProgressBar mode="indeterminate" class="mt-2" style="height: 6px" v-if="getDocotorsLoading[index]"></ProgressBar>
                 <span class="text-danger fs-14 text-center" v-if="getDocotorsLoading[index]">
-                    جاري تحديد الأخصائيين المتاحيين
+                    {{ $t('session.specLoad') }}
                 </span>
             </div>
 
@@ -215,7 +215,7 @@
         <div class="mt-2 pt-3 pb-3 mx-5 mb-3">
             <button class="btn w-25 px-5 sec-bg main_btn" @click.prevent="addGroup" :disabled="disabled">
                     <span v-if="!disabled">
-                    اضافة
+                    {{ $t('common.add') }}
                 </span>
                 <div class="spinner-border" role="status" v-if="disabled">
                     <span class="visually-hidden">Loading...</span>
