@@ -50,7 +50,7 @@
              
             <template #empty> {{ $t('con.notFound') }} </template>
 
-            <Column  header="رقم" >
+            <Column  :header="$t('common.num')" >
                 <template #body="slotProps">
                 <!-- Add row numbers to your table -->
                 {{  slotProps.index + 1  }}

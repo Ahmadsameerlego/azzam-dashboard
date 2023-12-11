@@ -13,6 +13,7 @@
       "logout": "Logout"
     },
     "common": {
+      "phoneValid" : "phone number should be more than 9 digits",
       "addSpec": "Add Specialist",
       "specDesc": "You can add a new specialist and have the ability to edit or delete them.",
       "specInfo": "Specialist Information",
@@ -176,10 +177,11 @@
       "supportNum": "supportGroup count",
       "total": "total number of cases",
       "urgentNum": "urgentConsultation count",
-      "personsNum": "Number of Attendees for Support Sessions",
+      "personsNum": "Subscriptions count",
       "treatNum": "treatmentPlan count",
-      "profits": "Subscriptions count",
-      "opinions": "Customer Opinions"
+      "profits": "profits statistics",
+      "opinions": "Customer Opinions",
+      "noRates" : "No Rates Till Now"
     },
     "offer": {
         "title": "Send Price Offer",
@@ -313,6 +315,15 @@
         "groupInfo": "Group Data",
         "name": "Group Name",
         "reserved": "Reserved Seats"
+      },
+      "days": {
+        "sat": "Saturday",
+        "sun": "Sunday",
+        "mun": "Monday",
+        "tue": "Tuesday",
+        "wed": "Wednesday",
+        "thu": "Thursday",
+        "fri": "Friday"
       }
     
   }

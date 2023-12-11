@@ -21,6 +21,8 @@
                         </label>
 
                         <Dropdown v-model="selectedNum" :options="sessions" @change="handleValid" optionLabel="name" :placeholder="$t('offer.numPlc')" class="default_input w-100 w-full md:w-14rem" :disabled="isEdit" />
+
+                        <span class="error text-danger fs-13" v-if="isNum"> {{$t('offer.numPlc') }} </span>
                     </div>
                 </div>
                 <div class="col-md-6 mb-3">
@@ -31,6 +33,8 @@
                         </label>
                         <!-- <InputNumber v-model="durationDays" inputId="integeronly" class="default_input w-100" placeholder="اكتب عدد الأيام المتوقعة"/> -->
                         <input type="number"  v-model="durationDays" @input="handleValid" class="form-control default_input w-100" :placeholder="$t('offer.durationPlc')" :readonly="isEdit">
+
+                        <span class="error text-danger fs-13" v-if="isDays"> {{ $t('offer.durationPlc') }} </span>
                     </div>
                 </div>
             </div>
@@ -42,10 +46,6 @@
     </section>
     
     <Skeleton v-else class="px-5 mb-3 mx-auto" style="width:90%" height="10rem"></Skeleton>
-
-
-
-
 
     <!-- appended sessions  -->
     <section class="" v-if="showSessionsNum">
@@ -64,6 +64,7 @@
                             </label>
 
                             <Dropdown v-model="selectedType[index]" :options="types" optionLabel="title" :placeholder="$t('offer.typePlc')" class="default_input w-100 w-full md:w-14rem" />
+                            <span class="error text-danger fs-13" v-if="isTyped[index]"> {{ $t('offer.typePlc') }} </span>
                         </div>
                     </div>
 
@@ -75,6 +76,8 @@
                             </label>
 
                             <Dropdown v-model="selectedSpec[index]" :options="specs" optionLabel="name" :placeholder="$t('offer.specPlc')" class="default_input w-100 w-full md:w-14rem" />
+                            <span class="error text-danger fs-13" v-if="isSpec[index]"> {{ $t('offer.specPlc') }} </span>
+
                         </div>
                     </div>
 
@@ -86,6 +89,8 @@
                                 <i class="fa-solid fa-asterisk text-danger fs-10"></i>
                             </label>
                             <InputText type="text" v-model="sessionName[index]" class="default_input w-100" :placeholder="$t('offer.namePlc')" />
+                            <span class="error text-danger fs-13" v-if="isSession[index]"> {{ $t('offer.namePlc') }} </span>
+
                         </div>
                     </div>
 
@@ -96,6 +101,8 @@
                                 <i class="fa-solid fa-asterisk text-danger fs-10"></i>
                             </label>
                             <InputNumber v-model="sessionDuration[index]" inputId="integeronly" class="default_input w-100" :placeholder="$t('offer.timePlc')"/>
+                            <span class="error text-danger fs-13" v-if="isDuration[index]"> {{ $t('offer.timePlc') }} </span>
+
                         </div>
                     </div>
 
@@ -106,6 +113,8 @@
                                 <i class="fa-solid fa-asterisk text-danger fs-10"></i>
                             </label>
                             <InputText type="text" v-model="instructions[index]" class="default_input w-100" :placeholder="$t('offer.instPlc')" />
+                            <span class="error text-danger fs-13" v-if="isInst[index]"> {{ $t('offer.instPlc') }} </span>
+
                         </div>
                     </div>
                 </div>
@@ -126,6 +135,7 @@
                                     <i class="fa-solid fa-asterisk text-danger fs-10"></i>
                                 </label>
                                 <InputText type="text" v-model="nameAr" class="default_input w-100" :placeholder="$t('offer.arPlc')" />
+                                <span class="error text-danger fs-13" v-if="isMedAr"> {{ $t('offer.arPlc') }} </span>
                             </div>
                         </div>
 
@@ -136,6 +146,8 @@
                                     <i class="fa-solid fa-asterisk text-danger fs-10"></i>
                                 </label>
                                 <InputText type="text" v-model="nameEn" class="default_input w-100" :placeholder="$t('offer.enPlc')" />
+                                <span class="error text-danger fs-13" v-if="isMedEn"> {{ $t('offer.enPlc') }} </span>
+
                             </div>
                         </div>
                 
@@ -154,6 +166,7 @@
                                 <!-- input file  -->
                                 <input type="file" name="images" id="" class="input_file" @change="uploadTreatImage">
 
+                                <span class="error text-danger fs-13" v-if="IsMedImage"> {{ $t('offer.imgPlc') }} </span>
                             </div>
                         </div>
 
@@ -168,6 +181,7 @@
                                     <i class="fa-solid fa-asterisk text-danger fs-10"></i>
                                 </label>
                                 <InputText type="text" v-model="namesAr[index]" class="default_input w-100" :placeholder="$t('offer.arPlc')" />
+                                <span class="error text-danger fs-13" v-if="isNamedAr[index]"> {{ $t('offer.arPlc') }} </span>
                             </div>
                         </div>
 
@@ -178,6 +192,8 @@
                                     <i class="fa-solid fa-asterisk text-danger fs-10"></i>
                                 </label>
                                 <InputText type="text" v-model="namesEn[index]" class="default_input w-100" :placeholder="$t('offer.enPlc')" />
+                                <span class="error text-danger fs-13" v-if="isNamedEn[index]"> {{ $t('offer.enPlc') }} </span>
+
                             </div>
                         </div>
                 
@@ -195,6 +211,9 @@
 
                                 <!-- input file  -->
                                 <input type="file" name="images" id="" ref="file_name" class="input_file" @change="uploadTreatImage1(index)">
+
+                                <!-- validations  -->
+                                <span class="error text-danger fs-13" v-if="isFiles[index]"> {{ $t('offer.imgPlc') }} </span>
 
                                 <button class="btn showImage" type="button" @click="visible[index]=true" v-if="isEdit">
                                     <i class="fas fa-eye"></i>
@@ -223,7 +242,7 @@
         <!-- التعليمات ولارشادات  -->
         <section class="main-bg pt-3 pb-3 mx-5 mb-3">
             <h6 class="sec-color fs-17 fw-6 px-5 mb-2"> {{ $t('treat.insts') }} </h6>
-            <form class="mx-5 mt-3" @submit.prevent="sendSessionsInfo">
+            <form class="mx-5 mt-3" >
 
                 <div class="form-group">
                     <label for="" class="blackColor d-block fw-6 mb-2 fs-14">
@@ -232,6 +251,8 @@
                     </label>
 
                     <textarea name="" v-model="public_instructions" @input="handleMainSub" class="form-control" id="" cols="30" rows="7" :placeholder="$t('treat.insts')"></textarea>
+
+                    <span class="error text-danger fs-13" v-if="isPublicInst"> {{ $t('treat.insts') }} </span>
                 </div>
             </form>
         </section>
@@ -239,7 +260,7 @@
         <!-- السعر  -->
         <section class="main-bg pt-3 pb-3 mx-5 mb-3">
             <h6 class="sec-color fs-17 fw-6 px-5 mb-2"> {{ $t('offer.price') }} </h6>
-            <form class="mx-5 mt-3" @submit.prevent="sendSessionsInfo">
+            <form class="mx-5 mt-3">
 
                 <div class="row">
                     <div class="col-md-6">
@@ -248,7 +269,9 @@
                                 {{ $t('offer.price') }} 
                                 <i class="fa-solid fa-asterisk text-danger fs-10"></i>
                             </label>
-                            <input type="number" v-model="price" @input="handleMainSub" class="form-control default_input w-100" :placeholder="$t('offer.pricePlc')" >
+                            <input type="number" min="1" v-model="price" @input="handleMainSub" class="form-control default_input w-100" :placeholder="$t('offer.pricePlc')" >
+                            <span class="error text-danger fs-13" v-if="isPriced"> {{ $t('offer.pricePlc') }} </span>
+
                         </div>
                     </div>
                 </div>
@@ -283,9 +306,11 @@
             </section>
         </section>
 
+        <!-- add  -->
         <div class=" pt-3 pb-3 mx-5 mb-3" @click.prevent="sendOffer" v-if="!$route.fullPath.includes('editPriceOffer')">
             <button class="btn w-25 main_btn " :disabled="disabled"> {{ $t('auth.confirm') }} </button>
         </div>
+        <!-- edit  -->
         <div class=" pt-3 pb-3 mx-5 mb-3" @click.prevent="updateOffer" v-if="$route.fullPath.includes('editPriceOffer')">
             <button class="btn w-25 main_btn " :disabled="disabled_update"> {{ $t('auth.confirm') }} </button>
         </div>
@@ -383,13 +408,13 @@ export default {
             items : [],
             durationDays : '' ,
 
-            nameAr : null,
-            nameEn : null,
+            nameAr : '',
+            nameEn : '',
 
             namesAr : [],
             namesEn : [],
-            numDisabled : true,
-            disabled : true,
+            numDisabled : false,
+            disabled : false,
 
             single_med_image : null,
             med_images : [],
@@ -411,23 +436,56 @@ export default {
             appedended_deleted_images : [],
 
             isEdit : false,
-            isShown : true
+            isShown : true,
+
+            // validations 
+            isNum : false,
+            isDays : false,
+            isTyped : [],
+            isSpec  : [],
+            isSession : [],
+            isInst : [],
+            isDuration : [],
+            isMedAr : '',
+            isMedEn : '',
+            IsMedImage : '',
+            isNamedAr : [],
+            isNamedEn : [],
+            isFiles : [],
+            isPublicInst : false,
+            isPriced : false
         }
     },
-    computed:{
-        ...mapGetters('setting',['countries', 'specs']),
-    },
-    watch:{       
+    // computed:{
+    // },
+    watch:{   
+        selectedType: {
+            handler(newVal) {
+                // This function will be called whenever selectedType changes
+                console.log('Selected Type changed:', newVal);
+                // Add your logic here to respond to changes
+            },
+            deep: true, // Use deep: true if selectedType is an array or object
+        },
+        sessionName: {
+            handler(newVal) {
+                // This function will be called whenever selectedType changes
+                console.log('Selected Type changed:', newVal);
+                // Add your logic here to respond to changes
+            },
+            deep: true, // Use deep: true if selectedType is an array or object
+        },
+            
     },
    
     methods:{
         ...mapActions('setting',['getCountries']),
         handleValid(){
-            if( this.selectedNum == '' || this.durationDays == '' ){
-                this.numDisabled = true ;
-            }else if( this.selectedNum != '' || this.durationDays != '' ){
-                this.numDisabled = false ;
-            } 
+            // if( this.selectedNum == '' || this.durationDays == '' ){
+            //     this.numDisabled = true ;
+            // }else if( this.selectedNum != '' || this.durationDays != '' ){
+            //     this.numDisabled = false ;
+            // } 
         },
         handleMainSub(){
             if( this.public_instructions == '' || this.price == '' ){
@@ -437,8 +495,22 @@ export default {
             }
         },
         sendSessionsInfo(){
-            console.log(this.selectedNum)
-            this.showSessionsNum = true ;
+            if( this.selectedNum.name == 0 ){
+                this.isNum = true ;
+            }else{
+                this.isNum = false ;
+            }
+
+            if( this.durationDays == '' ){
+                this.isDays = true ;
+            }else{
+                this.isDays = false ;
+            }
+
+            if( this.isNum == false && this.isDays == false ){
+                this.showSessionsNum = true ;
+            }
+            
         },
         uploadTreatImage(e){
             let file = e.target.files[0];
@@ -479,6 +551,96 @@ export default {
 
         // send offer main method 
         async sendOffer(){
+            for( let i = 0 ; i < this.selectedNum.name ; i++ ){
+                if( this.selectedType[i] == null){
+                     this.isTyped[i] = true ;
+                }else{
+                    this.isTyped[i] = false ;
+                }
+                if( this.selectedSpec[i] == null){
+                     this.isSpec[i] = true ;
+                }else{
+                    this.isSpec[i] = false ;
+                }
+                if( this.sessionName[i] == null || this.sessionName[i] == ''){
+                     this.isSession[i] = true ;
+                }else{
+                    this.isSession[i] = false ;
+                }
+                if( this.sessionDuration[i] == null || this.sessionDuration[i] == '' ){
+                    this.isDuration[i] = true ;
+                }else{
+                    this.isDuration[i] = false ;
+                }
+                if( this.instructions[i] == null || this.instructions[i] == '' ){
+                    this.isInst[i] = true ;
+                }else{
+                    this.isInst[i] = false ;
+                }
+
+
+                if( this.nameAr == '' ){
+                    this.isMedAr = true ;
+                }else{
+                    this.isMedAr = false ;
+                }
+                if( this.nameEn == '' ){
+                    this.isMedEn = true ;
+                }else{
+                    this.isMedEn = false ;
+                }
+                if( this.fileName == '' ){
+                    this.IsMedImage = true ;
+                }else{
+                    this.IsMedImage = false ;
+                }
+
+                if( this.public_instructions == '' ){
+                    this.isPublicInst = true ;
+                }else{
+                    this.isPublicInst = false ;
+                }
+
+                
+                if( this.price == '' ){
+                    this.isPriced = true ;
+                }else{
+                    this.isPriced = false ;
+                }
+
+
+
+                for( let i = 0 ; i < this.items.length ; i++ ){
+                    if(this.namesAr[i] == null || this.namesAr[i] == ''){
+                        this.isNamedAr[i] = true ;
+                    }else{
+                        this.isNamedAr[i] = false ;
+                    }
+
+                    if(this.namesEn[i] == null || this.namesEn[i] == ''){
+                        this.isNamedEn[i] = true ;
+                    }else{
+                        this.isNamedEn[i] = false ;
+                    }
+                    // files 
+                    if( this.filesName[i] == null || this.filesName[i] == '' ){
+                        this.isFiles[i] = true ;
+                    }else{
+                        this.isFiles[i] = false ;
+                    }
+                   
+                }
+                
+                
+            }
+
+            if( this.isTypedFalse && this.isSpecFalse && this.isSessionFalse && this.isDurationFalse && this.isInstFalse && this.isNamedArFalse && this.isNamedEnFalse && this.isFilesFalse && this.isMedAr == false && this.isMedEn == false && this.IsMedImage == false && this.isPublicInst == false && this.isPriced == false){
+                this.mainSend(); 
+            }
+        },
+
+        // main send 
+        async mainSend(){
             this.disabled = true ;
             const fd = new FormData(this.$refs.medicines);
             fd.append('id', this.$route.params.id);
@@ -502,13 +664,16 @@ export default {
 
             // add sessions 
             for( let i = 0 ; i < this.selectedNum.name ; i++ ){
-                this.sessions_appended.push({
-                    name : this.sessionName[i],
-                    type : this.selectedType[i].name ,
-                    duration : this.sessionDuration[i],
-                    specialization : this.selectedSpec[i].id  ,
-                    instructions : this.instructions[i]
-                })  
+                if( this.selectedType[i] != null && this.selectedSpec[i] != null ){
+                    this.sessions_appended.push({
+                        name : this.sessionName[i],
+                        type : this.selectedType[i].name ,
+                        duration : this.sessionDuration[i],
+                        specialization : this.selectedSpec[i].id  ,
+                        instructions : this.instructions[i]
+                    })  
+                }
+                
             }
             // append sessions
             fd.append('sessions', JSON.stringify(this.sessions_appended));
@@ -696,6 +861,37 @@ export default {
             } )
         }
     },
+    computed:{
+        isFilesFalse(){
+            return this.isFiles.every( value => value == false )
+        },
+        isNamedArFalse(){
+            return this.isNamedAr.every( value => value == false )
+        },
+        isNamedEnFalse(){
+            return this.isNamedEn.every( value => value == false )
+        },
+        isTypedFalse(){
+            return this.isTyped.every( value => value == false )
+        },
+        
+        isSpecFalse(){
+            return this.isSpec.every( value => value == false )
+        },
+        isSessionFalse(){
+            return this.isSession.every( value => value == false )
+        },
+        isDurationFalse(){
+            return this.isDuration.every( value => value == false )
+        },
+        isInstFalse(){
+            return this.isInst.every( value => value == false )
+        },
+
+        ...mapGetters('setting',['countries', 'specs']),
+
+
+    },
     components:{
         Dropdown,
         InputNumber,
@@ -716,8 +912,9 @@ export default {
 </script>
 
 <style>
+    
     .sessionNum .p-dropdown .p-dropdown-label.p-placeholder{
-        color: #000 !important;
+        color: #6c757d !important;
         font-size: 15px !important;
         font-weight: 600 !important;
     }

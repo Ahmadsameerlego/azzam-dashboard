@@ -444,7 +444,8 @@
             :class="{
               textDanger:
                 session.acceptRejectButton ||
-                (session.centerRejectDelay && session.isDelayed),
+                session.centerRejectDelay ||
+                session.isDelayed,
             }"
             :ref="sessionStatustext + [index]"
           >
@@ -523,7 +524,9 @@
                 session.id,
                 session.type,
                 session.duration,
-                session.specialization
+                session.specialization,
+                session.doctors,
+                session.members
               )
             "
           >
@@ -672,8 +675,9 @@
                             session.id,
                             session.type,
                             session.duration,
-                            doctor.specialization,
-                            session.doctors
+                            session.specialization,
+                            session.doctors,
+                            session.members
                           )
                         "
                       >
@@ -755,7 +759,16 @@
       >
         <button
           class="main-btn lg"
-          @click="getSessionId(session.id, session.type, session.duration)"
+          @click="
+            getSessionId(
+              session.id,
+              session.type,
+              session.duration,
+              session.specialization,
+              session.doctors,
+              session.members
+            )
+          "
         >
           قبول التاجيل
         </button>
@@ -771,8 +784,8 @@
   </section>
 
   <!-- send offer  -->
-  <div class="send_offer mx-5 mb-4" v-if="treat.status == 'new'">
-    <router-link :to="'/priceOffer/' + treat.id">
+  <div class="send_offer mx-5 mb-4" v-if="treat.status == 'new'" >
+    <router-link :to="'/priceOffer/' + treat.id" @click="storePatient">
       {{ $t("treat.sendOffer") }}
     </router-link>
   </div>
@@ -867,6 +880,7 @@
   </Dialog>
 </template>
 
+
 <script>
 import axios from "axios";
 import Skeleton from "primevue/skeleton";
@@ -951,7 +965,14 @@ export default {
         });
       this.disabled = false;
     },
-    getSessionId(id, type, duration, specialization, sessionDoctors) {
+    getSessionId(
+      id,
+      type,
+      duration,
+      specialization,
+      sessionDoctors,
+      sessionMembers
+    ) {
       this.getdoctor = true;
       this.sessionId = id;
       this.sessionType = type;
@@ -961,6 +982,10 @@ export default {
       this.doctors = sessionDoctors;
 
       this.selectedDoctor = sessionDoctors;
+
+      this.Patients = sessionMembers;
+
+      this.selectedPatient = sessionMembers;
     },
     // get treatment
     async getTreatment() {
@@ -992,9 +1017,9 @@ export default {
     async getDoctors() {
       await axios
         .get(
-          `/available-doctors?date=${moment(this.date).format(
-            "YYYY-MM-DD"
-          )}&startTime=${this.time.toLocaleTimeString([], {
+          `/available-doctors?id=${this.sessionId}&date=${moment(
+            this.date
+          ).format("YYYY-MM-DD")}&startTime=${this.time.toLocaleTimeString([], {
             hour: "2-digit",
             minute: "2-digit",
           })}&duration=${this.duration}&specialization=${this.specialization}`,
@@ -1007,8 +1032,7 @@ export default {
         .then((res) => {
           if (res.data.key === "success") {
             console.log(res.data.data);
-            // this.doctors = [],
-            // this.selectedDoctor = null
+            this.selectedDoctor = null;
             this.doctors = res.data.data;
           }
         })
@@ -1029,7 +1053,11 @@ export default {
         .then((res) => {
           if (res.data.key === "success") {
             console.log(res.data.data);
-            this.Patients = res.data.data;
+            if(!this.Patients.length){
+
+              this.Patients = res.data.data;
+            }
+            
           }
         })
         .catch((err) => {
@@ -1342,7 +1370,7 @@ export default {
 }
 .p-inputtext {
   font-family: "myfont", sans-serif !important;
-  // margin-top: 2px !important;
+  margin-top: 2px !important;
 }
 .p-multiselect {
   width: 100%;

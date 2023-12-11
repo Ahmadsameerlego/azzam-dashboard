@@ -16,7 +16,7 @@
       <form @submit.prevent="editProfile" ref="profileform">
         <!-- profile pic  -->
         <section class="profile_pic mx-auto d-flex mt-4">
-          <input type="file" name="avatar" @change="uploadProfilePic" />
+          <input type="file" class="uploadInput" name="avatar" @change="uploadProfilePic" />
           <!-- default image  -->
           <img :src="azamImg" class="profile_image" alt="" />
           <!-- edit  -->
@@ -35,6 +35,10 @@
             class="default_input w-100"
             :placeholder="$t('auth.namePlc')"
           />
+
+          <!-- validation message  -->
+          <div class="error text-danger fs-14"  v-if="showName"> {{ $t('auth.namePlc') }}  </div>
+
         </div>
 
         <div class="form-group mb-3 position-relative">
@@ -72,6 +76,9 @@
               </div>
             </template>
           </Dropdown>
+
+          <div class="error text-danger fs-14"  v-if="showrError" > {{ $t('common.phoneValid') }} </div>
+
         </div>
 
         <div class="form-group mb-3">
@@ -84,6 +91,10 @@
             class="default_input w-100"
             :placeholder="$t('auth.emailPlc')"
           />
+
+          <span class="error text-danger fs-14" v-if="showEmail">
+              {{ $t('auth.emailPlc') }}
+          </span>
         </div>
 
         <div class="form-group mb-3">
@@ -98,6 +109,10 @@
             :placeholder="specialPlace"
             class="default_input w-100 w-full md:w-14rem"
           />
+
+          <span class="error text-danger fs-14" v-if="showSpecError">
+              يرجى اختيار اخصائي
+          </span>
         </div>
 
         <div class="form-group mb-3">
@@ -112,6 +127,10 @@
             :placeholder="cityPlace"
             class="default_input w-100 w-full md:w-14rem"
           />
+
+          <span class="error text-danger fs-14" v-if="showCityError">
+              يرجى اختيار مدينة
+          </span>
         </div>
 
         <!-- google map  -->
@@ -126,6 +145,10 @@
             class="default_input w-100"
             :placeholder="$t('auth.addressPlc')"
           />
+
+          <span class="error text-danger fs-14" v-if="showAddressError">
+              {{ $t('auth.addressPlc') }}
+          </span>
         </div>
 
         <div class="form-group default_input mb-5">
@@ -139,6 +162,9 @@
             class="form-control w-100"
             :placeholder="$t('auth.numberPlc')"
           />
+          <span class="error text-danger fs-14" v-if="showCom">
+              {{ $t('auth.numberPlc') }}
+          </span>
         </div>
 
         <div class="form-group mb-3">
@@ -151,6 +177,10 @@
             class="default_input w-100"
             :placeholder="$t('auth.ownerPlc')"
           />
+
+          <span class="error text-danger fs" v-if="showOwn">
+              {{ $t('auth.ownerPlc') }}
+          </span>
         </div>
 
         <div class="form-group mb-3">
@@ -163,6 +193,10 @@
             class="default_input w-100"
             :placeholder="$t('auth.bankPlc')"
           />
+          <span class="error text-danger fs" v-if="showBank">
+              {{ $t('auth.bankPlc') }}
+          </span>
+
         </div>
 
         <div class="form-group mb-3">
@@ -175,6 +209,10 @@
             class="default_input w-100"
             :placeholder="$t('auth.ibanPlc')"
           />
+
+          <span class="error text-danger fs" v-if="showIban">
+              {{ $t('auth.ibanPlc') }}
+          </span>
         </div>
 
         <!-- upload images  -->
@@ -383,11 +421,24 @@ export default {
       profile: null,
       countries: [],
       selectedCountry: {
-        id: "64ae5989a2f2fd0c04737761",
-        name: "السعودية",
-        image:
-          "https://azzam.4hoste.com/assets/uploads/country/image941689583177874.png",
-        code: "+966",
+        "id": "64ae5989a2f2fd0c04737761",
+        "name": "السعودية",
+        "image": "https://azzam.4hoste.com/assets/uploads/country/image941689583177874.png",
+        "code": "+966",
+        "cities": [
+            {
+                "id": "64b3fad223389f0f2071ee4f",
+                "name": "جدة",
+                "image": "",
+                "code": ""
+            },
+            {
+                "id": "64b4fd5d5e73dbfc515475f0",
+                "name": "الرياض",
+                "image": "",
+                "code": ""
+            }
+        ]
       },
       selectedSpecial: null,
       specialPlace: "",
@@ -407,6 +458,19 @@ export default {
       sendedImgs: [],
       cityPlace: "",
       code: "",
+
+
+      showSpecError : false,
+      showCityError : false,
+      showAddressError : false,
+      showIban : false,
+      showrError : false,
+      showEmail : false,
+      showCom : false,
+      showOwn : false,
+      showBank : false,
+      showName : false,
+
     }
   },
   components: {
@@ -415,6 +479,58 @@ export default {
     Dialog,
     // InputNumber,
     Toast,
+  },
+  watch:{
+    phone(){
+        let inputString = this.phone.toString();
+        if( this.phone === '' || inputString.length < 9 ){
+            this.showrError = true ; 
+        }else if(this.phone !== '' ){
+            this.showrError = false;
+        }
+    },
+    email(){
+        if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.email)) {
+            this.showEmail = false ;
+        } else {
+            this.showEmail = true ;
+        }
+    },
+    commercialNumber(){
+        if( this.commercialNumber === ''  ){
+            this.showCom = true ; 
+        }else if(this.commercialNumber !== '' ){
+            this.showCom = false;
+        }
+    },
+    ownerName(){
+        if( this.ownerName === ''  ){
+            this.showOwn = true ; 
+        }else if(this.ownerName !== '' ){
+            this.showOwn = false;
+        }
+    },
+    bankName(){
+        if( this.bankName === ''  ){
+            this.showBank = true ; 
+        }else if(this.bankName !== '' ){
+            this.showBank = false;
+        }
+    },
+    iban(){
+        if( this.iban === ''  ){
+            this.showIban = true ; 
+        }else if(this.iban !== '' ){
+            this.showIban = false;
+        }
+    },
+    name(){
+        if( this.name === ''  ){
+            this.showName = true ; 
+        }else if(this.name !== '' ){
+            this.showName = false;
+        }
+    },
   },
   methods: {
     // send code
@@ -528,6 +644,75 @@ export default {
       this.azamImg = URL.createObjectURL(file);
     },
     async editProfile() {
+
+      let inputString = this.phone.toString();
+            if( this.phone === '' || inputString.length < 9  ){
+                this.showrError = true ; 
+            }
+            else if(this.phone !== '' ){
+                this.showrError = false;
+            }
+            // name 
+            if( this.name === ''  ){
+                this.showName = true ; 
+            }else if(this.name !== '' ){
+                // this.mainSubmitForm();   
+                this.showName = false;
+            }
+            // email 
+            if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.email)) {
+                this.showEmail = false ;
+            } else {
+                this.showEmail = true ;
+            }
+            // spec 
+            if( this.specials.length == 0 ){
+                this.showSpecError = true ;
+            } else{
+                this.showSpecError = false ;
+            }
+            // city 
+            if( this.selectedCity == null ){
+                this.showCityError = true ;
+            }else{
+                this.showCityError = false ;
+            }
+            // address 
+            if( this.address == '' ){
+                this.showAddressError = true ;
+            }else{
+                this.showAddressError = false ;   
+            }
+            // commercial 
+            if( this.commercialNumber == '' ){
+                this.showCom = true ;
+            }else{
+                this.showCom = false ;
+            }
+            if( this.ownerName == '' ){
+                this.showOwn = true ;
+            }else{
+                this.showOwn = false ;
+            }
+            if( this.bankName == '' ){
+                this.showBank = true
+            }else{
+                this.showBank = false ;
+            }
+            if( this.iban == '' ){
+                this.showIban = true ;
+            }else{
+                this.showIban = false ;
+            }
+
+
+            if( this.showrError == false && this.showName == false && this.showIban == false && this.showBank == false && this.showOwn == false && this.showCom == false && this.showAddressError == false && this.showCityError == false && this.showSpecError == false && this.showEmail == false){
+                this.mainSubmitForm();
+            }
+
+    },
+
+    async mainSubmitForm(){
       this.disabled = true;
 
       const fd = new FormData(this.$refs.profileform);
@@ -581,6 +766,7 @@ export default {
           });
         });
       this.disabled = false;
+
     },
 
     chooseCountry() {
@@ -643,8 +829,12 @@ export default {
             this.address = res.data.data.addressAr;
 
             this.selectedCountry.code = res.data.data.countryCode;
-            document.querySelector(".p-dropdown-label").innerHTML =
-              res.data.data.countryCode;
+            // document.querySelector(".p-dropdown-label").innerHTML =
+            //   res.data.data.countryCode;
+            //   `
+            // <img src="${this.selectedCountry.image}" class="country_image">
+            // ${this.selectedCountry.code}
+            // ` ;
             this.selectedCity = {
               id: res.data.data.cityId,
               name: res.data.data.cityName,
@@ -744,6 +934,12 @@ export default {
     this.getSpecialists();
     this.chooseCountry();
     // this.getCities();
+
+    document.querySelector(".p-dropdown-label").innerHTML =
+          `
+            <img src="${this.selectedCountry.image}" class="country_image">
+            ${this.selectedCountry.code}
+            ` ;
   },
 };
 </script>

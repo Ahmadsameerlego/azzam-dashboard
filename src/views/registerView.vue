@@ -33,7 +33,7 @@
                     <InputText type="text"  v-model="name" name="name" class="default_input w-100" :placeholder="$t('auth.namePlc')" @blur="nameTouched=true" />
 
                     <!-- validation message  -->
-                    <div class="error text-danger fs-14"  v-if="showName"> يرجى ملئ هذا الحقل  </div>
+                    <div class="error text-danger fs-14"  v-if="showName"> {{ $t('auth.namePlc') }}  </div>
                 </div>
 
                 <!-- phone  -->
@@ -46,7 +46,7 @@
                         <input type="number"   v-model="phone" name="phone" class="default_input form-control w-100" :placeholder="$t('auth.phonePlc')" @blur="phoneTouched=true">
 
                         <!-- country code  -->
-                        <Dropdown v-model="selectedCountry" :options="countries" optionLabel="code"  @change="chooseCountry"  class="default_input country_code  w-full md:w-14rem" />
+                        <Dropdown v-model="selectedCountry" :options="countries" optionLabel="name"  @change="chooseCountry"  class="default_input country_code  w-full md:w-14rem" />
 
                     </div>
                     
@@ -98,6 +98,9 @@
                     </label>
                     <InputText type="text" v-model="address"  @focus="googleMap=true" class="default_input w-100" :placeholder="$t('auth.addressPlc')" />
                     
+                    <span class="error text-danger fs-14" v-if="showAddressError">
+                        يرجى ادخال عنوانك
+                    </span>
                 </div>
 
                 <div class="form-group mb-3 ">
@@ -137,6 +140,9 @@
                             {{ $t('auth.iban') }} 
                     </label>
                     <InputText type="text" v-model="iban" name="iban" class="default_input w-100" :placeholder="$t('auth.ibanPlc')" />
+                    <span class="error text-danger fs" v-if="showIban">
+                        هذا الحقل مطلوب
+                    </span>
                 </div>
 
 
@@ -303,7 +309,8 @@ export default {
 
             showSpecError : false,
             showCityError : false,
-
+            showAddressError : false,
+            showIban : false
         }
     },
     validations(){
@@ -348,6 +355,13 @@ export default {
                 this.showBank = true ; 
             }else if(this.bankName !== '' ){
                 this.showBank = false;
+            }
+        },
+        iban(){
+            if( this.iban === ''  ){
+                this.showIban = true ; 
+            }else if(this.iban !== '' ){
+                this.showIban = false;
             }
         },
         name(){
@@ -423,20 +437,50 @@ export default {
             } else {
                 this.showEmail = true ;
             }
-
+            // spec 
             if( this.selectedSpec.length == 0 ){
                 this.showSpecError = true ;
             } else{
                 this.showSpecError = false ;
             }
-
+            // city 
             if( this.selectedCity == null ){
                 this.showCityError = true ;
             }else{
                 this.showCityError = false ;
             }
+            // address 
+            if( this.address == '' ){
+                this.showAddressError = true ;
+            }else{
+                this.showAddressError = false ;   
+            }
+            // commercial 
+            if( this.commercialNumber == '' ){
+                this.showCom = true ;
+            }else{
+                this.showCom = false ;
+            }
+            if( this.ownerName == '' ){
+                this.showOwn = true ;
+            }else{
+                this.showOwn = false ;
+            }
+            if( this.bankName == '' ){
+                this.showBank = true
+            }else{
+                this.showBank = false ;
+            }
+            if( this.iban == '' ){
+                this.showIban = true ;
+            }else{
+                this.showIban = false ;
+            }
 
 
+            if( this.showrError == false && this.showName == false && this.showIban == false && this.showBank == false && this.showOwn == false && this.showCom == false && this.showAddressError == false && this.showCityError == false && this.showSpecError == false && this.showEmail == false){
+                this.mainSubmitForm();
+            }
             
             
             
@@ -474,7 +518,10 @@ export default {
                 } )
         },
         chooseCountry(){
-            document.querySelector('.p-dropdown-label').innerHTML = this.selectedCountry.code ;
+            document.querySelector('.p-dropdown-label').innerHTML = `
+            <img src="${this.selectedCountry.image}" class="country_image">
+            ${this.selectedCountry.code}
+            ` ; 
             this.getCities()
         },
 
@@ -580,7 +627,10 @@ export default {
         this.geolocation();
         this.getCountries();
         this.getCities();
-        document.querySelector('.p-dropdown-label').innerHTML = this.selectedCountry.code ;
+        document.querySelector('.p-dropdown-label').innerHTML = `
+            <img src="${this.selectedCountry.image}" class="country_image">
+            ${this.selectedCountry.code}
+            ` ;
     }
 }
 </script>

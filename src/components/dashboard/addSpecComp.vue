@@ -19,6 +19,8 @@
                 <span class="edit">
                     <i class="fa-solid fa-pen-to-square"></i>
                 </span>
+
+                <span class="error text-danger fs-13" v-if="isAvatar"> يرجى اختيار صورة </span>
             </section>
 
             <!-- inputs  -->
@@ -32,6 +34,7 @@
                         </label>
                         <InputText type="text" v-model="name" name="name" class="default_input w-100" :placeholder="$t('common.namePlace')" />
 
+                        <span class="error text-danger fs-13" v-if="isName"> يرجى ادخال الاسم </span>
                     </div>
                 </div>
 
@@ -44,21 +47,25 @@
 
                         <Dropdown v-model="selectedSpec" :options="specs" optionLabel="name" :placeholder="$t('common.specPlc')" class="default_input w-100 w-full md:w-14rem" />
 
+                        <span class="error text-danger fs-13" v-if="isSpec"> يرجى اختيار اخصائي </span>
                     </div>
                 </div>
 
                 <div class="col-md-6 mb-3">
                     <div class="phone form-group position-relative">
-                        <label for="" class="d-block fw-6 mb-2">
-                             {{ $t('common.phone')  }} 
-                             <i class="fa-solid fa-star-of-life text-danger fs-10"></i>
-                        </label>
+                        <div class="position-relative">
+                            <label for="" class="d-block fw-6 mb-2">
+                                {{ $t('common.phone')  }} 
+                                <i class="fa-solid fa-star-of-life text-danger fs-10"></i>
+                            </label>
 
-                        <InputText type="number" v-model="phone" name="phone" class="default_input w-100" :placeholder="$t('common.phonePlace')" @input="handleChange('isPhoneChanged')" />
+                            <InputText type="number" v-model="phone" name="phone" class="default_input w-100" :placeholder="$t('common.phonePlace')" @input="handleChange('isPhoneChanged')" />
 
-                        <!-- country code  -->
-                        <Dropdown v-model="selectedCountry" @change="chooseCountry" :options="countries" optionLabel="code" :placeholder="$t('common.countryCode')" class="default_input country_code w-100 w-full md:w-14rem" />
+                            <!-- country code  -->
+                            <Dropdown v-model="selectedCountry" @change="chooseCountry" :options="countries" optionLabel="code" :placeholder="$t('common.countryCode')" class="default_input country_code w-100 w-full md:w-14rem" />
 
+                        </div>
+                        <span class="error text-danger fs-13" v-if="isPhone"> يجب ان يكون رقم الهاتف اكثر من 9 أرقام </span>
                     </div>
                 </div>
 
@@ -68,8 +75,9 @@
                              {{  $t('common.email')  }} 
                              <i class="fa-solid fa-star-of-life text-danger fs-10"></i>
                         </label>
-                        <InputText type="email" v-model="email" name="email" class="default_input w-100" :placeholder="$t('common.emailPlace')" required @input="handleChange('isMailChanged')"/>
+                        <InputText type="email" required v-model="email" name="email" class="default_input w-100" :placeholder="$t('common.emailPlace')"  @input="handleChange('isMailChanged')"/>
 
+                        <span class="error text-danger fs-13" v-if="isEmail"> يرجى ادخال صيغة بريد الكتروني صالحة </span>
                     </div>
                 </div>
 
@@ -79,10 +87,12 @@
                              {{  $t('common.conPrice')  }} 
                              <i class="fa-solid fa-star-of-life text-danger fs-10"></i>
                         </label>
-                        <InputNumber v-model="price" name="price" inputId="integeronly" class="default_input w-100" :placeholder="$t('common.pricePlace')" />
+                        <!-- <InputNumber v-model="price" name="price" inputId="integeronly" class="default_input w-100" :placeholder="$t('common.pricePlace')" /> -->
 
+                        <input type="number"  class="form-control default_input"  v-model="price" :placeholder="$t('common.pricePlace')">
+                        <span class="error text-danger fs-13" v-if="isPrice"> يرجى ادخال السعر </span>
                     </div>
-                </div>
+                </div>  
 
                 <div class="col-md-6 mb-3">
                     <div class="form-group">
@@ -95,6 +105,7 @@
                             v-model="time" 
                             min="15"
                             max="60"
+                            step="15"
                             pattern="\d*"
                             name="time" 
                             class="form-control default_input w-100" 
@@ -103,7 +114,8 @@
                         >
                         <!-- <InputNumber v-model="time" name="time" inputId="integeronly" class="default_input w-100" :placeholder="$t('common.durationPlace')" /> -->
 
-                    </div>
+                        <span class="error text-danger fs-13" v-if="isTime"> يرجى ادخال مدة الاستشارة </span>
+                    </div>  
                 </div>
 
                 <div class="col-md-12 mb-3">
@@ -113,6 +125,9 @@
                              <i class="fa-solid fa-star-of-life text-danger fs-10"></i>
                         </label>
                         <Textarea v-model="descriptionAr" name="descriptionAr" autoResize rows="5" class="default_input default_textarea w-100" cols="30" :placeholder="$t('common.bio_ar')" />
+                        <span class="error text-danger fs-13" v-if="isAr">
+                            يرجى ادخال الوصف بالعربية
+                        </span>
                     </div>
                 </div>
 
@@ -123,6 +138,10 @@
                              <i class="fa-solid fa-star-of-life text-danger fs-10"></i>
                         </label>
                         <Textarea v-model="descriptionEn" name="descriptionEn" autoResize rows="5" class="default_input default_textarea w-100" cols="30" :placeholder="$t('common.bio_en')" />
+                        
+                        <span class="error text-danger fs-13" v-if="isEn">
+                            يرجى ادخال الوصف بالإنجليزية
+                        </span>
                     </div>
                 </div>
 
@@ -187,6 +206,7 @@
                     </div>
                 </div>
 
+                <span class="error text-danger fs-13" v-if="isAppoint"> يرجى ادخال المواعيد </span>
             </div>
 
 
@@ -200,7 +220,7 @@
 
 
             <div class="d-flex justify-content-center align-items-center mt-3">
-                <button class="btn main_btn w-50 mx-auo pt-2 pb-2" :disabled="disabled2" @click.prevent="addDoctor">
+                <button class="btn main_btn w-50 mx-auo pt-2 pb-2"  @click.prevent="addDoctor">
                      <span v-if="!disabled">
                         {{ $t('common.add') }} 
                      </span>
@@ -314,7 +334,7 @@
 <script>
 import InputText from 'primevue/inputtext';
 import Dropdown from 'primevue/dropdown';
-import InputNumber from 'primevue/inputnumber';
+// import InputNumber from 'primevue/inputnumber';
 import Textarea from 'primevue/textarea';
 import { mapActions, mapGetters } from 'vuex';
 import Calendar from 'primevue/calendar';
@@ -329,7 +349,7 @@ export default {
             disabled : false ,
             disabled2 : true ,
             name : null,
-            phone : null ,
+            phone : '' ,
             isPhoneChanged : false ,
             email : null,
             isMailChanged : false ,
@@ -348,37 +368,37 @@ export default {
                 {
                     id : 1,
                     name : 'sat',
-                    title : 'السبت'
+                    title : this.$t('days.sat')
                 },
                 {
                     id : 2,
                     name : 'sun',
-                    title : 'الأحد'
+                    title : this.$t('days.sun')
                 },
                 {
                     id : 3,
                     name : 'mon',
-                    title : 'الاثنين'
+                    title : this.$t('days.mun')
                 },
                 {
                     id : 4,
                     name : 'tue',
-                    title : 'الثلاثاء'
+                    title : this.$t('days.tue')
                 },
                 {
                     id : 5,
                     name : 'wed',
-                    title : 'الأربعاء'
+                    title : this.$t('days.wed')
                 },
                 {
                     id : 6,
                     name : 'thu',
-                    title : 'الخميس'
+                    title :this.$t('days.thu')
                 },
                 {
                     id : 7,
                     name : 'fri',
-                    title : 'الجمعة'
+                    title : this.$t('days.fri')
                 },
             ],
             selectedDay : {
@@ -398,7 +418,6 @@ export default {
             ],
             dates : [],
 
-            
             minlenght : 15,
             maxlength : 60,
             addDoc : false,
@@ -409,7 +428,19 @@ export default {
             deleteDisabled : [],
 
             deleteApp : [],
-            avatar_image : null
+            avatar_image : null,
+                
+            // validations 
+            isName : false,
+            isPhone : false,
+            isEmail : false,
+            isSpec : false,
+            isPrice : false,
+            isTime : false,
+            isAr : false,
+            isEn : false,
+            isAppoint : false,
+            isAvatar: false
 
 
         }
@@ -440,7 +471,78 @@ export default {
                 }
             }
             }
+        },
+
+        // validations 
+        name(){
+            if( this.name == '' ){
+                this.isName = true ;
+            }else{
+                this.isName = false ;
+            }
+        },
+        phone(){
+            let inputString = this.phone.toString();
+            if( inputString.length < 9 ){
+                this.isPhone = true ;
+            }else{
+                this.isPhone = false ;
+            }
         }
+        ,
+        email(){
+            if( /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.email) ){
+                this.isEmail = false ;
+            }else{
+                this.isEmail = true ;
+            }
+        },
+        selectedSpec(){
+            if( this.selectedSpec == null ){
+                this.isSpec = true ;
+            }else{
+                this.isSpec = false ;
+            }
+        },
+        price(){
+            if( this.price == '' ){
+                this.isPrice = true ;
+            }else{
+                this.isPrice = false ;
+            }
+        },
+        time(){
+            if( this.time == '' ){
+                this.isTime = true ;
+            }else{
+                this.isTime = false ;
+            }
+        },
+        descriptionAr(){
+            if( this.descriptionAr == '' ){
+                this.isAr = true ;
+            }else{
+                this.isAr = false ;
+            }
+        },
+        descriptionEn(){
+            if( this.descriptionEn == '' ){
+                this.isEn = true ;
+            }else{
+                this.isEn = false ;
+            }
+        },
+        avatar_image(){
+            if( this.avatar_image == ''){
+                this.isAvatar = true ;
+            }else{
+                this.isAvatar = false ;
+            }
+        }
+
+
+
+        
 
 
     },
@@ -530,18 +632,28 @@ export default {
                 const seen = new Set();
 
                 for (let i = 0; i < this.new_appointments.length; i++) {
-                    const key = this.new_appointments[i].selectedDay.name +
+
+                    if(this.new_appointments[i].selectedDay !== null && this.new_appointments[i].startTime !== null && this.new_appointments[i].endTime !== null){
+
+                        const key = this.new_appointments[i].selectedDay.name +
                                 this.formatTimeTo12HourFormat(this.new_appointments[i].startTime) +
                                 this.formatTimeTo12HourFormat(this.new_appointments[i].endTime);
 
-                    if (!seen.has(key)) {
-                        seen.add(key);
-                        uniqueAppointments.push({
-                            day: this.new_appointments[i].selectedDay.name,
-                            startTime: this.formatTimeTo12HourFormat(this.new_appointments[i].startTime),
-                            endTime: this.formatTimeTo12HourFormat(this.new_appointments[i].endTime),
-                        });
+                        if (!seen.has(key)) {
+                            seen.add(key);
+                            uniqueAppointments.push({
+                                day: this.new_appointments[i].selectedDay.name,
+                                startTime: this.formatTimeTo12HourFormat(this.new_appointments[i].startTime),
+                                endTime: this.formatTimeTo12HourFormat(this.new_appointments[i].endTime),
+                            });
+                        }
+
+                        this.isAppoint = false ;
+                    }else{
+                        this.isAppoint = true ;
                     }
+
+
                 }
 
                 this.dates = uniqueAppointments;
@@ -579,13 +691,75 @@ export default {
                 }
             }
         },
+
+
         // Add New Spcialist 
         async addDoctor(){
 
+            // name 
+            if( this.name == null ){
+                this.isName = true ;
+            }else{
+                this.isName = false ;
+            }
+            // phone
+            let inputString = this.phone.toString();
+            if( inputString.length <  9 ){
+                this.isPhone = true ;
+            }else{
+                this.isPhone = false ;
+            }
+            // email 
+            if( /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.email) ){
+                this.isEmail = false ;
+            }else{
+                this.isEmail = true;
+            }
+            // spec 
+            if( this.selectedSpec == null ){
+                this.isSpec = true ;
+            }else{
+                this.isSpec = false ;
+            }
+            // price 
+            if( this.price == null ){
+                this.isPrice = true ;
+            }else{
+                this.isPrice = false ;
+            }
+            // time 
+            if( this.time == '' ){
+                this.isTime = true ;
+            }else{
+                this.isTime = false ;
+            }
+            // desc ar 
+            if( this.descriptionAr == '' ){
+                this.isAr = true ;
+            }else{
+                this.isAr = false ;
+            }
+            // desc en 
+            if( this.descriptionEn == '' ){
+                this.isEn = true ;
+            }else{
+                this.isEn = false ;
+            }
 
-            
-            this.storeAppointment()
-            
+            if( this.avatar_image == null){
+                this.isAvatar = true ;
+            }else{
+                this.isAvatar = false ;
+            }
+            // appointment 
+            // if( this.new_appointments.leng )
+            this.storeAppointment();
+            if( this.isName == false && this.isPhone == false && this.isEmail == false && this.isSpec == false && this.isPrice == false && this.isTime == false && this.isAr == false && this.isEn == false&& this.isAppoint == false && this.isAvatar == false ){
+                this.mainAddDoctor();
+            }
+        },
+        
+        async mainAddDoctor(){
             this.disabled = true ;
             this.disabled2 = true ;
             const fd = new FormData(this.$refs.addDoctorForm) ;
@@ -598,6 +772,7 @@ export default {
             fd.append('userType', 'doctor');
             fd.append('center', JSON.parse(localStorage.getItem('user')).id);
 
+            this.storeAppointment();
             fd.append('appointments', JSON.stringify(this.dates));
 
             await axios.post('/add-doctor', fd , {
@@ -622,6 +797,7 @@ export default {
             } )
             .catch( (err)=>{
                 this.$toast.add({ severity: 'error', summary: err.response.data.message, life: 3000 });
+                console.log(err.response)
                 this.disabled = false ;
                 this.disabled2 = false ;    
             } )
@@ -687,7 +863,71 @@ export default {
         },
         // update doctors 
         async updateDoctor(){
-           
+            // name 
+            if( this.name == '' ){
+                this.isName = true ;
+            }else{
+                this.isName = false ;
+            }
+            // phone
+            let inputString = this.phone.toString();
+            if( inputString.length <  9 ){
+                this.isPhone = true ;
+            }else{
+                this.isPhone = false ;
+            }
+            // email 
+            if( /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.email) ){
+                this.isEmail = false ;
+            }else{
+                this.isEmail = true;
+            }
+            // spec 
+            if( this.selectedSpec == null ){
+                this.isSpec = true ;
+            }else{
+                this.isSpec = false ;
+            }
+            // price 
+            if( this.price == '' ){
+                this.isPrice = true ;
+            }else{
+                this.isPrice = false ;
+            }
+            // time 
+            if( this.time == '' ){
+                this.isTime = true ;
+            }else{
+                this.isTime = false ;
+            }
+            // desc ar 
+            if( this.descriptionAr == '' ){
+                this.isAr = true ;
+            }else{
+                this.isAr = false ;
+            }
+            // desc en 
+            if( this.descriptionEn == '' ){
+                this.isEn = true ;
+            }else{
+                this.isEn = false ;
+            }
+
+            if( this.avatar_image == ''){
+                this.isAvatar = true ;
+            }else{
+                this.isAvatar = false ;
+            }
+            this.storeForEdit() ;
+            // appointment 
+            // if( this.new_appointments.leng )
+            if( this.isName == false && this.isPhone == false && this.isEmail == false && this.isSpec == false && this.isPrice == false && this.isTime == false && this.isAr == false && this.isEn == false&& this.isAppoint == false && this.isAvatar == false ){
+                this.mainEdit();
+            }
+            
+        },
+
+        async mainEdit(){
             this.storeForEdit()
             this.disabled = true ;
             this.disabled2 = true ;
@@ -750,7 +990,8 @@ export default {
                 }
             } )
             .catch( (err)=>{
-                this.$toast.add({ severity: 'error', summary: err.response.data, life: 3000 });
+                // this.$toast.add({ severity: 'error', summary: err.response.data, life: 3000 });
+                this.$toast.add({ severity: 'error', summary: err.response.data.message, life: 3000 });
                 console.log(err)
                 this.disabled = false ;
                 this.disabled2 = false ;
@@ -765,7 +1006,7 @@ export default {
     components:{
         InputText,
         Dropdown,
-        InputNumber,
+        // InputNumber,
         Textarea,
         Calendar,
         Toast,

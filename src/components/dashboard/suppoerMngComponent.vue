@@ -22,7 +22,9 @@
                   <i class="fa-solid fa-asterisk text-danger fs-10"></i>
               </label>
               <InputText type="text" v-model="groupNameAr" name="groupNameAr" class="default_input w-100" :placeholder="$t('group.namePlc')" />
-          </div>
+              <span class="error text-danger fs-13" v-if="isNameAr"> {{ $t('group.namePlc') }} </span>
+
+            </div>
         </div>
 
         <div class="col-md-6 mb-3">
@@ -32,6 +34,8 @@
                   <i class="fa-solid fa-asterisk text-danger fs-10"></i>
               </label>
               <InputText type="text" v-model="groupNameEn" name="groupNameEn" class="default_input w-100" :placeholder="$t('group.namePlc')" />
+              <span class="error text-danger fs-13" v-if="isNameEn"> {{ $t('group.namePlc') }} </span>
+
           </div>
         </div>
 
@@ -42,6 +46,8 @@
                   <i class="fa-solid fa-asterisk text-danger fs-10"></i>
               </label>
               <InputText type="text" v-model="groupDescriptionAr" name="groupDescriptionAr" class="default_input w-100" :placeholder="$t('group.descPlc')" />
+              <span class="error text-danger fs-13" v-if="isDescAr"> {{ $t('group.descPlc') }} </span>
+
           </div>
         </div>
         <div class="col-md-6 mb-3">
@@ -51,7 +57,9 @@
                   <i class="fa-solid fa-asterisk text-danger fs-10"></i>
               </label>
               <InputText type="text" v-model="groupDescriptionEn" name="groupDescriptionEn" class="default_input w-100" :placeholder="$t('group.descPlc')" />
-          </div>
+              <span class="error text-danger fs-13" v-if="isDescEn"> {{ $t('group.descPlc') }} </span>
+
+            </div>
         </div>
 
 
@@ -63,7 +71,9 @@
                 </label>
 
                 <Dropdown v-model="selectedType" disabled :options="values" optionLabel="title" :placeholder="$t('group.valuePlc')" class="default_input w-100 w-full md:w-14rem" />
-            </div>
+                <span class="error text-danger fs-13" v-if="isTyped"> {{ $t('group.valuePlc') }} </span>
+
+              </div>
         </div>
 
         <div class="col-md-6 mb-2" v-if="type='paid'">
@@ -73,6 +83,7 @@
                     <i class="fa-solid fa-asterisk text-danger fs-10"></i>
                 </label>
                 <InputNumber v-model="price" name="price" disabled inputId="integeronly" class="default_input w-100" :placeholder="$t('group.pricePlc')" />
+                <span class="error text-danger fs-13" v-if="isPrice"> {{ $t('group.pricePlc') }} </span>
             </div>
         </div>
 
@@ -84,6 +95,8 @@
                     <i class="fa-solid fa-asterisk text-danger fs-10"></i>
                 </label>
                 <InputNumber v-model="sessionsCount" disabled name="sessionsCount" inputId="integeronly" class="default_input w-100" :placeholder="$t('group.countPlc')"/>
+                <span class="error text-danger fs-13" v-if="isSession"> {{ $t('group.countPlc') }} </span>
+
             </div>
         </div>
 
@@ -94,7 +107,8 @@
                   {{ $t('group.seats') }} 
                     <i class="fa-solid fa-asterisk text-danger fs-10"></i>
                 </label>
-                <InputNumber v-model="seats" name="seats" inputId="integeronly" class="default_input w-100" :placeholder="$t('group.seatsPlc')"/>
+                <InputNumber v-model="seats" min="1" name="seats" inputId="integeronly" class="default_input w-100" :placeholder="$t('group.seatsPlc')"/>
+                <span class="error text-danger fs-13" v-if="isSeats"> {{ $t('group.seatsPlc') }} </span>
             </div>
         </div>
 
@@ -105,7 +119,7 @@
   
   <Skeleton v-else style="width:90%;margin:auto" class="mb-3" height="14rem"></Skeleton>
 
-  <section v-if="isShown">
+  <section v-if="isShown" class="addGroupMain">
     <!-- number of sessions  -->
     <section class="main-bg pt-3 pb-3 mx-5 mb-3" v-for="(session, index) in sessions" :key="index">
       <h6 class="sec-color fs-17 fw-6 px-5 mb-2"> {{ session.headText }} </h6>
@@ -121,6 +135,7 @@
                     <i class="fa-solid fa-asterisk text-danger fs-10"></i>
                 </label>
                 <InputText type="text" v-model="session.nameAr" class="default_input w-100" :placeholder="$t('session.namePlc')" />
+                <span class="error text-danger fs-13" v-if="isNamesAr[index]"> {{ $t('session.namePlc') }} </span>
             </div>
           </div>
           <div class="col-md-6 mb-3">
@@ -130,6 +145,8 @@
                     <i class="fa-solid fa-asterisk text-danger fs-10"></i>
                 </label>
                 <InputText type="text" v-model="session.nameEn" class="default_input w-100" :placeholder="$t('session.namePlc')" />
+                <span class="error text-danger fs-13" v-if="isNamesEn[index]"> {{ $t('session.namePlc') }} </span>
+
             </div>
           </div>
 
@@ -140,6 +157,8 @@
                     <i class="fa-solid fa-asterisk text-danger fs-10"></i>
                 </label>
                 <InputText type="text" v-model="session.descriptionAr" class="default_input w-100" :placeholder="$t('session.descPlc')" />
+                <span class="error text-danger fs-13" v-if="isDescsAr[index]"> {{ $t('session.descPlc') }} </span>
+
             </div>
           </div>
           <div class="col-md-6 mb-3">
@@ -149,6 +168,8 @@
                     <i class="fa-solid fa-asterisk text-danger fs-10"></i>
                 </label>
                 <InputText type="text" v-model="session.descriptionEn" class="default_input w-100" :placeholder="$t('session.descPlc')" />
+                <span class="error text-danger fs-13" v-if="isDescsEn[index]"> {{ $t('session.descPlc') }} </span>
+
             </div>
           </div>
 
@@ -159,6 +180,8 @@
                     <i class="fa-solid fa-asterisk text-danger fs-10"></i>
                 </label>
                 <Calendar v-model="session.date" class="default_input w-100" :placeholder="$t('session.datePlc')" />
+                <span class="error text-danger fs-13" v-if="isDates[index]"> {{ $t('session.datePlc') }} </span>
+
             </div>
           </div>
 
@@ -169,6 +192,8 @@
                     <i class="fa-solid fa-asterisk text-danger fs-10"></i>
                 </label>
                 <Calendar v-model="session.time" class="default_input w-100" :placeholder="$t('session.appPlc')" timeOnly hourFormat="12" />
+                <span class="error text-danger fs-13" v-if="isTimes[index]"> {{ $t('session.appPlc') }} </span>
+
             </div>
           </div>
 
@@ -179,7 +204,9 @@
                   {{ $t('session.duration') }}
                     <i class="fa-solid fa-asterisk text-danger fs-10"></i>
                 </label>
-                <InputText type="text" v-model="session.duration" class="default_input w-100" :placeholder="$t('session.durationPlc')"  @input="getDoctors(index)" />
+                <InputText type="text" min="1" v-model="session.duration" class="default_input w-100" :placeholder="$t('session.durationPlc')"  @input="getDoctors(index)" />
+                <span class="error text-danger fs-13" v-if="isDurations[index]"> {{ $t('session.durationPlc') }} </span>
+
             </div>
           </div>
 
@@ -287,7 +314,25 @@ export default {
         sendedSessions : [],
 
         getDocotorsLoading : [],
-        doctors : []
+        doctors : [],
+
+        // validations 
+        isNameAr : false ,
+        isNameEn : false ,
+        isDescAr : false ,
+        isDescEn : false ,
+        isTyped : false ,
+        isPrice : false ,
+        isSession : false ,
+        isSeats : false,
+        isNamesAr : [],
+        isNamesEn : [],
+        isDescsAr : [],
+        isDescsEn : [],
+        isDates : [],
+        isTimes : [],
+        isDurations : []
+ 
     }
   },
   methods:{
@@ -355,14 +400,92 @@ export default {
 
     // update group
     async updateGroup(){
+        // name 
+        if( this.groupNameAr == '' ){
+          this.isNameAr = true ;
+        }else{
+          this.isNameAr = false ;
+        }
+        if( this.groupNameEn == '' ){
+          this.isNameEn = true ;
+        }else{
+          this.isNameEn = false ;
+        }
+        // desc 
+        if( this.groupDescriptionAr == '' ){
+          this.isDescAr = true ;
+        }else{
+          this.isDescAr = false ;
+        }
+        if( this.groupDescriptionEn == '' ){
+          this.isDescEn = true ;
+        }else{
+          this.isDescEn = false ;
+        }
+        // type 
+        if( this.selectedType == null ){
+          this.isTyped == true ;
+        }else{
+          this.isTyped == false ;
+        }
 
-        this.disabled = true ;
+        for( let i = 0 ; i < this.sessions.length ; i++ ){
+          // name ar 
+          if( this.sessions[i].nameAr == '' ){
+            this.isNamesAr[i] = true ;
+          }else{
+            this.isNamesAr[i] = false ;
+          }
+          if( this.sessions[i].nameEn == '' ){
+            this.isNamesEn[i] = true ;
+          }else{
+            this.isNamesEn[i] = false ;
+          }
+          // desc 
+          if( this.sessions[i].descriptionAr == '' ){
+            this.isDescsAr[i] = true ;
+          }else{
+            this.isDescsAr[i] = false ;
+          }
+          if( this.sessions[i].descriptionEn == '' ){
+            this.isDescsEn[i] = true ;
+          }else{
+            this.isDescsEn[i] = false ;
+          }
+          // date 
+          // if( this.sessions[i].date == null ){
+          //   this.isDates =true ;
+          // }else{
+          //   this.isDates =false ;
+          // }
+          // time 
+          // if( this.sessions[i].time == null ){
+          //   this.isTimes =true ;
+          // }else{
+          //   this.isTimes =false ;
+          // }
+          // durations 
+          if( this.sessions[i].duration == '' ){
+            this.isDurations[i] = true ;
+          }else{
+            this.isDurations[i] = false ;
+          }
+
+        }
+        if( this.isNameAr == false  && this.isNameEn == false && this.isDescAr == false && this.isDescEn == false && this.isNamesArFalse && this.isNamesEnFalse && this.isDescsArFalse && this.isDescsEnFalse  && this.isDurationsFalse ){
+          this.mainEdit();
+        }
+    } ,
+
+    // main edit docotor 
+    async mainEdit(){
+      this.disabled = true ;
         const fd = new FormData();
 
-        fd.append('groupNameAr', this.groupName);
-        fd.append('groupNameEn', this.groupName);
-        fd.append('groupDescriptionAr', this.groupDescription);
-        fd.append('groupDescriptionEn', this.groupDescription);
+        fd.append('groupNameAr', this.groupNameAr);
+        fd.append('groupNameEn', this.groupNameEn);
+        fd.append('groupDescriptionAr', this.groupDescriptionAr);
+        fd.append('groupDescriptionEn', this.groupDescriptionEn) ;
         fd.append('seats', this.seats);
 
         for( let i = 0 ; i < this.sessions.length ; i++){
@@ -424,7 +547,7 @@ export default {
           this.sendedSessions = [] ;
           console.log(err)
         } )
-    } ,
+    },
 
     // get available doctoros 
     async getDoctors(index){
@@ -450,6 +573,29 @@ export default {
           this.$toast.add({ severity: 'error', summary: err.response.data.message, life: 3000 });
       } )
     } 
+  },
+  computed:{
+    isNamesArFalse(){
+      return this.isNamesAr.every( value => value === false )
+    },
+    isNamesEnFalse(){
+      return this.isNamesEn.every( value => value === false )
+    },
+    isDescsArFalse(){
+      return this.isDescsAr.every( value => value === false )
+    },
+    isDescsEnFalse(){
+      return this.isDescsEn.every( value => value === false )
+    },
+    // isDatesFalse(){
+    //   return this.isDates.every( value => value === false )
+    // },
+    // isTimesFalse(){
+    //   return this.isTimes.every( value => value === false )
+    // },
+    isDurationsFalse(){
+      return this.isDurations.every( value => value == false )
+    }
   },
   mounted(){
     if( this.$route.fullPath.includes('supportManage') ){

@@ -22,6 +22,7 @@ import ToastService from 'primevue/toastservice';
 // import style 
 import '@/assets/scss/style.scss';
 import '@/assets/scss/style_ltr.scss';
+import '@/assets/scss/responsive.scss'
 // import bootstrap
 import "bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -70,7 +71,7 @@ createApp(App)
     .component('v-otp-input', VOtpInput)
     .use(VueGoogleMaps, {
         load: {
-            key: 'AIzaSyB4d19CAL7u_hJ8k4P7EaQFcnner_Q9KEo',
+            key: 'AIzaSyBNLoYGrbnQI_GMqHt6m0PSN9yA7Zvq7gA',
             libraries: "places"
     
         },

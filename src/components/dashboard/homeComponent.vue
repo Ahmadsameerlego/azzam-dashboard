@@ -84,33 +84,40 @@
                         
                         <!-- all opinions  -->
                         <sections class="opinions">
-                            <!-- single opinion  -->
-                            <div class="opinion d-flex borderBottom pt-2 pb-2" v-for="review in reviews" :key="review.id">
-                                <!-- client image  -->
-                                <div class="client_image">
-                                    <img :src="review.image" alt="client image">
-                                </div>
-                                <!-- opinion details  -->
-                                <div class="opinion_details flex_column align-items-start mx-3">
+                            <section v-if="reviews.length>0">
+                                <!-- single opinion  -->
+                                <div class="opinion d-flex borderBottom pt-2 pb-2" v-for="review in reviews" :key="review.id">
+                                    <!-- client image  -->
+                                    <div class="client_image">
+                                        <img :src="review.image" alt="client image">
+                                    </div>
+                                    <!-- opinion details  -->
+                                    <div class="opinion_details flex_column align-items-start mx-3">
 
-                                    <span class="fw-6 blackColor mb-2"> {{ review.name }} </span>
+                                        <span class="fw-6 blackColor mb-2"> {{ review.name }} </span>
 
-                                    <div class="d-flex timming mb-2">
-                                        <div class="d-flex align-items-center">
-                                            <i class="fa-regular fa-clock"></i>
-                                            <span class="mx-1"> {{ review.timeAdd }} </span>
+                                        <div class="d-flex timming mb-2">
+                                            <div class="d-flex align-items-center">
+                                                <i class="fa-regular fa-clock"></i>
+                                                <span class="mx-1"> {{ review.timeAdd }} </span>
+                                            </div>
+
+                                            <!-- starts  -->
+                                            <Rating v-model="review.rate" readonly :cancel="false" class="mx-3" />
                                         </div>
 
-                                        <!-- starts  -->
-                                        <Rating v-model="review.rate" readonly :cancel="false" class="mx-3" />
+                                        <!-- comment  -->
+                                        <span class="comment">
+                                            {{ review.comment }}
+                                        </span>
                                     </div>
-
-                                    <!-- comment  -->
-                                    <span class="comment">
-                                        {{ review.comment }}
-                                    </span>
                                 </div>
-                            </div>
+                            </section>
+
+                            <section class="text-danger text-center" v-else>
+                                {{ $t('home.noRates') }}
+                            </section>
+                            
                         </sections>
                     </section>
                 </div>
@@ -161,7 +168,7 @@ export default {
                 datasets: [
                     
                     {
-                        label: 'احصائيات الارباح',
+                        label: this.$t('home.profits'),
                         data: this.profits , 
                         fill: true,
                         borderColor: '#3290d8',

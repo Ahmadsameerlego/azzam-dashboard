@@ -180,7 +180,7 @@ export default {
 </style>
 <style lang="scss">
     .p-dropdown .p-dropdown-trigger{
-        width: 30px !important;
+        width: 25px !important;
     }
     .country_image{
         width: 25px;
