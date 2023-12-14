@@ -34,7 +34,7 @@
                         </label>
                         <InputText type="text" v-model="name" name="name" class="default_input w-100" :placeholder="$t('common.namePlace')" />
 
-                        <span class="error text-danger fs-13" v-if="isName"> يرجى ادخال الاسم </span>
+                        <span class="error text-danger fs-13" v-if="isName"> {{ $t('common.namePlace') }} </span>
                     </div>
                 </div>
 
@@ -47,7 +47,7 @@
 
                         <Dropdown v-model="selectedSpec" :options="specs" optionLabel="name" :placeholder="$t('common.specPlc')" class="default_input w-100 w-full md:w-14rem" />
 
-                        <span class="error text-danger fs-13" v-if="isSpec"> يرجى اختيار اخصائي </span>
+                        <span class="error text-danger fs-13" v-if="isSpec"> {{ $t('common.specPlc') }} </span>
                     </div>
                 </div>
 
@@ -62,10 +62,10 @@
                             <InputText type="number" v-model="phone" name="phone" class="default_input w-100" :placeholder="$t('common.phonePlace')" @input="handleChange('isPhoneChanged')" />
 
                             <!-- country code  -->
-                            <Dropdown v-model="selectedCountry" @change="chooseCountry" :options="countries" optionLabel="code" :placeholder="$t('common.countryCode')" class="default_input country_code w-100 w-full md:w-14rem" />
+                            <Dropdown v-model="selectedCountry" @change="chooseCountry" :options="countries" optionLabel="name" :placeholder="$t('common.countryCode')" class="default_input country_code w-100 w-full md:w-14rem" />
 
                         </div>
-                        <span class="error text-danger fs-13" v-if="isPhone"> يجب ان يكون رقم الهاتف اكثر من 9 أرقام </span>
+                        <span class="error text-danger fs-13" v-if="isPhone"> {{ $t('common.phoneValid') }} </span>
                     </div>
                 </div>
 
@@ -77,7 +77,7 @@
                         </label>
                         <InputText type="email" required v-model="email" name="email" class="default_input w-100" :placeholder="$t('common.emailPlace')"  @input="handleChange('isMailChanged')"/>
 
-                        <span class="error text-danger fs-13" v-if="isEmail"> يرجى ادخال صيغة بريد الكتروني صالحة </span>
+                        <span class="error text-danger fs-13" v-if="isEmail"> {{ $t('common.emailValid') }} </span>
                     </div>
                 </div>
 
@@ -90,7 +90,7 @@
                         <!-- <InputNumber v-model="price" name="price" inputId="integeronly" class="default_input w-100" :placeholder="$t('common.pricePlace')" /> -->
 
                         <input type="number"  class="form-control default_input"  v-model="price" :placeholder="$t('common.pricePlace')">
-                        <span class="error text-danger fs-13" v-if="isPrice"> يرجى ادخال السعر </span>
+                        <span class="error text-danger fs-13" v-if="isPrice"> {{ $t('common.pricePlace') }} </span>
                     </div>
                 </div>  
 
@@ -110,11 +110,12 @@
                             name="time" 
                             class="form-control default_input w-100" 
                             :placeholder="$t('common.durationPlace')"
+                            :disabled="$route.fullPath.includes('editDoctor')"
                             
                         >
                         <!-- <InputNumber v-model="time" name="time" inputId="integeronly" class="default_input w-100" :placeholder="$t('common.durationPlace')" /> -->
 
-                        <span class="error text-danger fs-13" v-if="isTime"> يرجى ادخال مدة الاستشارة </span>
+                        <span class="error text-danger fs-13" v-if="isTime"> {{ $t('common.durationPlace') }} </span>
                     </div>  
                 </div>
 
@@ -126,7 +127,7 @@
                         </label>
                         <Textarea v-model="descriptionAr" name="descriptionAr" autoResize rows="5" class="default_input default_textarea w-100" cols="30" :placeholder="$t('common.bio_ar')" />
                         <span class="error text-danger fs-13" v-if="isAr">
-                            يرجى ادخال الوصف بالعربية
+                            {{ $t('common.bio_ar') }}
                         </span>
                     </div>
                 </div>
@@ -140,7 +141,7 @@
                         <Textarea v-model="descriptionEn" name="descriptionEn" autoResize rows="5" class="default_input default_textarea w-100" cols="30" :placeholder="$t('common.bio_en')" />
                         
                         <span class="error text-danger fs-13" v-if="isEn">
-                            يرجى ادخال الوصف بالإنجليزية
+                            {{ $t('common.bio_en') }}
                         </span>
                     </div>
                 </div>
@@ -206,7 +207,7 @@
                     </div>
                 </div>
 
-                <span class="error text-danger fs-13" v-if="isAppoint"> يرجى ادخال المواعيد </span>
+                <span class="error text-danger fs-13" v-if="isAppoint"> {{ $t('common.addApoint') }} </span>
             </div>
 
 
@@ -256,6 +257,8 @@
                             :placeholder="appointment.dayText"
                             class="default_input w-100 w-full md:w-14rem"
                             
+                            :disabled="!appointment.disabled"
+                            
                         />
                     </div>
                     </div>
@@ -269,6 +272,7 @@
                             class="default_input w-100 w-full md:w-14rem"
                             :placeholder="$t('common.from')"
                             hour-format="12"
+                            :disabled="!appointment.disabled"
                         />
                     </div>
                     </div>
@@ -282,6 +286,7 @@
                             class="default_input w-100 w-full md:w-14rem"
                             :placeholder="$t('common.to')"
                             hour-format="12"
+                            :disabled="!appointment.disabled"
                         />
                     </div>
                     </div>
@@ -294,7 +299,7 @@
                         <Dialog v-model:visible="deleteApp[index]" modal :style="{ width: '50rem' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
                             <h6 class="text-center"> {{ $t('common.delApp') }} </h6>
                             <div class="mt-3 d-flex">
-                                <button class="btn btn-danger w-50" @click.prevent="removeAppointment(index, appointment.day , appointment.startTime, appointment.endTime)">
+                                <button class="btn btn-danger w-50" :disabled="deleteDisabledButton" @click.prevent="removeAppointment(index, appointment.day , appointment.startTime, appointment.endTime)">
                                      {{ $t('common.yes') }} 
                                 </button>
                                 <button class="btn btn-secondary w-50 mx-2" type="button" @click="deleteApp[index]=false"> {{ $t('common.no') }} </button>
@@ -440,7 +445,11 @@ export default {
             isAr : false,
             isEn : false,
             isAppoint : false,
-            isAvatar: false
+            isAvatar: false,
+
+            deleteDisabledButton : false,
+
+            isNew : []
 
 
         }
@@ -564,35 +573,42 @@ export default {
         },
         // remove appointment 
         async removeAppointment(index, day , start , end){
-            
-            console.log(index)
-            const fd = new FormData();
-            fd.append('id', this.$route.params.id);
-            fd.append('day', day);
-            fd.append('startTime', start);
-            fd.append('endTime', end);
-            await axios.put(`/delete-appointment`, fd ,{
-                headers : {
-                    Authorization : `Bearer ${localStorage.getItem('token')}`
-                }
-            })
-            .then( (res)=>{            
-                if( res.data.key === 'success' ){
-                    this.$toast.add({ severity: 'success', summary: res.data.message, life: 3000 });
-                    // this.deleteDisabled[index] = false ;
-                    setTimeout(() => {
-                        this.getDoctorData();
-                    }, 500);
+            if( day == null ){
+                this.deleteApp[index] = false ;
+                this.new_appointments.splice(index, 1)
+            }else {
+                this.deleteDisabledButton = true ;
+                // console.log(index)
+                const fd = new FormData();
+                fd.append('id', this.$route.params.id);
+                fd.append('day', day);
+                fd.append('startTime', start);
+                fd.append('endTime', end);
+                await axios.put(`/delete-appointment`, fd ,{
+                    headers : {
+                        Authorization : `Bearer ${localStorage.getItem('token')}`
+                    }
+                })
+                .then( (res)=>{            
+                    if( res.data.key === 'success' ){
+                        this.$toast.add({ severity: 'success', summary: res.data.message, life: 3000 });
+                        // this.deleteDisabled[index] = false ;
+                        setTimeout(() => {
+                            this.getDoctorData();
+                        }, 500);
+                        this.deleteApp[index] = false ; 
+                    }else{
+                        this.$toast.add({ severity: 'error', summary: res.data.message, life: 3000 });
+                        // this.deleteDisabled[index] = false ;
+                    }
+                    this.deleteDisabledButton = false ;
+                } )
+                .catch( (err)=>{
+                    this.$toast.add({ severity: 'error', summary: err.response.data.message, life: 3000 });
                     this.deleteApp[index] = false ; 
-                }else{
-                    this.$toast.add({ severity: 'error', summary: res.data.message, life: 3000 });
-                    // this.deleteDisabled[index] = false ;
-                }
-            } )
-            .catch( (err)=>{
-                this.$toast.add({ severity: 'error', summary: err.response.data.message, life: 3000 });
-                this.deleteApp[index] = false ; 
-            } )
+                    this.deleteDisabledButton = false ;
+                } )
+            }
         },
         // handle input type number 
         
@@ -608,7 +624,10 @@ export default {
                 selectedDay: null,
                 startTime: null,
                 endTime: null,
+                disabled : 1
             });
+            // console.log(this.new_appointments.lastIndexOf())
+            // this.isNew[-1] = true ;
 
             // this.disabledOld[index] = true
         },
@@ -664,7 +683,7 @@ export default {
             // loop through appended appointments
             if (this.new_appointments.length > 0) {
 
-                for (let i = 0; i < this.new_appointments.length; i++) {
+                for (let i = 0; i < this.new_appointments.length ; i++) {
                     let sendedDay = null ;
                     let startTime = null ;
                     let endTime = null ;
@@ -672,13 +691,14 @@ export default {
                         sendedDay = this.new_appointments[i].day.name ;
                         startTime = this.formatTimeTo12HourFormat(this.new_appointments[i].startTime)  ;
                         endTime = this.formatTimeTo12HourFormat(this.new_appointments[i].endTime)  ;
-                        console.log('yes')
-                    } else if( !(typeof this.new_appointments[i].day === 'object')){
-                        sendedDay = this.new_appointments[i].day ;
-                        startTime = this.new_appointments[i].startTime;
-                        endTime = this.new_appointments[i].endTime  ;
-                        console.log('No')
-                    }
+                        // console.log('yes')
+                    } 
+                    // else if( !(typeof this.new_appointments[i].day === 'object')){
+                    //     sendedDay = this.new_appointments[i].day ;
+                    //     startTime = this.new_appointments[i].startTime;
+                    //     endTime = this.new_appointments[i].endTime  ;
+                    //     // console.log('No')
+                    // }
 
                     this.dates.push({
                         day: sendedDay,
@@ -687,8 +707,10 @@ export default {
                     });
 
 
-                    console.log(typeof this.new_appointments[i].day)
                 }
+                console.log(this.dates)
+                console.log(this.new_appointments.length)
+
             }
         },
 
@@ -786,7 +808,7 @@ export default {
                     this.disabled = false ;
                     this.disabled2 = false ; 
                     setTimeout(() => {
-                        this.$router.push('/specialistsManage')
+                        this.$router.push('/center/specialistsManage')
                     }, 1000);
                     
                 }else{
@@ -817,8 +839,11 @@ export default {
                     this.email = response.email ;
                     this.price = response.price ;
                     this.time = response.time ;
-                    this.selectedCountry.code = response.countryCode ;
-                    document.querySelector('.phone .p-dropdown-label').innerHTML = response.countryCode ;
+                    // this.selectedCountry.code = response.countryCode ;
+                    document.querySelector('.phone .p-dropdown-label').innerHTML = `
+                    <img src="${response.countryFlag}" class="country_image">
+                    ${response.countryCode}
+                    `  ;
 
                     for( let i = 0 ; i < this.specs.length ; i++ ){
                         if ( response.specializationId == this.specs[i].id ){
@@ -846,14 +871,14 @@ export default {
                                 //     selectedDay : this.days[x]
                                 // } )
                                 console.log(this.days[x].name);
-                                console.log(this.new_appointments);
+                                // console.log(this.new_appointments);
 
                             }
                         }
                     }
                     this.appoint_length = response.appointments.length ;
 
-                    console.log(this.new_appointments)
+                    // console.log(this.new_appointments)
                 }
             } )
             .catch( (err)=>{
@@ -928,7 +953,7 @@ export default {
         },
 
         async mainEdit(){
-            this.storeForEdit()
+            // this.storeForEdit()
             this.disabled = true ;
             this.disabled2 = true ;
             const fd = new FormData() ;
@@ -964,7 +989,7 @@ export default {
 
             
             fd.append( 'appointments', JSON.stringify(this.dates.splice(this.appoint_length) ) );
-
+            // .splice(this.appoint_length)
             await axios.put('/edit-doctor', fd , {
                 headers : {
                     Authorization : `Bearer ${localStorage.getItem('token')}`
@@ -979,14 +1004,15 @@ export default {
                     //     this.$router.push('/specialistsManage')
                     // }, 1000);
                     console.log('ffffffffffffffff')
-                    // this.dates = [];
+                    this.dates = [];
                     // this.new_appointments = [];
+                    this.getDoctorData();
                 }else{
                     this.$toast.add({ severity: 'error', summary: res.data.message, life: 3000 });
                     this.disabled = false ; 
                     this.disabled2 = false ; 
-                    // this.dates = [];
-                    // this.new_appointments = [];
+                    this.dates = [];
+                    this.new_appointments = [];
                 }
             } )
             .catch( (err)=>{
@@ -995,12 +1021,15 @@ export default {
                 console.log(err)
                 this.disabled = false ;
                 this.disabled2 = false ;
-                // this.dates = [];
+                this.dates = [];
                 // this.new_appointments = [];
             } )
         },
         chooseCountry(){
-            document.querySelector('.phone .p-dropdown-label').innerHTML = this.selectedCountry.code ;
+            document.querySelector('.phone .p-dropdown-label').innerHTML = `
+            <img src="${this.selectedCountry.image}" class="country_image">
+            ${this.selectedCountry.code}
+            `  ;
         },
     },
     components:{
@@ -1013,6 +1042,11 @@ export default {
         Dialog
     },
     beforeMount(){
+        
+        this.getCountries();   
+    },
+    mounted(){
+
         if( this.$route.fullPath.includes('addSpecialist') ){
             this.addDoc = true ;
             this.editDoc = false ;
@@ -1023,10 +1057,11 @@ export default {
 
             this.disabled2 = false ;
         }
-    },
-    mounted(){
-        this.getCountries();   
-        document.querySelector('.phone .p-dropdown-label').innerHTML = this.selectedCountry.code ;
+       
+        document.querySelector('.phone .p-dropdown-label').innerHTML =      `
+            <img src="${this.selectedCountry.image}" class="country_image">
+            ${this.selectedCountry.code}
+            ` ;
     }
 }
 </script>

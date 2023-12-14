@@ -30,9 +30,9 @@
         <button class="filter_item" :class="{'active' : activeFilter === 3 }" @click="setActiveFilter(3, 'finish')">
             {{ $t('common.finish') }}
         </button>
-        <button class="filter_item" :class="{'active' : activeFilter === 4 }" @click="setActiveFilter(4, 'cancelled')">
+        <!-- <button class="filter_item" :class="{'active' : activeFilter === 4 }" @click="setActiveFilter(4, 'cancelled')">
             {{ $t('common.cancel') }}
-        </button>
+        </button> -->
     </section>
     <!-- table  -->
     <div class="table">
@@ -65,7 +65,7 @@
 
                    <div class="d-flex">
                         <!-- edit  -->
-                        <router-link  :to="'/treat/'+slotProps.data.id" class="show_more fw-6" @click="click(slotProps.data.id)">
+                        <router-link  :to="'/center/treat/'+slotProps.data.id" class="show_more fw-6" @click="click(slotProps.data.id)">
                             {{ $t('session.details') }}
                         </router-link>
                    </div>

@@ -179,7 +179,7 @@
                   {{ $t('session.date') }}
                     <i class="fa-solid fa-asterisk text-danger fs-10"></i>
                 </label>
-                <Calendar v-model="session.date" class="default_input w-100" :placeholder="$t('session.datePlc')" />
+                <Calendar v-model="session.date" class="default_input w-100" :placeholder="$t('session.datePlc')" :minDate="new Date()" />
                 <span class="error text-danger fs-13" v-if="isDates[index]"> {{ $t('session.datePlc') }} </span>
 
             </div>
@@ -334,6 +334,20 @@ export default {
         isDurations : []
  
     }
+  },
+  watch:{
+    sessionDates(newDates, oldDates) {
+      // This function will be called when any session date property changes
+      console.log('New Dates:', newDates);
+      console.log('Old Dates:', oldDates);
+      console.log('Old Dates:', this.sessionDates);
+
+      // if( newDates !== oldDates ){
+          // this.getDoctors();
+      // }
+      // You can perform additional actions based on the new and old values
+    }
+  
   },
   methods:{
     // get group details 
@@ -595,7 +609,13 @@ export default {
     // },
     isDurationsFalse(){
       return this.isDurations.every( value => value == false )
+    },
+
+    sessionDates() {
+      // Create a new array containing only the 'date' property from each session
+      return this.sessions.map(session => session.date);
     }
+
   },
   mounted(){
     if( this.$route.fullPath.includes('supportManage') ){

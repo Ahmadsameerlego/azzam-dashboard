@@ -184,7 +184,7 @@
                                 {{ $t('session.date') }}
                                 <i class="fa-solid fa-asterisk text-danger fs-10"></i>
                             </label>
-                            <Calendar v-model="dates[index]" @select="getDocotrs(index)" class="default_input w-100" :placeholder="$t('session.datePlc')" />
+                            <Calendar v-model="dates[index]" @select="getDocotrs(index)" class="default_input w-100" :placeholder="$t('session.datePlc')" :minDate="new Date()" />
 
                             <span class="icon_date">
                                 <i class="fa-solid fa-calendar-days"></i>
@@ -671,7 +671,7 @@ export default {
                         this.$toast.add({ severity: 'success', summary: res.data.message, life: 3000 });
                         this.disabled = false ;
                         setTimeout(() => {
-                            this.$router.push('/support')
+                            this.$router.push('/center/support')
                         }, 1000);
                     }else{
                         this.$toast.add({ severity: 'error', summary: res.data.message, life: 3000 });

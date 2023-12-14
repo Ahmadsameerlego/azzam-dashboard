@@ -1,23 +1,80 @@
 @media( max-width: 768px ){
     #sidebar{
-        width: 80px;
+       transform: translate(100%);
     }
-    #sidebar .nav_name {
-        width: 0px !important;
-        opacity: 0;
+    #sidebar.active{
+        transform: translate(0%);
+        width: 300px;
+        z-index: 99;
     }
-
-    #sidebar .left svg {
-        font-size: 0px !important;
+    #sidebar.active .nav_name {
+        width: 100% !important; 
+        opacity: 1;
     }
-
+    .close_nav , .openSide{
+        display: block !important;
+    }
+    .close_nav{
+        position: absolute;
+        top: 30px;
+        left: 21px;
+        width: 34px;
+        height: 34px;
+        border: 1px solid #ccc;
+        border-radius: 50%;
+        display: flex !important;
+        justify-content: center;
+        align-items: center;
+        color: red;
+    }
+    .toggle_icon{
+        display: none !important;
+    }
+    
     #content {
-        width: calc(100% - 80px);
-        margin-right: 80px;
+        width: calc(100%);
+        margin-right: 0px !important;
     }
 
     #header {
-        width: calc(100% - 80px);
+        width: calc(100%);
+    }
+    #profile #login{
+        width: 80% !important;
+        margin: auto !important;
+    }
+    .financial{
+        flex-direction: column !important;
+        .form-group{
+            margin-bottom: 12px !important;  
+            .p-calendar input {
+                width: 230px !important;
+                border-radius: 3px !important;
+            } 
+        }
+       
+    }
+    .financial .p-dropdown{
+        width: 194px !important;
+    }
+    #statistics ,.card{
+        padding-left: 20px !important;
+        padding-right: 20px !important;
+    }
+ 
+    .card ,.mx-5{
+        margin-left: 20px !important;
+        margin-right: 20px !important;
+    }
+    #specManage{
+        flex-direction: column !important;
     }
     
+    #notifications{
+        margin-right: 20px !important;
+        margin-left: 20px !important;
+        padding-left: 0px !important;
+        padding-right: 0px !important;
+
+    }
 }

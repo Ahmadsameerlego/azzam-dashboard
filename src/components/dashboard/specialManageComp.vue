@@ -16,7 +16,7 @@
             </div>
             <!-- add  -->
             <div class="add">
-                <router-link to="/addSpecialist" class="add_doctor">
+                <router-link to="/center/addSpecialist" class="add_doctor">
                     <i class="fa-solid fa-plus"></i>
                 </router-link>
             </div>
@@ -25,7 +25,7 @@
     </section>
 
     <!-- table  -->
-    <div class=" ">
+    <div class="specialist">
 
         <DataTable 
             :value="doctors" 
@@ -49,13 +49,14 @@
             <Column field="name" :header="$t('common.specName')" sortable></Column>
             <Column field="phone" :header="$t('auth.phone')" sortable></Column>
             <Column field="email" :header="$t('auth.email')" sortable></Column>
+            <Column field="specialization" :header="$t('common.special')" sortable></Column>
             <Column field="sessionCount" :header="$t('spec.sessionNum')" sortable class="sessions"></Column>
             <Column field="averageRating" :header="$t('spec.rate')" sortable class="rate">
                 <template #body="slotProps">
 
                     <div class="d-flex">
                         <!-- edit  -->
-                        <router-link  :to="'/rates/'+slotProps.data.id" class="" >
+                        <router-link  :to="'/center/rates/'+slotProps.data.id" class="" >
                             {{ $t('spec.showRate') }}
                         </router-link>
                        
@@ -84,7 +85,7 @@
 
                    <div class="d-flex">
                         <!-- edit  -->
-                        <router-link  :to="'/editDoctor/'+slotProps.data.id" class="edit_doctor">
+                        <router-link  :to="'/center/editDoctor/'+slotProps.data.id" class="edit_doctor">
                                 <i class="fa-solid fa-pen-to-square" ></i>
                         </router-link>
                         <!-- notify  -->
@@ -116,7 +117,7 @@
                             {{ $t('spec.nameAr') }} 
                     </label>
                     <InputText type="text" v-model="titleAr" name="titleAr" class="default_input w-100" :placeholder="$t('spec.arPlc')" />
-
+                    <span class="error text-danger fs-13" v-if="isTitleAr"> {{ $t('spec.arPlc') }} </span>
                 </div>
 
                 <div class="form-group mb-2">
@@ -124,7 +125,7 @@
                             {{ $t('spec.nameEn') }} 
                     </label>
                     <InputText type="text" v-model="titleEn" name="titleEn" class="default_input w-100" :placeholder="$t('spec.enPlc')" />
-
+                    <span class="error text-danger fs-13" v-if="isTitleEn"> {{ $t('spec.enPlc') }} </span>
                 </div>
 
 
@@ -133,6 +134,8 @@
                             {{ $t('spec.contentAr') }} 
                     </label>
                     <Textarea v-model="messageAr" name="messageAr" autoResize rows="5" class="default_input default_textarea w-100" cols="30" :placeholder="$t('spec.arCon')" />
+                    <span class="error text-danger fs-13" v-if="isMessageAr"> {{ $t('spec.arCon') }} </span>
+
                 </div>
 
                 <div class="form-group mb-2">
@@ -140,6 +143,8 @@
                         {{ $t('spec.contentEn') }} 
                     </label>
                     <Textarea v-model="messageEn" name="messageEn" autoResize rows="5" class="default_input default_textarea w-100" cols="30" :placeholder="$t('spec.EnCon')" />
+                    <span class="error text-danger fs-13" v-if="isMessageEn"> {{ $t('spec.EnCon') }} </span>
+
                 </div>
 
                 <div class="d-flex justify-content-center align-items-center mt-3">
@@ -189,7 +194,11 @@ export default {
             messageAr : '',
             messageEn : '',
             disabledActive : [],
-            showDeleted : []
+            showDeleted : [],
+            isTitleAr : false ,
+            isTitleEn : false ,
+            isMessageAr : false ,
+            isMessageEn : false
         };
     },
     components:{
@@ -261,36 +270,60 @@ export default {
         },
         // send Notification 
         async sendNot(){
-            this.disabled = true ;
-            const fd = new FormData(this.$refs.not_form);
-            fd.append('id', this.not_id);
-            await axios.post('/send-notify', fd , {
-                headers : {
-                    Authorization : `Bearer ${localStorage.getItem('token')}`
-                }
-            })
-            .then( (res)=>{
-                if( res.data.key == 'success' ){
-                    this.$toast.add({ severity: 'success', summary: res.data.message, life: 3000 });
-                    this.disabled = false ;
+            if( this.titleAr == '' ){
+                this.isTitleAr = true;
+            }else{
+                this.isTitleAr = false;
+            }
+            if( this.titleEn == '' ){
+                this.isTitleEn = true;
+            }else{
+                this.isTitleEn = false;
+            }
+            if( this.messageAr == '' ){
+                this.isMessageAr = true;
+            }else{
+                this.isMessageAr = false;
+            }
+            if( this.messageEn == '' ){
+                this.isMessageEn = true;
+            }else{
+                this.isMessageEn = false;
+            }
 
-                    this.titleAr  = '';
-                    this.titleEn  = '';
-                    this.messageAr  = '';
-                    this.messageEn  = '';
+            if( this.isTitleAr == false && this.isTitleEn == false && this.isMessageAr == false && this.isMessageEn == false ){
+                this.disabled = true ;
+                const fd = new FormData(this.$refs.not_form);
+                fd.append('id', this.not_id);
+                await axios.post('/send-notify', fd , {
+                    headers : {
+                        Authorization : `Bearer ${localStorage.getItem('token')}`
+                    }
+                })
+                .then( (res)=>{
+                    if( res.data.key == 'success' ){
+                        this.$toast.add({ severity: 'success', summary: res.data.message, life: 3000 });
+                        this.disabled = false ;
 
-                    setTimeout(() => {
-                        this.visible = false ;
-                    }, 1000);
-                }else{
-                    this.$toast.add({ severity: 'error', summary: res.data.message, life: 3000 });
+                        this.titleAr  = '';
+                        this.titleEn  = '';
+                        this.messageAr  = '';
+                        this.messageEn  = '';
+
+                        setTimeout(() => {
+                            this.visible = false ;
+                        }, 1000);
+                    }else{
+                        this.$toast.add({ severity: 'error', summary: res.data.message, life: 3000 });
+                        this.disabled = false ;
+                    }
+                } )
+                .catch( (err)=>{
+                    this.$toast.add({ severity: 'error', summary: err.response.data.message, life: 3000 });
                     this.disabled = false ;
-                }
-            } )
-            .catch( (err)=>{
-                this.$toast.add({ severity: 'error', summary: err.response.data.message, life: 3000 });
-                this.disabled = false ;
-            } )
+                } )
+            }
+            
         },
         // get doctors 
         async getDoctors(){
@@ -321,6 +354,7 @@ export default {
 
 
 <style scoped>
+
 .spinner-border {
     position: absolute;
     width: 20px;
@@ -329,7 +363,11 @@ export default {
 }
 </style>
 <style lang="scss">
-    
+    .specialist {
+        .p-datatable-table{
+            min-width: 90rem !important;
+        }
+    }
     #specManage{    
         .form-group{
             input{

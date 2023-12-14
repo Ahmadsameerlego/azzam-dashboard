@@ -31,18 +31,33 @@
             <!-- router links  -->
 
             <!-- admin  -->
-            <router-link class="router_link" to="/" v-if="!not.key=='admin'"></router-link>
+            <router-link class="router_link" to="/center/home" v-if="!not.key=='admin'"></router-link>
             <!-- consultations  -->
-            <router-link class="router_link" :to="'/consult/'+not.sessionId" v-if="not.key=='urgentConsultation'"></router-link>
+            <router-link class="router_link" :to="'/center/consult/'+not.sessionId" v-if="not.key=='urgentConsultation'"></router-link>
             <!-- treatments  -->
-            <router-link class="router_link" :to="'/treat/'+not.sessionId" v-if="not.key=='treatmentPlan'"></router-link>
+            <router-link class="router_link" :to="'/center/treat/'+not.sessionId" v-if="not.key=='treatmentPlan'"></router-link>
             <!-- support group  -->
-            <router-link class="router_link" :to="'/supportManage/'+not.sessionId" v-if="not.key=='supportGroup'"></router-link>
+            <router-link class="router_link" :to="'/center/supportManage/'+not.sessionId" v-if="not.key=='supportGroup'"></router-link>
             <!-- messages  -->
-            <router-link class="router_link" to="'contactMessages" v-if="not.key=='contact'"></router-link>
+            <router-link class="router_link" to="'/center/contactMessages" v-if="not.key=='contact'"></router-link>
         </div>
     </section>
     <Skeleton v-else class="px-5 mb-3 mx-auto" style="width:90%" height="10rem"></Skeleton>
+
+    
+    <!-- pagination  -->
+    <paginate
+        v-model="currentPageP"
+        :page-count="totalPagesP"
+        :click-handler="page => pageClickHandler(page)"
+        :prev-text="$t('common.prev')"
+        :next-text="$t('common.next')"
+        :container-class="'pagination'"
+        :page-class="'page-item'"    
+        :no-li-surround="true"   
+        v-if="notifications.length>0"        
+    >
+    </paginate>
 
 
 </template>
@@ -50,16 +65,21 @@
 <script>
 import axios from 'axios';
 import Skeleton from 'primevue/skeleton';
+import Paginate from 'vuejs-paginate-next';
 
 import { ref , onMounted} from 'vue';
 export default {
     setup(){
         const notifications = ref([])
+        const currentPageP = ref(1)
+        const perPageP = ref(10)
+        const totalPagesP = ref(1)
+        const totalItems = ref(1)
         const isShown = ref(false)
 
         // methods 
         const getMessages = async ()=>{
-            await axios.get('/notifications-center', {
+            await axios.get(`/notifications-center?page=${currentPageP.value}`, {
                 headers : {
                     Authorization : `Bearer ${localStorage.getItem('token')}`
                 }
@@ -67,7 +87,20 @@ export default {
             .then( (res)=>{
                 if( res.data.key === 'success' ){
                     notifications.value = res.data.data ;
+
+                    totalItems.value = res.data.paginate.total ;
+                    
+                    perPageP.value = res.data.paginate.perPage ;
+                    currentPageP.value = res.data.paginate.currentPage ;
+
+                    totalPagesP.value = Math.ceil(totalItems.value / perPageP.value) ;
+
                     isShown.value = true ;
+
+                    window.scrollTo({
+                        top : 0 ,
+                        behavior : 'smooth'
+                    })
                 }
             } )
         }
@@ -80,11 +113,32 @@ export default {
         return{
             notifications,
             getMessages,
-            isShown
+            isShown,
+            currentPageP,
+            perPageP,
+            totalPagesP,
+            totalItems
+        }
+    },
+    data(){
+        return{
+            
+            
         }
     },
     components:{
-        Skeleton
+        Skeleton,
+        Paginate
+    },
+    created() {
+        // this.totalPagesP = Math.ceil(this.notifications.length / this.perPageP)
+    },
+    methods:{
+        pageClickHandler(page) {
+            this.currentPageP = page
+            this.getMessages();
+
+        },
     }
 }
 </script>
@@ -108,5 +162,19 @@ export default {
         height:100%;
         top:0;
         left:0;
+    }
+    .pagination{
+        display: flex;
+        justify-content: center;
+        margin:auto;
+        margin-bottom: 35px;
+    }
+    .active>.page-link, .page-link.active {
+        background-color: #3290d8 !important;
+        border-color: #3290d8 !important;
+        color: #fff !important;
+    }
+    .page-link{
+        cursor: pointer;
     }
 </style>

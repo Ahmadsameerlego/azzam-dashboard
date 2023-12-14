@@ -63,7 +63,7 @@
             </Column>
             <Column field="orderNumber" :header="$t('dash.orderNum')" sortable></Column>
             <Column field="price" :header="$t('fin.total')" sortable></Column>
-            <Column field="orderType" :header="$t('fin.orderType')" sortable></Column>
+            <Column field="orderType" :header="$t('common.orderType')" sortable></Column>
             <Column field="appPercentage" :header="$t('fin.appPercent')" sortable ></Column>
             <Column field="appCommission" :header="$t('fin.centerCom')" sortable ></Column>
             <Column field="reportNumber" :header="$t('fin.report')" sortable ></Column>
@@ -115,7 +115,7 @@ export default {
             endDate : '',
             format_start : '',
             format_end : '',
-            type : 'treatmentPlan',
+            type : '',
             types : [
                 {
                     id : 1,
@@ -198,6 +198,9 @@ export default {
 </script>
 
 <style lang="scss">
+    .financial .p-calendar .p-inputtext{
+        background-color: #fff !important;
+    }
     .calender{
         position: absolute;
         left: 14px;

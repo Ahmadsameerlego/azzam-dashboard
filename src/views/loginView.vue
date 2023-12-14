@@ -19,7 +19,7 @@
                             {{ $t('auth.phone') }} 
                     </label>
 
-                    <InputText type="number" v-model="loginKey" name="loginKey" class="default_input w-100" :placeholder="$t('auth.phonePlc')" />
+                    <InputText type="number" min="1" v-model="loginKey" name="loginKey" class="default_input w-100" :placeholder="$t('auth.phonePlc')" />
 
                     
                     <!-- country code  -->
@@ -55,7 +55,7 @@
             <div class="flex_center mt-3">
                 <p class="grayColor">
                     {{ $t('auth.haveNoAcc') }}  ؟
-                    <router-link to="/register" class="third-color"> {{ $t('auth.press') }} </router-link>
+                    <router-link to="/center/register" class="third-color"> {{ $t('auth.press') }} </router-link>
                 </p>
             </div>
         </section>
@@ -128,7 +128,7 @@ export default {
                         localStorage.setItem('loginKey', this.loginKey);
                         localStorage.setItem('countryCode', this.selectedCity.code);
                         setTimeout(() => {
-                            this.$router.push('/activeCode');
+                            this.$router.push('/center/activeCode');
                         }, 1000);
                     }else{
                         this.$toast.add({ severity: 'error', summary: res.data.message, life: 3000 });

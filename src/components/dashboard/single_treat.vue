@@ -15,7 +15,7 @@
           }"
           v-if="addAdditionalSessionsButton"
           class="main-btn xl"
-          >اضافة جلسة جديدة</router-link
+          > {{ $t('add.title') }} </router-link
         >
         <button
           type="button"
@@ -24,7 +24,7 @@
           class="main-btn bg-red xl"
           :disabled="disabled"
         >
-          <div v-if="!disabled">انهاء الخطة العلاجية</div>
+          <div v-if="!disabled"> {{ $t('single.finish') }} </div>
           <div class="loading" role="status" v-if="disabled">
             <div class="spinner-small-white" v-if="disabled"></div>
           </div>
@@ -263,28 +263,28 @@
       <!-- single info -->
       <div class="white_bg pt-2 pb-2 px-5" v-if="treat.duration">
         <div class="single_info flex_between">
-          <span class="info_key"> مدة انتهاء الخطة </span>
+          <span class="info_key"> {{ $t('single.duration') }} </span>
           <span class="info_value"> {{ treat.duration }} </span>
         </div>
       </div>
       <!-- single info -->
       <div class="gray-bg pt-2 pb-2 px-5" v-if="treat.price">
         <div class="single_info gray-bg flex_between">
-          <span class="info_key"> قيمة الخطة العلاجية</span>
+          <span class="info_key"> {{ $t('single.value') }}</span>
           <span class="info_value"> {{ treat.price }} </span>
         </div>
       </div>
       <!-- single info -->
       <div class="white_bg pt-2 pb-2 px-5" v-if="treat.vatPrice">
         <div class="single_info flex_between">
-          <span class="info_key"> قيمة الضريبة</span>
+          <span class="info_key"> {{ $t('single.tax') }}</span>
           <span class="info_value"> {{ treat.vatPrice }} </span>
         </div>
       </div>
       <!-- single info -->
       <div class="gray-bg pt-2 pb-2 px-5 all-total" v-if="treat.total">
         <div class="single_info gray-bg flex_between">
-          <span class="sec-col"> الاجمالي</span>
+          <span class="sec-col"> {{ $t('single.total') }}</span>
           <span> {{ treat.total }} ر.س </span>
         </div>
       </div>
@@ -464,7 +464,7 @@
           <!-- single info -->
           <div class="gray-bg pt-2 pb-2 px-5" v-if="session.name">
             <div class="single_info gray-bg flex_between">
-              <span class="info_key"> اسم الجلسة </span>
+              <span class="info_key"> {{ $t('add.name') }} </span>
               <span class="info_value"> {{ session.name }} </span>
             </div>
           </div>
@@ -488,7 +488,7 @@
           <!-- single info -->
           <div class="white_bg pt-2 pb-2 px-5" v-if="session.priceText">
             <div class="single_info flex_between">
-              <span class="info_key"> السعر</span>
+              <span class="info_key"> {{ $t('group.price') }}</span>
               <span class="info_value"> {{ session.priceText }} </span>
             </div>
           </div>
@@ -531,13 +531,13 @@
             "
           >
             <span v-if="session.addDoctorsToSession">{{
-              $t("treat.addDoc")
+              $t("treat.addDoc") 
             }}</span>
             <span v-if="session.reassignmentSessionButton"
-              >اعادة اسناد الجلسة</span
+              >{{ $t('single.reAdd') }}</span
             >
             <span v-if="session.rescheduleSessionButton"
-              >اعادة جدولة الجلسة</span
+              >{{ $t('single.reSech') }}</span
             >
           </button>
 
@@ -582,7 +582,7 @@
                     <p>{{ doctor.report.doctor.description }}</p>
                   </div>
                 </div>
-                <h6 class="main-color">استعراض تقارير الجلسة</h6>
+                <h6 class="main-color"> {{ $t('single.report') }} </h6>
                 <a
                   :href="doctor.report.file"
                   target="_blank"
@@ -592,7 +592,7 @@
                 </a>
                 <div class="row-rate mb-4" v-if="doctor.rating.patient.id">
                   <div class="flex-sm-gap mb-3">
-                    <div class="doc-name sec-color">تقييم العميل للاخصائي</div>
+                    <div class="doc-name sec-color"> {{ $t('single.rate') }} </div>
                     <div class="doc-rate">
                       <i class="fa-solid fa-star"></i>
                       <div class="rate-num">
@@ -604,7 +604,7 @@
                 </div>
                 <div class="row-rate mb-4" v-if="doctor.rating.doctor.rate">
                   <div class="flex-sm-gap mb-3">
-                    <div class="doc-name sec-color">تقييم الاخصائي للعميل</div>
+                    <div class="doc-name sec-color">{{ $t('single.reRate') }}</div>
                     <div class="doc-rate">
                       <i class="fa-solid fa-star"></i>
                       <div class="rate-num">
@@ -624,14 +624,14 @@
                     (session.doctors.length > 1 && session.type == 'individual')
                   "
                 >
-                  بيانات الاخصائيين المضافين للجلسة
+                  {{ $t('single.info') }}
                 </div>
                 <div
                   v-if="
                     session.type == 'individual' && session.doctors.length == 1
                   "
                 >
-                  بيانات الاخصائي
+                  {{ $t('single.specInfo') }}
                 </div>
               </h5>
               <div
@@ -681,13 +681,13 @@
                           )
                         "
                       >
-                        sss قبول التاجيل
+                         {{ $t('single.accept') }}
                       </button>
                       <button
                         class="main-btn lg bg-red"
                         @click="refuseDealy($event, session.id, doctor.id)"
                       >
-                        رفض التاجيل
+                        {{ $t('single.refuse') }}
                       </button>
                     </div>
                   </div>
@@ -696,7 +696,7 @@
             </div>
 
             <h5 class="sec-color mb-4" v-if="session.members.length">
-              بيانات المرضى المضافين للجلسة
+              {{ $t('single.patientInfo') }}
             </h5>
             <div
               class="loop-members mb-4"
@@ -726,7 +726,7 @@
             </div>
             <template v-if="session.isCompanions">
               <h5 class="sec-color mb-4" v-if="session.companions.length">
-                بيانات المرافقين
+                {{ $t('single.meats') }}
               </h5>
               <div
                 class="loop-members mb-4"
@@ -770,28 +770,28 @@
             )
           "
         >
-          قبول التاجيل
+          {{ $t('single.accept') }}
         </button>
         <button
           class="main-btn lg bg-red"
           :disabled="refuseSessionDisabled"
           @click="refuseSessionDealy($event, session.id)"
         >
-          رفض التاجيل
+          {{ $t('single.refuse') }}
         </button>
       </div>
     </section>
   </section>
 
   <!-- send offer  -->
-  <div class="send_offer mx-5 mb-4" v-if="treat.status == 'new'" >
-    <router-link :to="'/priceOffer/' + treat.id" @click="storePatient">
+  <div class="send_offer mx-5 mb-4" v-if="treat.sendOfferButton == true" >
+    <router-link :to="'/center/priceOffer/' + treat.id" @click="storePatient">
       {{ $t("treat.sendOffer") }}
     </router-link>
   </div>
   <!-- edit offer  -->
   <div class="send_offer mx-5 mb-4" v-if="treat.status == 'cancelled'">
-    <router-link to="/priceOffer">
+    <router-link :to="'/center/editPriceOffer/' + this.$route.params.id"  @click="storePatient">
       {{ $t("treat.editOffer") }}
     </router-link>
   </div>
@@ -800,57 +800,72 @@
   <Dialog v-model:visible="getdoctor" modal :style="{ width: '50vw' }">
     <div class="modal-container-main">
       <h5 class="mb-4 text-center font-bold">
-        الرجاء اختيار الطبيب المسند اليه الخطة
+        {{ $t('single.chooseDoc') }}
       </h5>
+
       <div class="main-input-cont mb-4">
-        <h6 class="mb-2 font14">تاريخ الجلسة</h6>
+        <h6 class="mb-2 font14">{{ $t('single.sessionDate') }}</h6>
         <Calendar
           v-model="date"
-          placeholder="برجاء ادخال تاريخ الجلسة"
+          :placeholder="$t('single.datePlc')"
           dateFormat="dd-mm-yy"
+          :minDate="new Date()"
         />
         <div class="abs-icon"><i class="fa-solid fa-calendar-days"></i></div>
+
+        <span class="error text-danger fs-13" v-if="isDate"> {{ $t('single.datePlc') }} </span>
       </div>
+
       <div class="main-input-cont mb-4">
-        <h6 class="mb-2 font14">وقت الجلسة</h6>
+
+        <h6 class="mb-2 font14">{{ $t('single.time') }}</h6>
         <Calendar
           hourFormat="12"
           id="calendar-12h"
           v-model="time"
-          placeholder="الرجاء اختيار وقت الجلسة"
+          :placeholder="$t('single.timePlc')"
           timeOnly
         />
         <div class="abs-icon"><i class="fa-regular fa-clock"></i></div>
+        <span class="error text-danger fs-13" v-if="isTime"> {{ $t('single.timePlc') }} </span>
+
       </div>
+
       <div class="main-input-cont mb-4">
-        <h6 class="mb-2 font14">الطبيب</h6>
+
+        <h6 class="mb-2 font14">{{ $t('single.doc') }}</h6>
         <MultiSelect
           v-model="selectedDoctor"
           display="chip"
           :options="doctors"
           optionLabel="name"
-          placeholder="اختر الطبيب "
+          :placeholder="$t('single.docPlc')"
           :maxSelectedLabels="20"
           class="w-full md:w-20rem"
         />
         <div class="abs-icon-right">
           <font-awesome-icon :icon="['far', 'clipboard']" />
         </div>
+        <span class="error text-danger fs-13" v-if="isDoctors"> {{ $t('single.docPlc') }} </span>
+
+
       </div>
       <div class="main-input-cont mb-4" v-if="sessionType == 'group'">
-        <h6 class="mb-2 font14">المرضى</h6>
+        <h6 class="mb-2 font14">{{ $t('single.patient') }}</h6>
         <MultiSelect
           v-model="selectedPatient"
           display="chip"
           :options="Patients"
           optionLabel="name"
-          placeholder="اختر  المرضى"
+          :placeholder="$t('single.patientPlc')"
           :maxSelectedLabels="20"
           class="w-full md:w-20rem"
         />
         <div class="abs-icon-right">
           <font-awesome-icon :icon="['far', 'clipboard']" />
         </div>
+        <span class="error text-danger fs-13" v-if="isPatients"> {{ $t('single.patientPlc') }} </span>
+
       </div>
       <button
         type="button"
@@ -867,13 +882,13 @@
 
     <!-- send offer  -->
     <div class="send_offer mx-5 mb-4" v-if="treat.sendOfferButton == true">
-      <router-link :to="'/priceOffer/' + treat.id" @click="storePatient">
+      <router-link :to="'/center/priceOffer/' + treat.id" @click="storePatient">
         {{ $t("treat.sendOffer") }}
       </router-link>
     </div>
     <!-- edit offer  -->
     <div class="send_offer mx-5 mb-4" v-if="treat.status == 'cancelled'">
-      <router-link :to="'/editPriceOffer/' + this.$route.params.id">
+      <router-link :to="'/center/editPriceOffer/' + this.$route.params.id"  @click="storePatient">
         {{ $t("treat.editOffer") }}
       </router-link>
     </div>
@@ -918,6 +933,11 @@ export default {
       specialization: null,
       stepper: true,
       sessionDoctors: [],
+
+      isDate : false ,
+      isTime : false,
+      isDoctors : false,
+      isPatients : false
     };
   },
   components: {
@@ -946,7 +966,7 @@ export default {
               summary: res.data.message,
               life: 3000,
             });
-            this.$router.push(`/`);
+            this.$router.push(`/center/home`);
           } else {
             this.$toast.add({
               severity: "error",
@@ -1064,8 +1084,42 @@ export default {
           console.log(err);
         });
     },
-    // send form
+
+
+    // send form "solia "
     async sendSession() {
+
+      if( this.date == null || this.data == '' ){
+        this.isDate = true ;
+      }else{
+        this.isDate = false ;
+      }
+
+      if( this.time == null || this.time == '' ){
+        this.isTime = true ;
+      }else{
+        this.isTime = false ;
+      }
+
+      if( this.selectedDoctor.length == 0 || this.selectedDoctor == null ){
+        this.isDoctors = true ;
+      }else{
+        this.isDoctors = false ;
+      }
+
+      if( this.selectedPatient.length == 0 || this.selectedPatient == null ){
+        this.isPatients = true ;
+      }else{
+        this.isPatients = false ;
+      }
+
+      if( this.isDate == false && this.isTime == false && this.isDoctors == false  && (this.isPatients == false || this.selectedPatient == null)){
+          this.mainSend();
+      }
+
+    },
+    // main send 
+    async mainSend(){
       this.disabled = true;
 
       const fd = new FormData();
@@ -1088,8 +1142,7 @@ export default {
       fd.append("doctors", JSON.stringify(docorsIds));
       fd.append("members", JSON.stringify(patiensIds));
       fd.append("startDate", moment(this.date).format("YYYY-MM-DD"));
-      fd.append(
-        "startTime",
+      fd.append("startTime",
         this.time.toLocaleTimeString([], {
           hour: "2-digit",
           minute: "2-digit",
@@ -1128,8 +1181,8 @@ export default {
           });
         });
       this.disabled = false;
-    },
 
+    },
     // sameeeer
 
     storePatient() {

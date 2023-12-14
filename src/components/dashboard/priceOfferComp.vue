@@ -32,7 +32,7 @@
                             <i class="fa-solid fa-asterisk text-danger fs-10"></i>
                         </label>
                         <!-- <InputNumber v-model="durationDays" inputId="integeronly" class="default_input w-100" placeholder="اكتب عدد الأيام المتوقعة"/> -->
-                        <input type="number"  v-model="durationDays" @input="handleValid" class="form-control default_input w-100" :placeholder="$t('offer.durationPlc')" :readonly="isEdit">
+                        <input type="number" min="1"  v-model="durationDays" @input="handleValid" class="form-control default_input w-100" :placeholder="$t('offer.durationPlc')" :readonly="isEdit">
 
                         <span class="error text-danger fs-13" v-if="isDays"> {{ $t('offer.durationPlc') }} </span>
                     </div>
@@ -127,6 +127,7 @@
             <form class="mx-5 mt-3" ref="medicines">
                 <div class="row">
 
+                    <!-- shows only in add case  -->
                     <section class="row" ref="treat_item" v-if="!$route.fullPath.includes('editPriceOffer')">
                         <div class="col-md-6 mb-2">
                             <div class="form-group ">
@@ -250,7 +251,7 @@
                         <i class="fa-solid fa-asterisk text-danger fs-10"></i>
                     </label>
 
-                    <textarea name="" v-model="public_instructions" @input="handleMainSub" class="form-control" id="" cols="30" rows="7" :placeholder="$t('treat.insts')"></textarea>
+                    <textarea name="" v-model="public_instructions" class="form-control" id="" cols="30" rows="7" :placeholder="$t('treat.insts')"></textarea>
 
                     <span class="error text-danger fs-13" v-if="isPublicInst"> {{ $t('treat.insts') }} </span>
                 </div>
@@ -269,7 +270,7 @@
                                 {{ $t('offer.price') }} 
                                 <i class="fa-solid fa-asterisk text-danger fs-10"></i>
                             </label>
-                            <input type="number" min="1" v-model="price" @input="handleMainSub" class="form-control default_input w-100" :placeholder="$t('offer.pricePlc')" >
+                            <input type="number" min="1" v-model="price"  class="form-control default_input w-100" :placeholder="$t('offer.pricePlc')" >
                             <span class="error text-danger fs-13" v-if="isPriced"> {{ $t('offer.pricePlc') }} </span>
 
                         </div>
@@ -698,7 +699,7 @@ export default {
                     this.$toast.add({ severity: 'success', summary: res.data.message, life: 3000 });
                     this.disabled = false ;
                     setTimeout(() => {
-                        this.$router.push('/treatManage');
+                        this.$router.push('/center/treatManage');
                     }, 1000);
                 }else{
                     this.$toast.add({ severity: 'error', summary: res.data.message, life: 3000 });
@@ -713,6 +714,95 @@ export default {
 
         // update offer 
         async updateOffer(){
+            for( let i = 0 ; i < this.selectedNum.name ; i++ ){
+                if( this.selectedType[i] == null){
+                     this.isTyped[i] = true ;
+                }else{
+                    this.isTyped[i] = false ;
+                }
+                if( this.selectedSpec[i] == null){
+                     this.isSpec[i] = true ;
+                }else{
+                    this.isSpec[i] = false ;
+                }
+                if( this.sessionName[i] == null || this.sessionName[i] == ''){
+                     this.isSession[i] = true ;
+                }else{
+                    this.isSession[i] = false ;
+                }
+                if( this.sessionDuration[i] == null || this.sessionDuration[i] == '' ){
+                    this.isDuration[i] = true ;
+                }else{
+                    this.isDuration[i] = false ;
+                }
+                if( this.instructions[i] == null || this.instructions[i] == '' ){
+                    this.isInst[i] = true ;
+                }else{
+                    this.isInst[i] = false ;
+                }
+
+
+                // if( this.nameAr == '' ){
+                //     this.isMedAr = true ;
+                // }else{
+                //     this.isMedAr = false ;
+                // }
+                // if( this.nameEn == '' ){
+                //     this.isMedEn = true ;
+                // }else{
+                //     this.isMedEn = false ;
+                // }
+                // if( this.fileName == '' ){
+                //     this.IsMedImage = true ;
+                // }else{
+                //     this.IsMedImage = false ;
+                // }
+
+                if( this.public_instructions == '' ){
+                    this.isPublicInst = true ;
+                }else{
+                    this.isPublicInst = false ;
+                }
+
+                
+                if( this.price == '' ){
+                    this.isPriced = true ;
+                }else{
+                    this.isPriced = false ;
+                }
+
+
+
+                for( let i = 0 ; i < this.items.length ; i++ ){
+                    if(this.namesAr[i] == null || this.namesAr[i] == ''){
+                        this.isNamedAr[i] = true ;
+                    }else{
+                        this.isNamedAr[i] = false ;
+                    }
+
+                    if(this.namesEn[i] == null || this.namesEn[i] == ''){
+                        this.isNamedEn[i] = true ;
+                    }else{
+                        this.isNamedEn[i] = false ;
+                    }
+                    // files 
+                    if( this.filesName[i] == null || this.filesName[i] == '' ){
+                        this.isFiles[i] = true ;
+                    }else{
+                        this.isFiles[i] = false ;
+                    }
+                   
+                }
+                
+                
+            }
+
+            if( this.isTypedFalse && this.isSpecFalse && this.isSessionFalse && this.isDurationFalse && this.isInstFalse && this.isNamedArFalse && this.isNamedEnFalse && this.isFilesFalse && this.isMedAr == false && this.isMedEn == false && this.IsMedImage == false && this.isPublicInst == false && this.isPriced == false){
+                this.mainEdit(); 
+            }
+        },
+
+        async mainEdit(){
             this.disabled_update = true ;
             const fd = new FormData(this.$refs.medicines);
             fd.append('id', this.$route.params.id);

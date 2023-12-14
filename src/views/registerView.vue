@@ -43,7 +43,7 @@
                             {{ $t('auth.phone') }} 
                         </label>
 
-                        <input type="number"   v-model="phone" name="phone" class="default_input form-control w-100" :placeholder="$t('auth.phonePlc')" @blur="phoneTouched=true">
+                        <input type="number"  min="1"  v-model="phone" name="phone" class="default_input form-control w-100" :placeholder="$t('auth.phonePlc')" @blur="phoneTouched=true">
 
                         <!-- country code  -->
                         <Dropdown v-model="selectedCountry" :options="countries" optionLabel="name"  @change="chooseCountry"  class="default_input country_code  w-full md:w-14rem" />
@@ -108,7 +108,7 @@
                         {{ $t('auth.licenseName') }}
                     </label>
                     <!-- <InputNumber v-model="commercialNumber" inputId="integeronly" class="default_input w-100" :placeholder="$t('auth.numberPlc')"/> -->
-                    <input type="number" v-model="commercialNumber" class="default_input form-control w-100" :placeholder="$t('auth.numberPlc')">
+                    <input type="number" min="1" v-model="commercialNumber" class="default_input form-control w-100" :placeholder="$t('auth.numberPlc')">
 
                     <span class="error text-danger fs-14" v-if="showCom">
                         هذا الحقل مطلوب
@@ -206,7 +206,7 @@
             <div class="flex_center mt-3">
                 <p class="grayColor">
                     هل لديك حساب  ؟
-                    <router-link to="/login" class="third-color"> {{ $t('auth.login') }} </router-link>
+                    <router-link to="/center/login" class="third-color"> {{ $t('auth.login') }} </router-link>
                 </p>
             </div>
         </section>
@@ -505,7 +505,7 @@ export default {
                     if( res.data.key === 'success' ){   
                         this.$toast.add({ severity: 'success', summary: res.data.message, life: 3000 });
                         setTimeout(() => {
-                            this.$router.push('/login')
+                            this.$router.push('/center/login')
                         }, 1000);
                         this.disabled=false ;
                     }else{

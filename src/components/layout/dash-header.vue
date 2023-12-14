@@ -5,13 +5,16 @@
             <button class="btn toggle_icon" @click="switchSide()">
                 <i class="fa-solid fa-bars-staggered"></i>
             </button>
+            <button class="btn openSide" @click="opeSide()">
+                <i class="fa-solid fa-bars-staggered"></i>
+            </button>
 
             <!-- user interaction  -->
            <div class="d-flex align-items-baseline">
                 
 
                 <!-- notfications  -->
-                <router-link to="/notification" class="position-relative btn nots mx-3">
+                <router-link to="/center/notification" class="position-relative btn nots mx-3">
                     <i class="fa-regular fa-bell"></i>
                     <span class="not_count" v-if="notifyCount>0">
                         {{ notifyCount }}
@@ -37,13 +40,13 @@
                     </button>
                     <ul class="dropdown-menu " aria-labelledby="dropdownMenuButton1">
                         <li class="single">
-                            <router-link to="/about"> {{ $t('dash.about') }} </router-link>
+                            <router-link to="/center/about"> {{ $t('dash.about') }} </router-link>
                         </li>
                         <li class="single">
-                            <router-link to="/faqs"> {{ $t('dash.fqs') }}  </router-link>
+                            <router-link to="/center/faqs"> {{ $t('dash.fqs') }}  </router-link>
                         </li>
                         <li class="single">
-                            <router-link to="/terms"> {{ $t('dash.terms') }} </router-link>
+                            <router-link to="/center/terms"> {{ $t('dash.terms') }} </router-link>
                         </li>
                     </ul>
                 </div>
@@ -128,12 +131,15 @@ export default {
         },
 
         switchSide(){
-            console.log()
             document.querySelector('#sidebar').classList.toggle('active');
             document.querySelector('#header').classList.toggle('active');
             document.querySelector('#content').classList.toggle('active');
         }
+        ,
+        opeSide(){
+            document.querySelector('#sidebar').classList.add('active');
 
+        }
     },
     mounted(){
         let user = JSON.parse( localStorage.getItem('user') );
@@ -147,6 +153,9 @@ export default {
 </script>
 
 <style lang="scss">
+    .openSide{
+        display: none !important; 
+    }
     .not_count{
         position: absolute;
         background: #3290d8;

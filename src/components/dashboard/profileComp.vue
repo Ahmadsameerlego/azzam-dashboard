@@ -42,40 +42,44 @@
         </div>
 
         <div class="form-group mb-3 position-relative">
-          <label
-            for=""
-            class="blackColor d-block fw-6 mb-2 fs-14 d-flex justify-content-between"
-          >
-            <span> {{ $t('auth.phone') }} </span>
-            <span class="grayColor" @click="sendCode" style="cursor: pointer"
-              >{{ $t('auth.changePhone') }}</span
+          <div class="position-relative">
+            <label
+              for=""
+              class="blackColor d-block fw-6 mb-2 fs-14 d-flex justify-content-between"
             >
-          </label>
+              <span> {{ $t('auth.phone') }} </span>
+              <span class="grayColor" @click="sendCode" style="cursor: pointer"
+                >{{ $t('auth.changePhone') }}</span
+              >
+            </label>
 
-          <InputText
-            type="text"
-            v-model="phone"
-            class="default_input w-100"
-            :placeholder="$t('auth.phonePlc')"
-          />
+            <InputText
+              type="number"
+              min="1"
+              disabled
+              v-model="phone"
+              class="default_input w-100"
+              :placeholder="$t('auth.phonePlc')"
+            />
 
-          <!-- country code  -->
-          <Dropdown
-            v-model="selectedCountry"
-            @change="chooseCountry"
-            :options="countries"
-            optionLabel="name"
-            class="default_input country_code w-full md:w-14rem"
-          >
-            <template #value="slotProps">
-              <div class="flex align-items-center">
-                <!-- <img :alt="slotProps.image" :src="slotProps.image" :class="`mr-2 flag flag-${slotProps.code.toLowerCase()}`" style="width: 18px" /> -->
-                <span>
-                  {{ slotProps }}
-                </span>
-              </div>
-            </template>
-          </Dropdown>
+            <!-- country code  -->
+            <Dropdown
+              v-model="selectedCountry"
+              @change="chooseCountry"
+              :options="countries"
+              optionLabel="name"
+              class="default_input country_code w-full md:w-14rem"
+            >
+              <template #value="slotProps">
+                <div class="flex align-items-center">
+                  <!-- <img :alt="slotProps.image" :src="slotProps.image" :class="`mr-2 flag flag-${slotProps.code.toLowerCase()}`" style="width: 18px" /> -->
+                  <span>
+                    {{ slotProps }}
+                  </span>
+                </div>
+              </template>
+            </Dropdown>
+          </div>
 
           <div class="error text-danger fs-14"  v-if="showrError" > {{ $t('common.phoneValid') }} </div>
 
@@ -161,6 +165,7 @@
             v-model="commercialNumber"
             class="form-control w-100"
             :placeholder="$t('auth.numberPlc')"
+            min="1"
           />
           <span class="error text-danger fs-14" v-if="showCom">
               {{ $t('auth.numberPlc') }}
@@ -596,7 +601,7 @@ export default {
               life: 3000,
             });
             this.disabled = false;
-            this.$router.push("/changePhone");
+            this.$router.push("/center/changePhone");
           } else {
             this.$toast.add({
               severity: "error",

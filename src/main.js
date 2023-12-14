@@ -56,6 +56,25 @@ axios.defaults.baseURL = 'https://azzam.4hoste.com/api';
 axios.defaults.headers.lang = localStorage.getItem('locale');
 
 
+axios.interceptors.response.use(
+response => response,
+error => {
+    // Check if the error response status is 401 (unauthenticated)
+    if (error.response.data.key === 'unauthorized') {
+    // Perform your action here, such as redirecting to the login page
+    // For example:
+    // router.push('/login');
+        router.push('/center/login')
+    }
+
+    return Promise.reject(error);
+}
+);
+
+// import pagination
+import Paginate from "vuejs-paginate-next";
+
+
 createApp(App)
     .use(i18n)
     .use(VueI18n)
@@ -64,6 +83,7 @@ createApp(App)
     .use(router)
     .use(PrimeVue)
     .use(DataTable)
+    .use(Paginate)
     .use(ToastService)
     .use(Column)
     .use(ColumnGroup)

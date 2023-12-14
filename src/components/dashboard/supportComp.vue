@@ -17,7 +17,7 @@
             </div>
             <!-- add  -->
             <div class="add">
-                <router-link to="/addGroup" class="add_doctor">
+                <router-link to="/center/addGroup" class="add_doctor">
                     <i class="fa-solid fa-plus"></i>
                 </router-link>
             </div>
@@ -49,7 +49,15 @@
             </Column>
             <Column field="name" :header="$t('support.name')" sortable></Column>
             <Column field="seats" :header="$t('group.seats')" sortable></Column>
-            <Column field="reservedSeats" :header="$t('support.reserved')" sortable></Column>
+            <Column :header="$t('support.reserved')" sortable>
+                <template #body="slotProps">
+                    <span v-if="slotProps.data.reservedSeats !== $t('common.reserved') "> {{ slotProps.data.reservedSeats }} </span>
+                    <!-- <span v-if="slotProps.data.reservedSeats=='تم حجز جميع المقاعد' || slotProps.data.reservedSeats == 'All seats have been reserved'" class="reservedSeats"> {{ slotProps.data.reservedSeats }} </span> -->
+                    <span v-if="slotProps.data.reservedSeats ===  $t('common.reserved') "  class="reservedSeats"> {{ slotProps.data.reservedSeats }} </span>
+                </template>
+
+                <!-- field="reservedSeats" -->
+            </Column>
             <Column field="sessionsCount" :header="$t('offer.num')" sortable></Column>
             <Column field="price" :header="$t('group.price')" sortable ></Column>
 
@@ -58,7 +66,7 @@
 
                    <div class="d-flex">
                         <!-- edit  -->
-                        <router-link  :to="'/supportManage/'+slotProps.data.id" class="show_more fw-6" @click="click(slotProps.data.id)">
+                        <router-link  :to="'/center/supportManage/'+slotProps.data.id" class="show_more fw-6" @click="click(slotProps.data.id)">
                                 {{ $t('session.details') }}
                         </router-link>
                    </div>
@@ -138,6 +146,9 @@ export default {
 </script>
 
 <style lang="scss">
+    .reservedSeats{
+        color: #4aa236;
+    }
     .show_more{
         color:#40a8e0 !important;
         border-bottom:1px solid #40a8e0;

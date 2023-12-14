@@ -36,7 +36,6 @@ body{
             padding-right: 0;
             padding-left:12px ;
         }
-
         #sidebar .list {
             padding-right: 0px;
             padding-left: 15px;
@@ -49,20 +48,26 @@ body{
             right: 0;
             left: auto;
         }
-
         .p-paginator .p-paginator-first, .p-paginator .p-paginator-prev, .p-paginator .p-paginator-next, .p-paginator .p-paginator-last{
             transform: rotate(0deg);
         }
         .steps .line{
             width:160px ;
         }
-
         .country_code {
             right: 0;
             left: auto;
         }
         .calender {
             right: 14px;
+            left: auto;
+        }
+        .time_date {
+            right: 10px;
+            left: auto;
+        }
+        #auth .country_code {
+            right: 0;
             left: auto;
         }
 

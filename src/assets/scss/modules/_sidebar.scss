@@ -16,6 +16,7 @@
     height: 100vh;
     overflow-y: auto;
     transition: .3s all;
+    z-index: 99;
     &.active{
         width: 80px;
         .nav_name{

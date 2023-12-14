@@ -21,18 +21,24 @@
                     <label for="" class="blackColor d-block fw-6 mb-2 fs-14">
                             {{ $t('con.name') }} 
                     </label>
-                    <InputText type="text" v-model="name" class="default_input w-100" :placeholder="$t('offer.namePlc')" />
+                    <InputText type="text" v-model="name" class="default_input w-100" :placeholder="$t('offer.namePlc')" disabled />
+                    <span class="error text-danger fs-13" v-if="isName"> {{ $t('offer.namePlc') }} </span>
                 </div>
 
                 <div class="form-group mb-3 position-relative">
-                    <label for="" class="blackColor d-block fw-6 mb-2 fs-14 d-flex justify-content-between">
-                            <span>{{ $t('con.phone') }}</span> 
-                    </label>
 
-                    <InputText type="text" v-model="phone" class="default_input w-100" :placeholder="$t('con.phonePlc')" />
+                    <div class="position-relative">
+                        <label for="" class="blackColor d-block fw-6 mb-2 fs-14 d-flex justify-content-between">
+                                <span>{{ $t('con.phone') }}</span> 
+                        </label>
 
-                    <!-- country code  -->
-                    <Dropdown v-model="selectedCity" :options="countries" @change="chooseCountry" optionLabel="name" placeholder="Select a City" class="default_input country_code  w-full md:w-14rem" />
+                        <InputText type="text" disabled v-model="phone" class="default_input w-100" :placeholder="$t('con.phonePlc')" />
+
+                        <!-- country code  -->
+                        <Dropdown v-model="selectedCity" disabled :options="countries" @change="chooseCountry" optionLabel="name" placeholder="Select a City" class="default_input country_code  w-full md:w-14rem" />
+
+                    </div>
+                    <span class="error text-danger fs-13" v-if="isPhone"> {{ $t('common.phoneValid') }} </span>
 
                 </div>
 
@@ -40,7 +46,9 @@
                     <label for="" class="blackColor d-block fw-6 mb-2 fs-14">
                         {{ $t('common.email') }}
                     </label>
-                    <InputText type="email" v-model="email" class="default_input w-100" :placeholder="$t('common.emailPlace')" />
+                    <InputText type="email" v-model="email" disabled class="default_input w-100" :placeholder="$t('common.emailPlace')" />
+                    <span class="error text-danger fs-13"  v-if="isEmail"> {{ $t('common.emailValid') }} </span>
+
                 </div>
 
                 <div class="form-group">
@@ -48,6 +56,8 @@
                             {{ $t('common.text') }} 
                     </label>
                     <Textarea v-model="message" autoResize rows="5" class="default_input default_textarea w-100" cols="30" :placeholder="$t('common.textPlc')" />
+
+                    <span class="error text-danger fs-13" v-if="isMessage"> {{ $t('common.textPlc') }} </span>
                 </div>
 
             </form>
@@ -93,8 +103,12 @@ export default {
                 code: "+966",
             },
             loader : false ,
-            disabled : true,
-            message : ''
+            disabled : false,
+            message : '',
+            isMessage : false,
+            isName : false ,
+            isPhone : false ,
+            isEmail : false
         }
     },
     components:{
@@ -105,13 +119,13 @@ export default {
         Toast
     },
     watch:{
-        message(){
-            if( this.message == '' ){
-                this.disabled = true ;
-            }else{
-                this.disabled = false ;
-            }
-        }
+        // message(){
+        //     if( this.message == '' ){
+        //         this.disabled = true ;
+        //     }else{
+        //         this.disabled = false ;
+        //     }
+        // }
     },
     computed:{
         ...mapGetters('setting',['countries'])
@@ -127,6 +141,38 @@ export default {
 
         // send message 
         async sendMessage(){
+            if( this.message == '' ){
+                this.isMessage = true ;
+            }else{
+                this.isMessage = false ;
+            }
+
+            if( this.name == '' ){
+                this.isName = true ;
+            }else{
+                this.isName = false ;
+            }
+
+            let inputString = this.phone.toString();
+            if( this.phone === '' || inputString.length < 9){
+                this.isPhone = true ;
+            }else{
+                this.isPhone = false ;
+            }
+
+            if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.email)) {
+                this.isEmail = false ;
+            } else {
+                this.isEmail = true ;
+            }
+
+
+            if( this.isMessage == false && this.isName == false && this.isPhone == false && this.isEmail == false ){
+                this.mainSend();
+            }
+        },
+
+        async mainSend(){
             this.loader = true ;
             this.disabled = true ;
             const fd = new FormData();
